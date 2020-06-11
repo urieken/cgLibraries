@@ -1,8 +1,15 @@
 # cgLibraries(Crazy Galen's Libraries)
 
-A collection of libraries with graphics programming research.
-1. Currently using.
-1.1 SDL
-1.2 C++
-2. Planned
-2.1 Vulkan
+* A collection of libraries with graphics programming research.
+  * Currently using.
+    * [SDL](https://www.libsdl.org/)
+    * [C++](https://en.cppreference.com/w/)
+      * https://en.cppreference.com/w/
+      * http://www.cplusplus.com/doc/tutorial/
+      * https://isocpp.org/
+  * Planned
+    * [OpenGL](https://www.khronos.org/opengl/)
+      * https://www.opengl.org/
+      * https://www.khronos.org/opengl/
+    * [Vulkan](https://www.khronos.org/vulkan/)
+      * https://www.khronos.org/vulkan/
