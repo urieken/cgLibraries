@@ -14,16 +14,23 @@ set(SOURCE_FILES
     src/app/app.cpp)
 
 set(TEST_FILES
-    tests/src/main.cpp)
+    src/app/app.cpp
+    tests/src/main.cpp
+    tests/src/app_tests.cpp)
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE
     inc)
 
 add_executable(${PROJECT_NAME}_tests ${TEST_FILES})
+target_include_directories(${PROJECT_NAME}_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cgl/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../vendors/googletest/googletest/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../vendors/googletest/googlemock/include)
 target_link_directories(${PROJECT_NAME}_tests PRIVATE
-    $ENV{MINGW_64_ROOT}/lib)
-target_link_libraries(${PROJECT_NAME}_tests mingw32)
+    $ENV{MINGW_64_ROOT}/lib
+    ${CMAKE_BINARY_DIR}/lib)
+target_link_libraries(${PROJECT_NAME}_tests mingw32 gtest gmock)
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
