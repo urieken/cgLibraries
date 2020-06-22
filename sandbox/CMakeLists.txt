@@ -10,6 +10,8 @@ project(cgLibsSandbox
     DESCRIPTION "Crazy Galen's Libraries Sandbox"
     LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD_REQUIRED 17)
+
 set(SOURCE_FILES
     src/main.cpp)
 
