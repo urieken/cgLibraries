@@ -27,6 +27,15 @@ class app : public iapp {
     app();
     //! Destructor
     virtual ~app();
+    //! Handler for application initialize event.
+    /*!
+     * \param argc Pointer to command line argument counter.
+     * \param argv Command line arguments.
+     * \return Return code.
+     */
+    uint_fast8_t OnInitialize(int* argc, char** argv) override;
+    //! Handler for application cleanup event.
+    void OnCleanUp() override;
 };
 /*! @} End of Doxygen Groups*/
 }  // End namespace app

@@ -10,13 +10,16 @@ project(cgl
     DESCRIPTION "Crazy Galen's Library"
     LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD_REQUIRED 17)
+
 set(SOURCE_FILES
     src/app/app.cpp)
 
 set(TEST_FILES
     src/app/app.cpp
     tests/src/main.cpp
-    tests/src/app_tests.cpp)
+    tests/src/app_tests.cpp
+    tests/src/event_tests.cpp)
 
 add_library(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE
