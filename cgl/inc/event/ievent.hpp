@@ -25,7 +25,7 @@ template <typename T_>
 class ievent {
  private:
     //! Event ID.
-    uint_fast8_t mId;
+    std::uint8_t mId;
     //! Event data.
     T_ mPayload;
 
@@ -38,16 +38,14 @@ class ievent {
      * \param length Payload length.,
      * \param payload Data to be moved.
      */
-    void setPayload(uint_fast8_t id, std::size_t length, const T_* payload) {
+    void setPayload(std::uint8_t id, std::size_t length, const T_* payload) {
         mId = id;
         std::memmove(&mPayload, payload, length);
     }
     /*! Returns the event id.
      * \return Current event id.
      */
-    uint_fast8_t getId() {
-        return mId;
-    }
+    std::uint8_t getId() { return mId; }
     /*! Returns the event payload length.
      * \return Current payload length.
      */

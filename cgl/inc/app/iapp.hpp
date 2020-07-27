@@ -5,6 +5,7 @@
     Base class for application classes.
  */
 #include <cstdint>
+
 #ifndef CGL_INC_APP_IAPP_HPP_
 #define CGL_INC_APP_IAPP_HPP_
 //! Crazy Galen's Libraries
@@ -52,7 +53,7 @@ class iapp {
      * \param argv Command line arguments.
      * \return Return code.
      */
-    virtual uint_fast8_t OnInitialize(int* argc, char** argv) = 0;
+    virtual std::uint8_t OnInitialize(int* argc, char** argv) = 0;
     //! Handler for application cleanup event.
     virtual void OnCleanUp() = 0;
 };

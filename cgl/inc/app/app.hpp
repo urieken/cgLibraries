@@ -33,7 +33,7 @@ class app : public iapp {
      * \param argv Command line arguments.
      * \return Return code.
      */
-    uint_fast8_t OnInitialize(int* argc, char** argv) override;
+    std::uint8_t OnInitialize(int* argc, char** argv) override;
     //! Handler for application cleanup event.
     void OnCleanUp() override;
 };

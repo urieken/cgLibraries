@@ -11,10 +11,10 @@ namespace event {
 namespace tests {
 
 struct  payload_t{
-    uint_fast8_t a;
-    uint_fast16_t b;
-    uint_fast32_t c;
-    uint_fast64_t d;
+    std::uint8_t a;
+    std::uint8_t b;
+    std::uint8_t c;
+    std::uint8_t d;
 };
 
 class EventTestF : public ::testing::Test {
@@ -32,7 +32,7 @@ class EventTestF : public ::testing::Test {
 
 TEST_F(EventTestF, testSetAndGetData) {
     payload_t* payload{nullptr};
-    uint_fast8_t id{0xFF};
+    std::uint8_t id{0xFF};
     std::size_t length{sizeof mPayload};
 
     mEvent->setPayload(id, length, &mPayload);

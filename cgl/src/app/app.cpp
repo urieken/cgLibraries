@@ -11,8 +11,8 @@ app::app() {
 }
 app::~app() {
 }
-uint_fast8_t app::OnInitialize(int* argc, char** argv) {
-    uint_fast8_t ret{0};
+std::uint8_t app::OnInitialize(int* argc, char** argv) {
+    std::uint8_t ret{0};
     running(true);
     return ret;
 }
