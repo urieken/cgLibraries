@@ -33,7 +33,7 @@ target_include_directories(${PROJECT_NAME}_tests PRIVATE
 target_link_directories(${PROJECT_NAME}_tests PRIVATE
     $ENV{MINGW_64_ROOT}/lib
     ${CMAKE_BINARY_DIR}/lib)
-target_link_libraries(${PROJECT_NAME}_tests mingw32 gtest gmock)
+target_link_libraries(${PROJECT_NAME}_tests gtest gmock)
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES

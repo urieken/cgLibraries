@@ -20,7 +20,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     inc)
 target_link_directories(${PROJECT_NAME} PRIVATE
     $ENV{MINGW_64_ROOT}/lib)
-target_link_libraries(${PROJECT_NAME} mingw32)
+target_link_libraries(${PROJECT_NAME} )
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
