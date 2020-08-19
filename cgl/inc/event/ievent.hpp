@@ -21,13 +21,14 @@ namespace event {
  * @{
  */
 //! Event interface
-template <typename T_>
 class ievent {
  private:
     //! Event ID.
     std::uint8_t mId;
+    //! Length of payload
+    std::size_t mPayloadLength;
     //! Event data.
-    T_ mPayload;
+    void* mPayload;
 
  public:
     //! Default DTOR
@@ -38,9 +39,10 @@ class ievent {
      * \param length Payload length.,
      * \param payload Data to be moved.
      */
-    void setPayload(std::uint8_t id, std::size_t length, const T_* payload) {
+    void setPayload(std::uint8_t id, std::size_t length, const void* payload) {
         mId = id;
-        std::memmove(&mPayload, payload, length);
+        mPayloadLength = length;
+        std::memmove(&mPayload, payload, mPayloadLength);
     }
     /*! Returns the event id.
      * \return Current event id.
@@ -50,12 +52,12 @@ class ievent {
      * \return Current payload length.
      */
     std::size_t getPayloadLength() {
-        return sizeof mPayload;
+        return mPayloadLength;
     }
     /*! Returns a pointer to the payload.
      * \return Pointer to payload data.
      */
-    T_* getPayload() {
+    void* getPayload() {
         return &mPayload;
     }
 };
