@@ -17,10 +17,11 @@ set(SOURCE_FILES
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE
-    inc)
+    inc
+    ${PROJECT_SOURCE_DIR}/../cgl/inc)
 target_link_directories(${PROJECT_NAME} PRIVATE
     $ENV{MINGW_64_ROOT}/lib)
-target_link_libraries(${PROJECT_NAME} )
+target_link_libraries(${PROJECT_NAME} cgl)
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
