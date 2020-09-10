@@ -2,3 +2,6 @@
 	path = .\\vendors\\googletest
 	url = https://github.com/google/googletest
 	
+[submodule "vendors/stb"]
+	path = vendors/stb
+	url = https://github.com/nothings/stb.git
