@@ -32,17 +32,16 @@ namespace window {
 class SDLWindow  : public IWindow {
  private:
     SDL_Window* m_pWindow;
-    
- public:
 
+ public:
     SDLWindow();
     virtual ~SDLWindow();
 
-    bool create(const std::string& title,
-        const iRect& windowRect, Uint32 windowFlags) override;
-    void destroy() override;
+    auto create(const std::string& title,
+        const iRect& windowRect, Uint32 windowFlags) -> bool override;
+    auto destroy() -> void override;
 
-    bool handleEvent(event::ievent& evt);
+    auto handleEvent(const event::ievent& evt) -> bool;
 };
 /*! @} End of Doxygen Groups*/
 }  // namespace window

@@ -37,14 +37,14 @@ class iapp {
     /*!
      * \return True if application is running.
      */
-    bool running() const {
+    auto running() -> const bool {
        return !mDone;
     }
     //! Sets the application running flag.
     /*!
      * \param running True to set flag to running.
      */
-    void running(const bool& running) {
+    auto running(const bool& running) -> void {
        mDone = !running;
     }
     //! Handler for application initialize event.
@@ -53,9 +53,9 @@ class iapp {
      * \param argv Command line arguments.
      * \return Return code.
      */
-    virtual std::uint8_t OnInitialize(int* argc, char** argv) = 0;
+    virtual auto OnInitialize(int* argc, char** argv) -> std::uint8_t = 0;
     //! Handler for application cleanup event.
-    virtual void OnCleanUp() = 0;
+    virtual auto OnCleanUp() -> void = 0;
 };
 /*! @} End of Doxygen Groups*/
 }  // End namespace app

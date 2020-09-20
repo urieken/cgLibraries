@@ -10,7 +10,7 @@
 namespace sandbox {
 namespace gst_helper {
 
-void initialize(int* argc, char*** argv);
+auto initialize(int* argc, char*** argv) -> void;
 
 }  // gst_helper
 }  // namespace sandbox

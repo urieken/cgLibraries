@@ -39,7 +39,8 @@ class ievent {
      * \param length Payload length.,
      * \param payload Data to be moved.
      */
-    void setPayload(std::uint8_t id, std::size_t length, const void* payload) {
+    auto setPayload(std::uint8_t id,
+        std::size_t length, const void* payload) -> void {
         mId = id;
         mPayloadLength = length;
         std::memmove(&mPayload, payload, mPayloadLength);
@@ -47,17 +48,17 @@ class ievent {
     /*! Returns the event id.
      * \return Current event id.
      */
-    std::uint8_t getId() { return mId; }
+    auto getId() -> std::uint8_t { return mId; }
     /*! Returns the event payload length.
      * \return Current payload length.
      */
-    std::size_t getPayloadLength() {
+    auto getPayloadLength() -> std::size_t {
         return mPayloadLength;
     }
     /*! Returns a pointer to the payload.
      * \return Pointer to payload data.
      */
-    void* getPayload() {
+    auto getPayload() -> void* {
         return &mPayload;
     }
 };

@@ -31,9 +31,9 @@ namespace window {
 class IWindow {
  public:
     event::EventHandler onEvent;
-    virtual bool create(const std::string& title,
-        const iRect& windowRect, Uint32 windowFlags) = 0;
-    virtual void destroy() = 0;
+    auto create(const std::string& title,
+        const iRect& windowRect, Uint32 windowFlags) virtual bool = 0;
+    auto destroy() virtual void = 0;
 };
 /*! @} End of Doxygen Groups*/
 }  // namespace window

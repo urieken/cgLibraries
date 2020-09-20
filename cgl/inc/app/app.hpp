@@ -33,9 +33,9 @@ class app : public iapp {
      * \param argv Command line arguments.
      * \return Return code.
      */
-    std::uint8_t OnInitialize(int* argc, char** argv) override;
+    auto OnInitialize(int* argc, char** argv) -> std::uint8_t override;
     //! Handler for application cleanup event.
-    void OnCleanUp() override;
+    auto OnCleanUp() -> void override;
 };
 /*! @} End of Doxygen Groups*/
 }  // End namespace app

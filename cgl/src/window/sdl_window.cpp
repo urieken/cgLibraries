@@ -7,7 +7,7 @@
 namespace cgl {
 namespace window {
 
-bool SDLWindow::handleEvent(event::ievent& evt) {
+auto SDLWindow::handleEvent(event::ievent& evt) -> bool {
     bool bReturn{false};
     SDL_Event sdlEvt;
     if (cgl::event::EVENT_ID::SDL_EVENT == evt.getId()) {
@@ -26,15 +26,15 @@ SDLWindow::SDLWindow() :
 
 SDLWindow::~SDLWindow() {}
 
-bool SDLWindow::create(const std::string& title,
-    const iRect& windowRect, Uint32 windowFlags) {
+auto SDLWindow::create(const std::string& title,
+    const iRect& windowRect, Uint32 windowFlags) -> bool {
     m_pWindow = ::SDL_CreateWindow(title.c_str(),
         windowRect.top, windowRect.left,
         windowRect.width, windowRect.height, windowFlags);
     return nullptr != m_pWindow;
 }
 
-void SDLWindow::destroy() {
+auto SDLWindow::destroy() -> void {
     if (nullptr != m_pWindow) {
         ::SDL_DestroyWindow(m_pWindow);
         m_pWindow = nullptr;

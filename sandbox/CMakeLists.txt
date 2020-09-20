@@ -13,14 +13,16 @@ project(cgLibsSandbox
 set(CMAKE_CXX_STANDARD_REQUIRED 17)
 
 set(SOURCE_FILES
-    src/main.cpp)
+    src/main.cpp
+    src/sandbox_app.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE
-    inc)
+    inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cgl/inc)
 target_link_directories(${PROJECT_NAME} PRIVATE
     $ENV{MINGW_64_ROOT}/lib)
-target_link_libraries(${PROJECT_NAME} )
+target_link_libraries(${PROJECT_NAME}  mingw32 SDL2main SDL2 cgl)
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES

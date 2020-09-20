@@ -16,7 +16,7 @@ class AppRunner {
     AppRunner() = default;
     virtual ~AppRunner() = default;
 
-    int Run(int* argc, char** argv) {
+    auto Run(int* argc, char** argv) -> int {
         int ret{-1};
         mApplication = std::make_unique<T>();
         // Create a constant or enumeration and replace '0'.

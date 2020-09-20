@@ -8,8 +8,6 @@
 #ifndef CGL_INC_EVENT_IEVENT_LISTENER_HPP_
 #define CGL_INC_EVENT_IEVENT_LISTENER_HPP_
 
-#include <functional>
-
 //! Crazy Galen's Libraries
 namespace cgl {
 /*!
@@ -32,9 +30,9 @@ class ieventListener {
      * \brief Register event handler to handler list.
      * \param handler The event handler to be registered. 
      */ 
-    virtual void registerHandler(const EventHandler& handler) = 0;
+    auto registerHandler(const EventHandler& handler) -> virtual void = 0;
     //! Start listening for events.
-    virtual void startListening() = 0;
+    auto startListening() -> virtual void = 0;
 };
 /*! @} End of Doxygen Groups*/
 }  // namespace event

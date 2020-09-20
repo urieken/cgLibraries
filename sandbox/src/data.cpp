@@ -8,8 +8,8 @@
 
 namespace sandbox {
 
-void foo(std::promise<std::uint8_t>&& count,
-         std::uint8_t start, std::uint8_t stop) {
+auto foo(std::promise<std::uint8_t>&& count,
+         std::uint8_t start, std::uint8_t stop) -> void {
     std::printf("%s:%d:%d\n", __func__, __FILE__, __LINE__);
     auto counter = 0;
     for (auto i = start; i < stop; i++) {
@@ -20,7 +20,7 @@ void foo(std::promise<std::uint8_t>&& count,
     count.set_value(counter);
 }
 
-std::uint8_t cnt(std::uint8_t start, std::uint8_t stop) {
+auto cnt(std::uint8_t start, std::uint8_t stop) -> std::uint8_t {
     auto counter = 0;
     for (auto i = start; i < stop; i++) {
         std::printf("COUNTER : %d\n", i);
