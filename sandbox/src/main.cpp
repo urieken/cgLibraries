@@ -3,14 +3,24 @@
 #include <SDL2/SDL.h>
 
 #include <cstdio>
+#include <iostream>
 
+#include <error/error_types.hpp>
 #include <common/shapes.hpp>
+
 #include <sandbox_app.hpp>
 
 auto main(int argc, char** argv) -> int {
     int code{0};
     cgl::sandbox::SandboxApp app;
+    // cgl::error::cglErrorCategory cglErrorCategoryObj;
+    std::error_code cglError{
+        static_cast<int>(cgl::error::CGL_ERROR::NO_ERROR),
+        cgl::error::cglErrorCategory{}};
     std::printf("[ARGC : %d][APP : %s]\n", argc, argv[0]);
+    std::cout << cglError << std::endl;
+    std::cout << cglError.message() << std::endl;
+    std::cout << cglError.value() << std::endl;
 
     if (0 == ::SDL_Init(SDL_INIT_VIDEO)) {
         std::printf("INITIAZED SDL\n");
