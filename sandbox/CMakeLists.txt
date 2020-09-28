@@ -20,9 +20,9 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PRIVATE
     inc
     ${CMAKE_CURRENT_SOURCE_DIR}/../cgl/inc)
+target_link_libraries(${PROJECT_NAME}  mingw32 SDL2main SDL2 cgl)
 target_link_directories(${PROJECT_NAME} PRIVATE
     $ENV{MINGW_64_ROOT}/lib)
-target_link_libraries(${PROJECT_NAME}  mingw32 SDL2main SDL2 cgl)
 
 set_target_properties(${PROJECT_NAME}
     PROPERTIES

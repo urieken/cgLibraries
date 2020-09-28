@@ -5,18 +5,21 @@
 #include <cstdio>
 #include <iostream>
 
-#include <error/error_types.hpp>
 #include <common/shapes.hpp>
+#include <error/error_types.hpp>
+#include <compilers/compilers.hpp>
 
 #include <sandbox_app.hpp>
 
 auto main(int argc, char** argv) -> int {
-    int code{0};
     cgl::sandbox::SandboxApp app;
-    // cgl::error::cglErrorCategory cglErrorCategoryObj;
     std::error_code cglError{
         static_cast<int>(cgl::error::CGL_ERROR::NO_ERROR),
         cgl::error::cglErrorCategory{}};
+    int code{0};
+    std::printf("BUILT WITH %s : %s\n",
+        cgl::Compilers::name().c_str(),
+        cgl::Compilers::versionString().c_str());
     std::printf("[ARGC : %d][APP : %s]\n", argc, argv[0]);
     std::cout << cglError << std::endl;
     std::cout << cglError.message() << std::endl;

@@ -14,7 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED 17)
 
 set(SOURCE_FILES
     src/app/app.cpp
-    src/error/cgl_error.cpp)
+    src/error/cgl_error.cpp
+    src/compilers/compilers.cpp)
 
 set(TEST_FILES
     src/app/app.cpp
