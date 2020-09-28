@@ -13,11 +13,13 @@ project(cgl
 set(CMAKE_CXX_STANDARD_REQUIRED 17)
 
 set(SOURCE_FILES
-    src/app/app.cpp)
+    src/app/app.cpp
+    src/error/cgl_error.cpp)
 
 set(TEST_FILES
     src/app/app.cpp
     tests/src/main.cpp
+    src/error/cgl_error.cpp
     tests/src/app_tests.cpp
     tests/src/event_tests.cpp)
 

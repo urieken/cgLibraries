@@ -4,7 +4,10 @@
 
     Base class for application classes.
  */
+
 #include <cstdint>
+#include <system_error>
+#include <error/error_types.hpp>
 
 #ifndef CGL_INC_APP_IAPP_HPP_
 #define CGL_INC_APP_IAPP_HPP_
