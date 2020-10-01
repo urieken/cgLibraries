@@ -9,7 +9,12 @@ project(cgLibraries
     VERSION 1.0
     DESCRIPTION "Crazy Galen's Libraries"
     LANGUAGES CXX)
-
-add_subdirectory(vendors/googletest)
+if(BUILD_DEPENDENCIES)
+    # add_subdirectory(vendors/Vulkan-Headers)
+    add_subdirectory(vendors/googletest)
+    # add_subdirectory(vendors/SDL2)
+endif()
 add_subdirectory(cgl)
-add_subdirectory(sandbox)
+if(NOT CODE_COVERAGE)
+    add_subdirectory(sandbox)
+endif()

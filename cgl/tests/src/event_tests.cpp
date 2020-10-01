@@ -59,7 +59,7 @@ TEST_F(EventTestF, testSetAndGetData) {
     EXPECT_EQ(length, mEvent->getPayloadLength());
 }
 
-TEST_F(EventTestF, testSetAndGetErrorCodeForNoError) {
+TEST_F(EventTestF, DISABLED_testSetAndGetErrorCodeForNoError) {
     mEvent->setError(
         std::make_shared<std::error_code>(
             static_cast<int>(cgl::error::CGL_ERROR::NO_ERROR),
@@ -72,7 +72,7 @@ TEST_F(EventTestF, testSetAndGetErrorCodeForNoError) {
         static_cast<cgl::error::CGL_ERROR>(mEvent->getError()->value()));
 }
 
-TEST_F(EventTestF, testSetAndGetErrorCodeForUnknownError) {
+TEST_F(EventTestF, DISABLED_testSetAndGetErrorCodeForUnknownError) {
     mEvent->setError(
         std::make_shared<std::error_code>(
             static_cast<int>(cgl::error::CGL_ERROR::UNKNOWN),
