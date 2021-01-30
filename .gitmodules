@@ -1,22 +1,6 @@
-[submodule ".\\vendors\\googletest"]
-	path = .\\vendors\\googletest
-	url = https://github.com/google/googletest
-	
 [submodule "vendors/stb"]
 	path = vendors/stb
 	url = https://github.com/nothings/stb.git
 [submodule "vendors/googletest"]
 	path = vendors/googletest
 	url = https://github.com/google/googletest
-[submodule "vendors/SDL2"]
-	path = vendors/SDL2
-	url = https://github.com/davidsiaw/SDL2.git
-[submodule "vendors/Vulkan-Docs"]
-	path = vendors/Vulkan-Docs
-	url = https://github.com/KhronosGroup/Vulkan-Docs.git
-[submodule "vendors/Vulkan-Samples"]
-	path = vendors/Vulkan-Samples
-	url = https://github.com/KhronosGroup/Vulkan-Samples.git
-[submodule "vendors/Vulkan-Headers"]
-	path = vendors/Vulkan-Headers
-	url = https://github.com/KhronosGroup/Vulkan-Headers.git
