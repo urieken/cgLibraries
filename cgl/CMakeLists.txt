@@ -7,5 +7,7 @@ project(cgl
 
 set(CMAKE_CXX_STANDARD_REQUIRED 17)
 
+add_subdirectory(library)
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/../toolchains/buildTypes.cmake)
 

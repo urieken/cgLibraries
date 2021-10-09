@@ -8,6 +8,8 @@
 #ifndef CGL_INC_EVENT_IEVENT_LISTENER_HPP_
 #define CGL_INC_EVENT_IEVENT_LISTENER_HPP_
 
+#include <funtional>
+
 //! Crazy Galen's Libraries
 namespace cgl {
 /*!
