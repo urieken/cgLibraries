@@ -26,11 +26,12 @@ SDLEventListener::SDLEventListener(::Application::IApplication& app) :
     mApplication{app} {
 }
 
-auto SDLEventListener::Start() -> void {
+auto SDLEventListener::Start() -> int {
     if (SDL_INIT_EVENTS != ::SDL_WasInit(SDL_INIT_EVENTS)) {
-        // Might want to return an `std::error_condition` here.
         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
             "SDL Events was not initialized");
+        // Might want to return an `std::error_condition` here.
+        return -1;
     } else {
         ::SDL_Log("SDL Events initialized");
         mListening = true;
@@ -50,6 +51,7 @@ auto SDLEventListener::Start() -> void {
             };
         };
     }
+    return 0;
 }
 
 auto SDLEventListener::Stop() -> void {
@@ -58,10 +60,6 @@ auto SDLEventListener::Stop() -> void {
 
 auto SDLEventListener::PushEvent(const IEvent& event) -> void {
     mApplication.OnEvent(event);
-}
-
-auto SDLEventListener::Subscribe(Application::IApplication& app) -> void {
-    mApplication = app;
 }
 
 }  // namespace cgl

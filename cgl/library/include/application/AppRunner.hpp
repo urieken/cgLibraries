@@ -12,7 +12,9 @@
 #ifndef CGL_LIBRARY_INCLUDE_APPLICATION_APP_RUNNER_HPP_
 #define CGL_LIBRARY_INCLUDE_APPLICATION_APP_RUNNER_HPP_
 
-#include <memory>
+#include <event/CoreEvent.hpp>
+
+namespace Event = ::cgl::event;
 
 namespace cgl {
 namespace application {
@@ -21,7 +23,7 @@ namespace application {
  * 
  * @tparam APP The application to be executed.
  */
-template <typename APP>
+template <typename APP, typename LISTENER>
 class AppRunner {
 public:
     /**
@@ -30,8 +32,8 @@ public:
      * @param argc Command line argument count.
      * @param argv Command line arguments.
      */
-    AppRunner(int argc, char** argv) {
-        mApplication = std::make_unique<APP>(argc, argv);
+    AppRunner(int argc, char** argv) :
+        mApplication{argc, argv} {
     }
     /**
      * @brief Run the application.
@@ -39,7 +41,9 @@ public:
      * @return int The application return code.
      */
     auto Run() -> int {
-        return mApplication->Run();
+        LISTENER listener{mApplication};
+        listener.PushEvent(Event::CoreEvent(Event::EventType::Init));
+        return listener.Start();
     }
     /**
      * @brief Returns a raw pointer to the application instance.
@@ -51,9 +55,9 @@ public:
     }
 private:
     /**
-     * @brief Pointer to the Application instance.
+     * @brief The Application instance.
      */
-    std::unique_ptr<APP> mApplication;
+    APP mApplication;
 };
 
 }  // namespace application

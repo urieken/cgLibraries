@@ -27,8 +27,10 @@ public:
     virtual ~IEventListener() = default;
     /**
      * @brief Start listening.
+     * 
+     * @return int The return code for the application.
      */
-    virtual auto Start() -> void = 0;
+    virtual auto Start() -> int = 0;
     /**
      * @brief Stop listening.
      */
@@ -39,12 +41,6 @@ public:
      * @param event The event to be pushed.
      */
     virtual auto PushEvent(const IEvent& event) -> void = 0;
-    /**
-     * @brief Subcribe to event notifications.
-     * 
-     * @param app The subscriber.
-     */
-    virtual auto Subscribe(::cgl::application::IApplication& app) -> void = 0;
 };
 
 }  // namespace event

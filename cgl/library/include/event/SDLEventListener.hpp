@@ -32,8 +32,10 @@ public:
     SDLEventListener(::cgl::application::IApplication& app);
     /**
      * @brief Start listening.
+     * 
+     * @return int The return code for the application.
      */
-    auto Start() -> void override;
+    auto Start() -> int override;
     /**
      * @brief Stop listening.
      */
@@ -44,12 +46,6 @@ public:
      * @param event The event to be pushed.
      */
     auto PushEvent(const IEvent& event) -> void override;
-    /**
-     * @brief Subcribe to event notifications.
-     * 
-     * @param app The subscriber.
-     */
-    auto Subscribe(::cgl::application::IApplication& app) -> void override;
 private:
     /**
      * @brief The event subscriber

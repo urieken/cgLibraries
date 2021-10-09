@@ -13,6 +13,7 @@
 #include <application/IApplication.hpp>
 
 #include <MockApplication.hpp>
+#include <MockEventListener.hpp>
 
 #include <memory>
 
@@ -31,7 +32,8 @@ protected:
     /**
      * @brief Pointer to test object.
      */
-    AppRunner<::testing::NiceMock<MockApplication>> mAppRunner;
+    AppRunner<::testing::NiceMock<MockApplication>,
+        ::testing::NiceMock<::cgl::event::test::MockEventListener>> mAppRunner;
     /**
      * @brief Construct a new AppRunnerTest object
      */
