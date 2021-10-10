@@ -42,7 +42,8 @@ public:
      */
     auto Run() -> int {
         LISTENER listener{mApplication};
-        listener.PushEvent(Event::CoreEvent(Event::EventType::Init));
+        listener.PushEvent(Event::CoreEvent(Event::EventType::Init,
+            Event::EventSource::None));
         return listener.Start();
     }
     /**

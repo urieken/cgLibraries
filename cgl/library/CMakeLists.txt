@@ -9,8 +9,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED 17)
 
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/source/application/SDLApplication.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/event/IEvent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/CoreEvent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/SDLEventListener.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/event/SDLEvent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/system/Compilers.cpp)
 
 add_library(${PROJECT_NAME}

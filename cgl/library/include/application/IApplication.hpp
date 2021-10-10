@@ -34,7 +34,7 @@ public:
      * 
      * @param event The event to be handled.
      * @return true The event was processed.
-     * @return false The event was ignored.
+     * @return false An error has occurred or quit the application.
      */
     virtual auto OnEvent(const ::cgl::event::IEvent& event) -> bool = 0;
 };

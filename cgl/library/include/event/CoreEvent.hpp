@@ -9,10 +9,10 @@
  * 
  */
 
-#include <event/IEvent.hpp>
+#ifndef CGL_LIBRARY_INCLUDE_EVENT_CORE_EVENT_HPP_
+#define CGL_LIBRARY_INCLUDE_EVENT_CORE_EVENT_HPP_
 
-#ifndef CGL_LIBRARY_INCLUDE_EVENT_CORE_HPP_
-#define CGL_LIBRARY_INCLUDE_EVENT_CORE_HPP_
+#include <event/IEvent.hpp>
 
 namespace cgl {
 namespace event {
@@ -28,24 +28,20 @@ public:
     /**
      * @brief Construct a new CoreEvent object
      * 
-     * @param type The CoreEvent subtype
+     * @param type The CoreEvent.
+     * @param source The EventSource.
      */
-    explicit CoreEvent(const EventType& type);
+    CoreEvent(const EventType& type, const EventSource& source);
     ~CoreEvent() = default;
     /**
-     * @brief Returns the event type.
+     * @brief Returns a pointer to event data.
      * 
-     * @return EventType The event type.
+     * @return const void* The pointer event data.
      */
-    auto Type() const -> const EventType override;
-private:
-    /**
-     * @brief The event type
-     */
-    EventType mType;
+    auto Data() const -> const void* override;
 };
 
 }  // namespace event
 }  // namespace cgl
 
-#endif /* CGL_LIBRARY_INCLUDE_EVENT_CORE_HPP_ */
+#endif /* CGL_LIBRARY_INCLUDE_EVENT_CORE_EVENT_HPP_ */

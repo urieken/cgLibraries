@@ -10,7 +10,7 @@
  */
 
 #include <event/SDLEventListener.hpp>
-#include <event/CoreEvent.hpp>
+#include <event/SDLEvent.hpp>
 
 #include <application/IApplication.hpp>
 
@@ -38,16 +38,9 @@ auto SDLEventListener::Start() -> int {
         while(mListening) {
             SDL_Event event;
             while (::SDL_PollEvent(&event)) {
-                switch (event.type){
-                case SDL_QUIT : {
-                    // Might want to do an `SDLEvent` here instead.
-                    // But for now, we'll just use `CoreEvent` to see
-                    // if this works.
-                    mApplication.OnEvent(Event::CoreEvent(Event::EventType::Quit));
-                    mListening = false;
-                }break;
-                default:break;
-                }
+                mListening = mApplication.OnEvent(Event::SDLEvent{
+                    Event::EventType::Core,Event::EventSource::SDL,
+                    &event});
             };
         };
     }

@@ -20,9 +20,14 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+namespace EventTest = ::cgl::event::test;
+
 namespace cgl {
 namespace application {
 namespace test {
+
+using NiceMockApplication = ::testing::NiceMock<MockApplication>;
+using NiceMockEventListener = ::testing::NiceMock<EventTest::MockEventListener>;
 
 /**
  * @brief Test fixture for AppRunner
@@ -32,8 +37,7 @@ protected:
     /**
      * @brief Pointer to test object.
      */
-    AppRunner<::testing::NiceMock<MockApplication>,
-        ::testing::NiceMock<::cgl::event::test::MockEventListener>> mAppRunner;
+    AppRunner<NiceMockApplication, NiceMockEventListener> mAppRunner;
     /**
      * @brief Construct a new AppRunnerTest object
      */

@@ -44,16 +44,28 @@ auto SDLApplication::Run() -> int {
 }
 
 auto SDLApplication::OnEvent(const Event::IEvent& event) -> bool {
-    auto type = event.Type();
-    switch (type) {
-        case Event::EventType::Init : {
-            return Setup();
-        }break;
-        case Event::EventType::Quit : {
-            Cleanup();
-            return true;
-        }break;
-        default:break;
+    if (Event::EventSource::SDL == event.Source()) {
+        auto data = static_cast<const SDL_Event*>(event.Data());
+        switch(data->type) {
+            case SDL_QUIT : {
+                Cleanup();
+                return false;
+            }break;
+            case SDL_KEYDOWN : {
+                return OnKeyDownEvent(data->key);
+            }break;
+            case SDL_KEYUP : {
+                return OnKeyUpEvent(data->key);
+            }break;
+            default:break;
+        }
+    } else {
+        switch (event.Type()) {
+            case Event::EventType::Init : {
+                return Setup();
+            }break;
+            default : break;
+        }
     }
     return false;
 }
@@ -74,6 +86,22 @@ auto SDLApplication::Setup() -> bool {
 auto SDLApplication::Cleanup() -> void {
     ::SDL_Log("Shutting down SDL");
     ::SDL_Quit();
+}
+
+auto SDLApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool {
+    System::unused(event);
+    return true;
+}
+
+auto SDLApplication::OnKeyUpEvent(const SDL_KeyboardEvent& event) -> bool {
+    switch(event.keysym.sym) {
+        case SDLK_ESCAPE : {
+            Cleanup();
+            return false;
+        } break;
+        default:break;
+    }
+    return true;
 }
 
 }  // namespace application

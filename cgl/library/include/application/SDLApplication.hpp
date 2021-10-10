@@ -52,7 +52,7 @@ public:
      * 
      * @param event The event to be handled.
      * @return true The event was processed.
-     * @return false The event was ignored.
+     * @return false An error has occurred or quit the application.
      */
     auto OnEvent(const ::cgl::event::IEvent& event) -> bool override;
 private:
@@ -71,6 +71,22 @@ private:
      * @brief Cleanup the appication resources.
      */
     auto Cleanup() -> void;
+    /**
+     * @brief Handle keyboard press events
+     * 
+     * @param event The SDL keyboard event.
+     * @return true The event was processed.
+     * @return false An error has occurred or quit the application.
+     */
+    auto OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool;
+    /**
+     * @brief Handle keyboard release events
+     * 
+     * @param event The SDL keyboard event.
+     * @return true The event was processed.
+     * @return false An error has occurred or quit the application.
+     */
+    auto OnKeyUpEvent(const SDL_KeyboardEvent& event) -> bool;
 };
 
 
