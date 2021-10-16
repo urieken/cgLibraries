@@ -14,7 +14,12 @@
 
 #include <application/IApplication.hpp>
 
+#include <display/SDLWindow.hpp>
+#include <display/SDLRenderer.hpp>
+
 #include <event/IEvent.hpp>
+
+#include <memory>
 
 #include <SDL2/SDL.h>
 
@@ -39,12 +44,6 @@ public:
      * @note Might want to use std::forward here.
      */
     SDLApplication(int argc, char** argv);
-    /**
-     * @brief Run the application.
-     * 
-     * @return int The application return code.
-     */
-    auto Run() -> int override;
     // Add std::error_condition for some handlers.
     // Add pure virtual init, update, event, render handers, etc.
     /**
@@ -59,7 +58,15 @@ private:
     /**
      * @brief The SDL window.
      */
-    SDL_Window* mWindow;
+    std::unique_ptr<::cgl::display::IWindow> mWindow;
+    /**
+     * @brief The SDL renderer.
+     */
+    std::unique_ptr<::cgl::display::IRenderer> mRenderer;
+    /**
+     * @brief An update has been requested.
+     */
+    bool mUpdateRequested;
     /**
      * @brief Setup the application
      * 
@@ -87,6 +94,10 @@ private:
      * @return false An error has occurred or quit the application.
      */
     auto OnKeyUpEvent(const SDL_KeyboardEvent& event) -> bool;
+    /**
+     * @brief Update renderer
+     */
+    auto OnUpdate() -> void;
 };
 
 

@@ -24,12 +24,6 @@ class IApplication {
 public:
     virtual ~IApplication() = default;
     /**
-     * @brief Run the application.
-     * 
-     * @return int The application return code.
-     */
-    virtual auto Run() -> int = 0;
-    /**
      * @brief Handle events.
      * 
      * @param event The event to be handled.

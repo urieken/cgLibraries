@@ -23,7 +23,7 @@ constexpr auto compilerPatchLevel{__clang_patchlevel__};
 #elif defined(__GNUC___) || defined(__GNUG__)
 constexpr auto compilerName{"GNU"};
 constexpr auto compilerMajor{__GNUC__};
-constexpr auto compilerMinor{__clang_minor__};
+constexpr auto compilerMinor{__GNUC_MINOR__};
 constexpr auto compilerPatchLevel{__GNUC_PATCHLEVEL__};
 #define FUNCTION_NAME __PRETTY_FUNCTION__
 #elif defined(__MINGW32__)

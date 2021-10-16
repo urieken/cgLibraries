@@ -1,14 +1,24 @@
-include(${CMAKE_CURRENT_SOURCE_DIR}/../../toolchains/versions.cmake)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../cmake")
+
+include(versions)
 
 project(CGLCommon
     VERSION 1.0
     DESCRIPTION "Crazy Galen's Library - Common"
     LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED 17)
+
+set(CODE_COVERAGE "On")
+set(CMAKE_BUILD_TYPE "Debug")
+
+include(build_types)
 
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/source/application/SDLApplication.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLRenderer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLWindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/IEvent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/CoreEvent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/SDLEventListener.cpp
