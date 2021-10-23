@@ -34,12 +34,8 @@ class MockApplication : public IApplication {
 public:
     /**
      * @brief Construct a new Mock Application object
-     * 
-     * @param argc Command line argument count.
-     * @param argv Command line arguments.
      */
-    MockApplication(int argc, char** argv) {
-        System::unused(argc, argv);
+    MockApplication() {
         ON_CALL(*this, Run())
             .WillByDefault(::testing::Return(defaultTestReturnCode));
     }

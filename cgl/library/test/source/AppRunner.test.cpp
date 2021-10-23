@@ -41,7 +41,7 @@ protected:
     /**
      * @brief Construct a new AppRunnerTest object
      */
-    AppRunnerTest() : mAppRunner{0, nullptr} {}
+    AppRunnerTest() : mAppRunner{} {}
 };
 
 /**

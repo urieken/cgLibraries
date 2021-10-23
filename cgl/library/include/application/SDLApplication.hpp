@@ -14,10 +14,11 @@
 
 #include <application/IApplication.hpp>
 
-#include <display/SDLWindow.hpp>
-#include <display/SDLRenderer.hpp>
-
+#include <error/CGLError.hpp>
 #include <event/IEvent.hpp>
+#include <display/IWindow.hpp>
+#include <display/IRenderer.hpp>
+#include <system/Arguments.hpp>
 
 #include <memory>
 
@@ -38,12 +39,9 @@ public:
     /**
      * @brief Construct a new SDLApplication object
      * 
-     * @param argc Command line argument count.
-     * @param argv Command line arguments.
-     * 
-     * @note Might want to use std::forward here.
+     * @param args The processed arguments.
      */
-    SDLApplication(int argc, char** argv);
+    explicit SDLApplication(const ::cgl::system::Arguments& args);
     // Add std::error_condition for some handlers.
     // Add pure virtual init, update, event, render handers, etc.
     /**
@@ -55,6 +53,10 @@ public:
      */
     auto OnEvent(const ::cgl::event::IEvent& event) -> bool override;
 private:
+    /**
+     * @brief Arguments for the application.
+     */
+    const ::cgl::system::Arguments& mArguments;
     /**
      * @brief The SDL window.
      */

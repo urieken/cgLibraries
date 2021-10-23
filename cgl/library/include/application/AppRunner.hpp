@@ -13,8 +13,13 @@
 #define CGL_LIBRARY_INCLUDE_APPLICATION_APP_RUNNER_HPP_
 
 #include <event/CoreEvent.hpp>
+#include <system/Arguments.hpp>
+
+#include <memory>
+#include <utility>
 
 namespace Event = ::cgl::event;
+namespace System = ::cgl::system;
 
 namespace cgl {
 namespace application {
@@ -27,13 +32,18 @@ template <typename APP, typename LISTENER>
 class AppRunner {
 public:
     /**
+     * @brief Construct a new App Runner object
+     */
+    AppRunner() :
+        mApp{new APP{}} {
+    }
+    /**
      * @brief Construct a new AppRunner object
      * 
-     * @param argc Command line argument count.
-     * @param argv Command line arguments.
+     * @param args Processed arguments to be sent to the application instance.
      */
-    AppRunner(int argc, char** argv) :
-        mApplication{argc, argv} {
+    explicit AppRunner(System::Arguments& args) :
+        mApp{new APP{args}} {
     }
     /**
      * @brief Run the application.
@@ -41,24 +51,16 @@ public:
      * @return int The application return code.
      */
     auto Run() -> int {
-        LISTENER listener{mApplication};
+        LISTENER listener{*mApp};
         listener.PushEvent(Event::CoreEvent(Event::EventType::Init,
             Event::EventSource::None));
         return listener.Start();
-    }
-    /**
-     * @brief Returns a raw pointer to the application instance.
-     * 
-     * @return const APP* The application raw pointer.
-     */
-    auto get() const -> const APP* {
-        return mApplication.get();
     }
 private:
     /**
      * @brief The Application instance.
      */
-    APP mApplication;
+    std::unique_ptr<APP> mApp;
 };
 
 }  // namespace application

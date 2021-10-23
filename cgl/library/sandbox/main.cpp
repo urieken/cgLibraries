@@ -12,22 +12,51 @@
 #include <application/AppRunner.hpp>
 
 #include <application/SDLApplication.hpp>
+#include <display/SDLRenderer.hpp>
+#include <display/SDLWindow.hpp>
+#include <error/CGLError.hpp>
 #include <event/SDLEventListener.hpp>
 
 #include <system/Compilers.hpp>
 
 #include <cstdio>
+#include <fstream>
 #include <string>
+#include <sstream>
 
 namespace Application = ::cgl::application;
+namespace Display = ::cgl::display;
+namespace Error = ::cgl::error;
 namespace Event = ::cgl::event;
 namespace System = ::cgl::system;
+
+using Code = Error::ErrorCode;
+
+constexpr auto default_config{"res/config/default_config"};
 
 auto main(int argc, char** argv) -> int {
     auto compiler = System::Compilers{};
     std::printf("Compiled with : %s %s\n",compiler.name().c_str(),
         compiler.versionString().c_str());
-    Application::AppRunner<Application::SDLApplication,
-        Event::SDLEventListener> appRunner{argc, argv};
-    return appRunner.Run();
+    std::ifstream configFile{default_config};
+    if (configFile.is_open()) {
+        std::stringstream ss;
+        std::string line{};
+        while(std::getline(configFile, line)) {
+            ss << line << "\n";
+        }
+        System::Arguments args{};
+        auto parseResult = args.ProcessInputStream(ss, "([a-zA-Z0-9 ]+)");
+        if (static_cast<int>(Code::NoError) == parseResult.value()) {
+            Application::AppRunner<Application::SDLApplication,
+                Event::SDLEventListener> appRunner {args};
+            return appRunner.Run();
+        } else {
+            std::printf("Failed to parse input stream : %s\n",
+                parseResult.message().c_str());
+        }
+    } else {
+        std::printf("Failed to open file : %s\n", default_config);
+    }
+    return -1;
 }

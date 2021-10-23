@@ -11,9 +11,9 @@
 
 #include <application/SDLApplication.hpp>
 
+#include <display/SDLWindow.hpp>
+#include <display/SDLRenderer.hpp>
 #include <event/CoreEvent.hpp>
-
-#include <system/Unused.hpp>
 
 namespace Display = ::cgl::display;
 namespace Event = ::cgl::event;
@@ -22,11 +22,9 @@ namespace System = ::cgl::system;
 namespace cgl {
 namespace application {
 
-SDLApplication::SDLApplication(int argc, char** argv) :
-    mWindow{nullptr},
-    mRenderer{nullptr},
+SDLApplication::SDLApplication(const System::Arguments& args) :
+    mArguments{args}, mWindow{nullptr}, mRenderer{nullptr},
     mUpdateRequested{false} {
-    System::unused(argc, argv);
 }
 
 SDLApplication::~SDLApplication() {
@@ -68,9 +66,13 @@ auto SDLApplication::Setup() -> bool {
             "Failed to initialize SDL. Error = %s", ::SDL_GetError());
         return false;
     }
-    mWindow = std::make_unique<Display::SDLWindow>("SDL_Application",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-            800, 600, SDL_WINDOW_SHOWN);
+    mWindow = std::make_unique<Display::SDLWindow>(
+        mArguments.GetProperty("name").value().c_str(),
+        std::stoi(mArguments.GetProperty("top").value()),
+        std::stoi(mArguments.GetProperty("left").value()),
+        std::stoi(mArguments.GetProperty("width").value()),
+        std::stoi(mArguments.GetProperty("height").value()),
+        SDL_WINDOW_SHOWN);
     if (nullptr == mWindow) {
         return false;
     }
