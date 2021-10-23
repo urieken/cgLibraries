@@ -29,7 +29,7 @@ auto Arguments::GetProperty(const std::string& key) const
     return {};
 }
 
-auto Arguments::ProcessInputStream(std::stringstream& inputStream,
+auto Arguments::ProcessInputStream(std::istream& inputStream,
     const std::string& allowedCharacters, const std::string& delimeter)
     -> std::error_condition {
     std::string line{};

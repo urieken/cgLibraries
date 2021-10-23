@@ -40,7 +40,7 @@ public:
      * @param delimeter The delimeter for key and value strings.
      * @return std::error_condition The error condition.
      */
-    auto ProcessInputStream(std::stringstream& inputStream,
+    auto ProcessInputStream(std::istream& inputStream,
         const std::string& allowedCharacters = "([a-zA-Z0-9]+)",
         const std::string& delimeter = ":")
         -> std::error_condition;

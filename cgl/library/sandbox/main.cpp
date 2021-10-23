@@ -40,13 +40,9 @@ auto main(int argc, char** argv) -> int {
         compiler.versionString().c_str());
     std::ifstream configFile{default_config};
     if (configFile.is_open()) {
-        std::stringstream ss;
-        std::string line{};
-        while(std::getline(configFile, line)) {
-            ss << line << "\n";
-        }
         System::Arguments args{};
-        auto parseResult = args.ProcessInputStream(ss, "([a-zA-Z0-9 ]+)");
+        auto parseResult = args.ProcessInputStream(configFile,
+            "([a-zA-Z0-9 ]+)");
         if (static_cast<int>(Code::NoError) == parseResult.value()) {
             Application::AppRunner<Application::SDLApplication,
                 Event::SDLEventListener> appRunner {args};
