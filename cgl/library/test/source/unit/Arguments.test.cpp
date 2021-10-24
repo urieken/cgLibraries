@@ -26,7 +26,8 @@ namespace System = ::cgl::system;
 using Code = Error::ErrorCode;
 
 namespace cgl {
-namespace cpp_research {
+namespace system {
+namespace test {
 /**
  * @brief Test fixture for Arguments.
  */
@@ -93,6 +94,6 @@ TEST_F(ArgumentsTest, testValidInputStream) {
     EXPECT_EQ(std::string{"val02"}, mArguments->GetProperty("key02"));
     EXPECT_EQ(std::string{"val03"}, mArguments->GetProperty("key03"));
 }
-
-}  // namespace cpp_research
+}  // namespace test
+}  // namespace system
 }  // namespace cgl

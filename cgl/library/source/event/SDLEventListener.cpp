@@ -29,11 +29,11 @@ SDLEventListener::SDLEventListener(::Application::IApplication& app) :
 auto SDLEventListener::Start() -> int {
     if (SDL_INIT_EVENTS != ::SDL_WasInit(SDL_INIT_EVENTS)) {
         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
-            "SDL Events was not initialized");
+            "SDL event subsystem was not initialized");
         // Might want to return an `std::error_condition` here.
         return -1;
     } else {
-        ::SDL_Log("SDL Events initialized");
+        ::SDL_Log("SDL event subsystem initialized");
         mListening = true;
         while(mListening) {
             SDL_Event event;
@@ -52,7 +52,7 @@ auto SDLEventListener::Stop() -> void {
 }
 
 auto SDLEventListener::PushEvent(const IEvent& event) -> void {
-    mApplication.OnEvent(event);
+    mListening = mApplication.OnEvent(event);
 }
 
 }  // namespace cgl

@@ -54,11 +54,14 @@ set_target_properties(${PROJECT_NAME}_sandbox
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 set(TEST_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/AppRunner.test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/Arguments.test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/CGLError.test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/Compilers.test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/KeyPairString.test.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/integration/SDLApplication.integration.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/integration/SDLEventListener.integration.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/AppRunner.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/Arguments.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/CGLError.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/Compilers.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/KeyPairString.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/SDLEvent.test.cpp)
 
 add_executable(${PROJECT_NAME}_test
     ${TEST_FILES}

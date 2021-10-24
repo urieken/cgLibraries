@@ -18,7 +18,8 @@
 namespace System = ::cgl::system;
 
 namespace cgl {
-namespace cpp_research {
+namespace system {
+namespace test {
 /**
  * @brief Test fixture for KeyPairString
  */
@@ -84,6 +85,6 @@ TEST_F(KeyPairStringTest, testKeyValuePair) {
     EXPECT_EQ(0, InvalidkeyPair.key.length());
     EXPECT_EQ(0, InvalidkeyPair.value.length());
 }
-
-}  // namespace cpp_research
+}  // namespace test
+}  // namespace system
 }  // namespace cgl

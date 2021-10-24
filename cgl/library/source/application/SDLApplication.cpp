@@ -87,7 +87,6 @@ auto SDLApplication::Cleanup() -> void {
 }
 
 auto SDLApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool {
-    // ::SDL_Log("Key down : %d", event.keysym.sym);
     switch(event.keysym.sym) {
         case SDLK_r : {
             mRenderer->SetDrawColor(255UL, 0UL, 0UL, 255UL);
@@ -107,15 +106,15 @@ auto SDLApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool {
 }
 
 auto SDLApplication::OnKeyUpEvent(const SDL_KeyboardEvent& event) -> bool {
-    // ::SDL_Log("Key up : %d", event.keysym.sym);
+    bool result{true};
     switch(event.keysym.sym) {
         case SDLK_ESCAPE : {
             Cleanup();
-            return false;
+            result = false;
         } break;
         default:break;
     }
-    return true;
+    return result;
 }
 
 auto SDLApplication::OnUpdate() -> void {
