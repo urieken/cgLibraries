@@ -42,7 +42,7 @@ auto main(int argc, char** argv) -> int {
     if (configFile.is_open()) {
         System::Arguments args{};
         auto parseResult = args.ProcessInputStream(configFile,
-            "([a-zA-Z0-9 ]+)");
+            "([a-zA-Z0-9 \\_\\-]+)");
         if (static_cast<int>(Code::NoError) == parseResult.value()) {
             Application::AppRunner<Application::SDLApplication,
                 Event::SDLEventListener> appRunner {args};

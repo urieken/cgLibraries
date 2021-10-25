@@ -15,12 +15,51 @@
 #include <display/SDLRenderer.hpp>
 #include <event/CoreEvent.hpp>
 
+#include <regex>
+#include <sstream>
+#include <vector>
+
 namespace Display = ::cgl::display;
 namespace Event = ::cgl::event;
 namespace System = ::cgl::system;
 
 namespace cgl {
 namespace application {
+
+/**
+ * @brief Get the string value of the given key.
+ * 
+ * @param key The key for the property.
+ * @param args The Arguments instance containing the values.
+ * @return const std::string The value for the key.
+ */
+auto GetStringProperty(const std::string& key,
+    const System::Arguments& args) -> const std::string {
+    auto value = args.GetProperty(key);
+    if (value.has_value()) {
+        return value.value();
+    }
+    ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
+        "No value for key: %s\n", key.c_str());
+    return {""};
+}
+/**
+ * @brief Get the integer value of the given key.
+ * 
+ * @param key The key for the property.
+ * @param args The Arguments instance containing the values.
+ * @return const int The value for the key.
+ */
+auto GetIntegerProperty(const std::string& key,
+    const System::Arguments& args) -> const int {
+    auto value = args.GetProperty(key);
+    if (value.has_value()) {
+        return std::stoi(value.value());
+    }
+    ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
+        "No value for key: %s\n", key.c_str());
+    return 0;
+}
 
 SDLApplication::SDLApplication(const System::Arguments& args) :
     mArguments{args}, mWindow{nullptr}, mRenderer{nullptr},
@@ -59,19 +98,39 @@ auto SDLApplication::OnEvent(const Event::IEvent& event) -> bool {
     return result;
 }
 
+auto SDLApplication::ProcessSDLFlags(const std::string& flags) const
+    -> const std::int32_t {
+    std::int32_t value{0};
+    std::regex pattern{" "};
+    std::vector<std::string> tokens{
+        std::sregex_token_iterator(flags.begin(), flags.end(), pattern, -1),
+        std::sregex_token_iterator()
+    };
+    for (auto& token : tokens) {
+        std::int32_t tokenValue{0};
+        std::stringstream ss;
+        ss << std::hex << token;
+        ss >> tokenValue;
+        value |= tokenValue;
+    }
+    return value;
+}
+
 auto SDLApplication::Setup() -> bool {
     ::SDL_Log("Setting up SDLApplication");
-    if (0 != ::SDL_Init(SDL_INIT_EVERYTHING)) {
+    auto initFlags
+        = ProcessSDLFlags(GetStringProperty("sdl_init_flags", mArguments));
+    if (0 != ::SDL_Init(initFlags)) {
         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
             "Failed to initialize SDL. Error = %s", ::SDL_GetError());
         return false;
     }
     mWindow = std::make_unique<Display::SDLWindow>(
-        mArguments.GetProperty("name").value().c_str(),
-        std::stoi(mArguments.GetProperty("top").value()),
-        std::stoi(mArguments.GetProperty("left").value()),
-        std::stoi(mArguments.GetProperty("width").value()),
-        std::stoi(mArguments.GetProperty("height").value()),
+        GetStringProperty("name", mArguments),
+        GetIntegerProperty("top", mArguments),
+        GetIntegerProperty("left", mArguments),
+        GetIntegerProperty("width", mArguments),
+        GetIntegerProperty("height", mArguments),
         SDL_WINDOW_SHOWN);
     if (nullptr == mWindow) {
         return false;
