@@ -38,11 +38,14 @@ public:
      * @param inputStream The input stream.
      * @param allowedCharacters Allowed characters for key and value strings.
      * @param delimeter The delimeter for key and value strings.
+     * @param commentStart The start for a comment line.
      * @return std::error_condition The error condition.
      */
     auto ProcessInputStream(std::istream& inputStream,
-        const std::string& allowedCharacters = "([a-zA-Z0-9]+)",
-        const std::string& delimeter = ":")
+        const std::string& allowedCharacters = "([a-zA-Z0-9\\-]+)",
+        // const std::string& allowedCharacters = "/^\\w+$/",
+        const std::string& delimeter = ":",
+        const std::string& commentStart = "#")
         -> std::error_condition;
     /**
      * @brief Get the named property.

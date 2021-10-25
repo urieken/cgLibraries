@@ -20,7 +20,9 @@
 #include <display/IRenderer.hpp>
 #include <system/Arguments.hpp>
 
+#include <cstdint>
 #include <memory>
+#include <string>
 
 #include <SDL2/SDL.h>
 
@@ -69,6 +71,15 @@ private:
      * @brief An update has been requested.
      */
     bool mUpdateRequested;
+    
+    /**
+     * @brief Process the std::string flags.
+     * 
+     * @param flags The flags in std::string format.
+     * @return const std::int32_t The integral value of the flags.
+     */
+    auto ProcessSDLFlags(const std::string& flags) const
+        -> const std::int32_t;
     /**
      * @brief Setup the application
      * 
