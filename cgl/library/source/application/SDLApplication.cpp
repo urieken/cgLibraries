@@ -11,17 +11,28 @@
 
 #include <application/SDLApplication.hpp>
 
-#include <display/SDLWindow.hpp>
+#include <command/SDLRendererCommand.hpp>
+#include <command/SDLRendererCopyCommand.hpp>
 #include <display/SDLRenderer.hpp>
+#include <display/SDLTexture.hpp>
+#include <display/SDLWindow.hpp>
+#include <error/CGLError.hpp>
 #include <event/CoreEvent.hpp>
 
 #include <regex>
 #include <sstream>
 #include <vector>
 
+#include <SDL2/SDL_image.h>
+
+namespace Command = ::cgl::command;
 namespace Display = ::cgl::display;
+namespace Error = ::cgl::error;
 namespace Event = ::cgl::event;
 namespace System = ::cgl::system;
+
+using Code = Error::ErrorCode;
+using RenderOperation = Command::SDLRendererCommand::Operation;
 
 namespace cgl {
 namespace application {
@@ -52,8 +63,11 @@ auto GetIntegerProperty(const std::string& key,
 }
 
 SDLApplication::SDLApplication(const System::Arguments& args) :
-    mArguments{args}, mWindow{nullptr}, mRenderer{nullptr},
-    mUpdateRequested{false} {
+    mArguments{args},
+    mWindow{nullptr},
+    mRenderer{nullptr},
+    mUpdateRequested{false},
+    mTexture{nullptr} {
 }
 
 SDLApplication::~SDLApplication() {
@@ -108,9 +122,11 @@ auto SDLApplication::ProcessSDLFlags(const std::string& flags) const
 
 auto SDLApplication::Setup() -> bool {
     ::SDL_Log("Setting up SDLApplication");
+    constexpr auto file{"res/img/Simple_DirectMedia_Layer_Logo.png"};
     auto initFlags
         = ProcessSDLFlags(GetStringProperty("sdl_init_flags", mArguments));
-    if (0 != ::SDL_Init(initFlags)) {
+    int imgFlags{IMG_INIT_PNG};
+    if (0 != ::SDL_Init(initFlags) && (::IMG_Init(imgFlags) & imgFlags)) {
         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
             "Failed to initialize SDL. Error = %s", ::SDL_GetError());
         return false;
@@ -124,7 +140,13 @@ auto SDLApplication::Setup() -> bool {
         GetIntegerProperty("sdl_window_flags", mArguments));
     mRenderer = std::make_unique<Display::SDLRenderer>(
         mWindow->GetId(), -1, SDL_RENDERER_ACCELERATED);
-    return nullptr != mRenderer;
+    mTexture = std::make_unique<Display::SDLTexture>();
+    if (static_cast<int>(Code::NoError) !=
+        mTexture->Load(file, *mRenderer).value()) {
+        return false;
+    }
+    ::SDL_Log("Loaded %s", file);
+    return true;
 }
 
 auto SDLApplication::Cleanup() -> void {
@@ -135,15 +157,39 @@ auto SDLApplication::Cleanup() -> void {
 auto SDLApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool {
     switch(event.keysym.sym) {
         case SDLK_r : {
-            mRenderer->SetDrawColor(255UL, 0UL, 0UL, 255UL);
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::SetDrawColor,
+                SDL_Color{255UL, 0UL, 0UL, 255UL}));
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
             mUpdateRequested = true;
         } break;
         case SDLK_g : {
-            mRenderer->SetDrawColor(0UL, 255UL, 0UL, 255UL);
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::SetDrawColor,
+                SDL_Color{0UL, 255UL, 0UL, 255UL}));
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
             mUpdateRequested = true;
         } break;
         case SDLK_b : {
-            mRenderer->SetDrawColor(0UL, 0UL, 255UL, 255UL);
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::SetDrawColor,
+                SDL_Color{0UL, 0UL, 255UL, 255UL}));
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
+            mUpdateRequested = true;
+        } break;
+        case SDLK_c : {
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+                RenderOperation::CopyTexture, *mTexture));
             mUpdateRequested = true;
         } break;
         default:break;
@@ -165,9 +211,14 @@ auto SDLApplication::OnKeyUpEvent(const SDL_KeyboardEvent& event) -> bool {
 
 auto SDLApplication::OnUpdate() -> void {
     if (mUpdateRequested) {
-        mRenderer->Clear();
-        mRenderer->Present();
+        mRendererCommands.push_back(
+            std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+            RenderOperation::Present));
         mUpdateRequested = false;
+        for (auto& command : mRendererCommands) {
+            command->Execute();
+        }
+        mRendererCommands.clear();
     }
 }
 

@@ -18,7 +18,9 @@ include(build_types)
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/source/application/SDLApplication.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererCommand.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererCopyCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLRenderer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLTexture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLWindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/error/CGLError.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/IEvent.cpp
@@ -34,7 +36,7 @@ add_library(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include)
     target_link_libraries(${PROJECT_NAME}
-    SDL2main SDL2)
+    SDL2main SDL2 SDL2_image)
 set_target_properties(${PROJECT_NAME}
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -47,7 +49,7 @@ add_executable(${PROJECT_NAME}_sandbox
 target_include_directories(${PROJECT_NAME}_sandbox PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(${PROJECT_NAME}_sandbox
-    SDL2main SDL2 ${PROJECT_NAME})
+    SDL2main SDL2 SDL2_image ${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME}_sandbox
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -79,7 +81,7 @@ target_link_directories(${PROJECT_NAME}_test PRIVATE
     ${CMAKE_BINARY_DIR}/lib
     /opt/googletest/lib)
 target_link_libraries(${PROJECT_NAME}_test
-    SDL2main SDL2 gtest gmock pthread)
+    SDL2main SDL2 SDL2_image gtest gmock pthread)
 set_target_properties(${PROJECT_NAME}_test
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"

@@ -12,10 +12,14 @@
 #ifndef CGL_LIBRARY_INCLUDE_DISPLAY_IRENDERER_HPP_
 #define CGL_LIBRARY_INCLUDE_DISPLAY_IRENDERER_HPP_
 
+#include <display/IRenderer.hpp>
+
 #include <cstdint>
 
 namespace cgl {
 namespace display {
+
+class ITexture;
 
 /**
  * @brief The Renderer interface
@@ -41,6 +45,20 @@ public:
      * @brief Present the renderer to the target window.
      */
     virtual auto Present() -> void = 0;
+    /**
+     * @brief Get a raw pointer to the renderer instance.
+     * 
+     * @return void* The pointer to the renderer instance.
+     */
+    virtual auto Get() const -> void* = 0;
+    /**
+     * @brief Copy a texture to the rendererer
+     * 
+     * @param texture The texture to be copied
+     * @return true The operation succeeded.
+     * @return false The operation failed.
+     */
+    virtual auto Copy(ITexture& texture) -> bool = 0;
 };
 
 }  // namespace display

@@ -17,6 +17,7 @@
 #include <command/ICommand.hpp>
 #include <display/IWindow.hpp>
 #include <display/IRenderer.hpp>
+#include <display/ITexture.hpp>
 #include <error/CGLError.hpp>
 #include <event/IEvent.hpp>
 #include <system/Arguments.hpp>
@@ -72,12 +73,15 @@ private:
     /**
      * @brief The command queue for renderer operations.
      */
-    std::vector<::cgl::command::ICommand> mRendererCommands;
+    std::vector<std::unique_ptr<::cgl::command::ICommand>> mRendererCommands;
     /**
      * @brief An update has been requested.
      */
     bool mUpdateRequested;
-    
+    /**
+     * @brief Pointer to the texture.
+     */
+    std::unique_ptr<::cgl::display::ITexture> mTexture;
     /**
      * @brief Process the std::string flags.
      * 

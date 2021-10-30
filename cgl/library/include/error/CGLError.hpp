@@ -24,6 +24,8 @@ namespace error {
 enum class ErrorCode {
     NoError = 0UL,
     MalformedKeyPair,
+    ImageLoadFailure,
+    TextureCreationFailure,
     /**
      * @brief The max value for error code.
      * 

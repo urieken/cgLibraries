@@ -18,6 +18,8 @@ constexpr auto NoError{"NoError"};
 constexpr auto MalformedKeyPair{"MalformedKeyPair"};
 constexpr auto Unknown{"Unknown"};
 constexpr auto CGLErrorCategory{"CGLErrorCategory"};
+constexpr auto ImageLoadFailure{"ImageLoadFailure"};
+constexpr auto TextureCreationFailure{"TextureCreationFailure"};
 
 auto CGLError::name() const noexcept -> const char* {
     return CGLErrorCategory;
@@ -26,9 +28,16 @@ auto CGLError::name() const noexcept -> const char* {
 auto CGLError::message(int code) const -> std::string {
     std::string message{Unknown};
     switch (static_cast<ErrorCode>(code)) {
-    case ErrorCode::NoError : message =  NoError; break;
-    case ErrorCode::MalformedKeyPair : message = MalformedKeyPair; break;
-    case ErrorCode::Unknown : message = Unknown;[[fallthrough]];
+    case ErrorCode::NoError :
+        message =  NoError; break;
+    case ErrorCode::MalformedKeyPair :
+        message = MalformedKeyPair; break;
+    case ErrorCode::ImageLoadFailure :
+        message = ImageLoadFailure; break;
+    case ErrorCode::TextureCreationFailure :
+        message = TextureCreationFailure; break;
+    case ErrorCode::Unknown :
+        message = Unknown;[[fallthrough]];
     default:break;
     }
     return message;

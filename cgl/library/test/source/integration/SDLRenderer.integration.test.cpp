@@ -63,15 +63,15 @@ TEST_F(SDLRendererTest, testRenderer) {
     mRenderer->SetDrawColor(0UL, 0UL, 0UL, 0UL);
     mRenderer->Clear();
     mRenderer->Present();
-    ::SDL_Delay(500);
+    ::SDL_Delay(100);
     mRenderer->SetDrawColor(255UL, 0UL, 0UL, 0UL);
     mRenderer->Clear();
     mRenderer->Present();
-    ::SDL_Delay(500);
+    ::SDL_Delay(100);
     mRenderer->SetDrawColor(0UL, 255UL, 0UL, 0UL);
     mRenderer->Clear();
     mRenderer->Present();
-    ::SDL_Delay(500);
+    ::SDL_Delay(100);
     mRenderer->SetDrawColor(0UL, 0UL, 255UL, 0UL);
     mRenderer->Clear();
     mRenderer->Present();

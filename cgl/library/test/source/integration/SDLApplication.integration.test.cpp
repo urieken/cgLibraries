@@ -122,15 +122,15 @@ TEST_F(SDLApplicationTest, testKeyDownEvents) {
     event.key.keysym.sym = SDLK_r;
     mEventListener->PushEvent(Event::SDLEvent{
         Event::EventType::Core, Event::EventSource::SDL, &event});
-    ::SDL_Delay(500);
+    ::SDL_Delay(100);
     event.key.keysym.sym = SDLK_g;
     mEventListener->PushEvent(Event::SDLEvent{
         Event::EventType::Core, Event::EventSource::SDL, &event});
-    ::SDL_Delay(500);
+    ::SDL_Delay(100);
     event.key.keysym.sym = SDLK_b;
     mEventListener->PushEvent(Event::SDLEvent{
         Event::EventType::Core, Event::EventSource::SDL, &event});
-    ::SDL_Delay(500);
+    ::SDL_Delay(100);
     event.key.keysym.sym = SDLK_x;
     mEventListener->PushEvent(Event::SDLEvent{
         Event::EventType::Core, Event::EventSource::SDL, &event});

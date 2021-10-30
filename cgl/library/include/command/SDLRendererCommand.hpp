@@ -14,7 +14,12 @@
 
 #include <command/ICommand.hpp>
 
-#include <display/SDLRenderer.hpp>
+#include <display/IRenderer.hpp>
+#include <display/ITexture.hpp>
+
+#include <cstdint>
+
+#include <SDL2/SDL.h>
 
 namespace cgl {
 namespace command {
@@ -29,6 +34,8 @@ public:
     enum class Operation {
         Clear = 0UL,
         Present,
+        SetDrawColor,
+        CopyTexture,
         Unknown
     };
     SDLRendererCommand() = delete;
@@ -39,19 +46,37 @@ public:
      * @param renderer The renderer to operated upon.
      * @param operation The operation to be executed.
      */
-    SDLRendererCommand(::cgl::display::SDLRenderer& renderer,
+    SDLRendererCommand(::cgl::display::IRenderer& renderer,
         const Operation& operation);
-
-    auto Execute() -> std::error_condition override;
-private:
     /**
-     * @brief Reference to the renderer instance.
+     * @brief Construct a new SDLRendererCommand object
+     * 
+     * @param renderer The renderer to operated upon.
+     * @param operation The operation to be executed.
+     * @param color The color for the operation.
      */
-    ::cgl::display::SDLRenderer& mRenderer;
+    SDLRendererCommand(::cgl::display::IRenderer& renderer,
+        const Operation& operation, const SDL_Color& color);
+    /**
+     * @brief Execute the command.
+     * 
+     * @return std::error_condition The operation result.
+     */
+    auto Execute() -> std::error_condition override;
+protected:
     /**
      * @brief The operation to be executed in this command.
      */
     Operation mOperation;
+    /**
+     * @brief Reference to the renderer instance.
+     */
+    ::cgl::display::IRenderer& mRenderer;
+private:
+    /**
+     * @brief The render color.
+     */
+    SDL_Color mRenderColor;
 };
 
 }  // namespace command

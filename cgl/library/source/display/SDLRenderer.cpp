@@ -47,5 +47,20 @@ auto SDLRenderer::Present() -> void {
     ::SDL_RenderPresent(mRenderer);
 }
 
+auto SDLRenderer::Get() const -> void* {
+    return mRenderer;
+}
+
+auto SDLRenderer::Copy(ITexture& texture) -> bool {
+    if (0 == ::SDL_RenderCopy(mRenderer,
+        static_cast<SDL_Texture*>(texture.Get()), nullptr, nullptr)) {
+        SDL_Log("Texture copied.");
+        return true;
+    }
+   ::SDL_Log("Failed to copy texture to renderer : %s",
+        SDL_GetError());
+    return false;
+}
+
 }  // namespace display
 }  // namespace cgl

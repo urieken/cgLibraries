@@ -13,6 +13,7 @@
 #define CGL_LIBRARY_INCLUDE_DISPLAY_SDL_RENDERER_HPP_
 
 #include <display/IRenderer.hpp>
+#include <display/ITexture.hpp>
 
 #include <cstdint>
 
@@ -57,6 +58,20 @@ public:
      * @brief Present the renderer to the target window.
      */
     auto Present() -> void override;
+    /**
+     * @brief Get a raw pointer to the renderer instance.
+     * 
+     * @return void* The pointer to the renderer instance.
+     */
+    auto Get() const -> void* override;
+    /**
+     * @brief Copy a texture to the rendererer
+     * 
+     * @param texture The texture to be copied
+     * @return true The operation succeeded.
+     * @return false The operation failed.
+     */
+    auto Copy(ITexture& texture) -> bool override;
 private:
     /**
      * @brief Pointer to the opaque renderer.
