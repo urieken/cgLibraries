@@ -36,12 +36,7 @@ namespace application {
 auto GetStringProperty(const std::string& key,
     const System::Arguments& args) -> const std::string {
     auto value = args.GetProperty(key);
-    if (value.has_value()) {
-        return value.value();
-    }
-    ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
-        "No value for key: %s\n", key.c_str());
-    return {""};
+    return value.value_or("");
 }
 /**
  * @brief Get the integer value of the given key.
@@ -53,12 +48,7 @@ auto GetStringProperty(const std::string& key,
 auto GetIntegerProperty(const std::string& key,
     const System::Arguments& args) -> const int {
     auto value = args.GetProperty(key);
-    if (value.has_value()) {
-        return std::stoi(value.value());
-    }
-    ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
-        "No value for key: %s\n", key.c_str());
-    return 0;
+    return std::stoi(value.value_or("0"));
 }
 
 SDLApplication::SDLApplication(const System::Arguments& args) :
@@ -131,10 +121,7 @@ auto SDLApplication::Setup() -> bool {
         GetIntegerProperty("left", mArguments),
         GetIntegerProperty("width", mArguments),
         GetIntegerProperty("height", mArguments),
-        SDL_WINDOW_SHOWN);
-    if (nullptr == mWindow) {
-        return false;
-    }
+        GetIntegerProperty("sdl_window_flags", mArguments));
     mRenderer = std::make_unique<Display::SDLRenderer>(
         mWindow->GetId(), -1, SDL_RENDERER_ACCELERATED);
     return nullptr != mRenderer;

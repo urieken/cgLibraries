@@ -17,6 +17,7 @@ include(build_types)
 
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/source/application/SDLApplication.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLRenderer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLWindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/error/CGLError.cpp
@@ -56,10 +57,13 @@ set_target_properties(${PROJECT_NAME}_sandbox
 set(TEST_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/integration/SDLApplication.integration.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/integration/SDLEventListener.integration.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/integration/SDLRenderer.integration.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/integration/SDLWindow.integration.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/AppRunner.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/Arguments.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/CGLError.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/Compilers.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/CoreEvent.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/KeyPairString.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/SDLEvent.test.cpp)
 
@@ -83,7 +87,7 @@ set_target_properties(${PROJECT_NAME}_test
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 add_custom_target(${PROJECT_NAME}_post-processing
-    COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/bin
+    COMMAND cp -rv ${CMAKE_CURRENT_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/bin
     DEPENDS ${PROJECT_NAME}_sandbox)
 
 add_custom_target(${PROJECT_NAME}_sandbox_execute

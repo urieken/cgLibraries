@@ -54,7 +54,7 @@ public:
      * @return std::optional<std::string> The property.
      */
     auto GetProperty(const std::string& key) const
-        -> std::optional<std::string>;
+        -> std::optional<std::string>;   
 private:
     /**
      * @brief The processed arguments.

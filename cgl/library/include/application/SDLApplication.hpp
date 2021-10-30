@@ -14,15 +14,17 @@
 
 #include <application/IApplication.hpp>
 
-#include <error/CGLError.hpp>
-#include <event/IEvent.hpp>
+#include <command/ICommand.hpp>
 #include <display/IWindow.hpp>
 #include <display/IRenderer.hpp>
+#include <error/CGLError.hpp>
+#include <event/IEvent.hpp>
 #include <system/Arguments.hpp>
 
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <SDL2/SDL.h>
 
@@ -67,6 +69,10 @@ private:
      * @brief The SDL renderer.
      */
     std::unique_ptr<::cgl::display::IRenderer> mRenderer;
+    /**
+     * @brief The command queue for renderer operations.
+     */
+    std::vector<::cgl::command::ICommand> mRendererCommands;
     /**
      * @brief An update has been requested.
      */

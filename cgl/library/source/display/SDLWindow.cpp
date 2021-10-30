@@ -19,7 +19,8 @@ SDLWindow::SDLWindow(const std::string& title,
     std::uint32_t flags) {
     if (mWindow = ::SDL_CreateWindow(title.c_str(), top, left, width,
         height, flags);nullptr == mWindow) {
-        ::SDL_Log("Failed to create window : %s", ::SDL_GetError());
+        ::SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create window : %s",
+            ::SDL_GetError());
     }
 }
 

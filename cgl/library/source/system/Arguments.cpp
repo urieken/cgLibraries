@@ -39,7 +39,7 @@ auto Arguments::ProcessInputStream(std::istream& inputStream,
     while(std::getline(inputStream, line)) {
         if (line.rfind(commentStart) != 0UL) {
             if (keyPair.IsValid(line)) {
-                auto keyValuePair = keyPair.Parse(line);        
+                auto keyValuePair = keyPair.Parse(line);
                 mProperties[keyValuePair.key] = keyValuePair.value;
             } else {
                 return Error::makeErrorCondition(Code::MalformedKeyPair);

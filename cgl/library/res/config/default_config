@@ -9,7 +9,6 @@
 #SDL_INIT_EVENTS                0x00004000u
 #SDL_INIT_NOPARACHUTE           0x00100000u      /**< compatibility; this flag is ignored. */
 #SDL_INIT_EVERYTHING (SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS |  SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER)
-
 #Window flags
 #SDL_WINDOW_FULLSCREEN          0x00000001,      /**< fullscreen window */
 #SDL_WINDOW_OPENGL              0x00000002,      /**< window usable with OpenGL context */
@@ -34,8 +33,6 @@
 #SDL_WINDOW_TOOLTIP             0x00040000,      /**< window should be treated as a tooltip */
 #SDL_WINDOW_POPUP_MENU          0x00080000,      /**< window should be treated as a popup menu */
 #SDL_WINDOW_VULKAN              0x10000000       /**< window usable for Vulkan surface */
-
-
 name:CGL Test Application
 sdl_init_flags:0x00000001u 0x00000010u 0x00000020u 0x00000200u 0x00001000u 0x00002000u 0x00004000u
 sdl_window_flags:0x00000004

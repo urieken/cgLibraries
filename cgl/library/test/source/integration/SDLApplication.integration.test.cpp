@@ -79,9 +79,10 @@ protected:
      * @brief Prepare the test configuration.
      */
     auto PrepareTestConfiguration() -> void {
-        mInputStream << "sdl_init_flags:0x00000004u\n"
-            << "name:SDLApplication integration test\n"
-            << "top:0\nleft:0\nwidth:1280\nheight:720\n";
+        mInputStream << "sdl_init_flags:0x00000001u\n"
+            << "sdl_window_flags:0x00000004u\n"
+            << "name:SDLApplicationt\n"
+            << "top:0\nleft:0\nwidth:200\nheight:200\n";
         auto parseResult = mArguments.ProcessInputStream(mInputStream,
             "([a-zA-Z0-9 \\_\\-]+)");
         EXPECT_EQ(static_cast<int>(Code::NoError), parseResult.value());

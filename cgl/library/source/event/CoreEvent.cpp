@@ -15,7 +15,7 @@ namespace cgl {
 namespace event {
 
 CoreEvent::CoreEvent() :
-    IEvent{EventType::Core, EventSource::None} {
+    IEvent{} {
 }
 
 CoreEvent::CoreEvent(const EventType& type,
