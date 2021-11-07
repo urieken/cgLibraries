@@ -11,6 +11,8 @@
 
 #include <application/AppRunner.hpp>
 
+#include <application/SDLSandboxApplication.hpp>
+
 #include <application/SDLApplication.hpp>
 #include <display/SDLRenderer.hpp>
 #include <display/SDLWindow.hpp>
@@ -30,6 +32,8 @@ namespace Error = ::cgl::error;
 namespace Event = ::cgl::event;
 namespace System = ::cgl::system;
 
+namespace SandboxApplication = ::cgl::application::sandbox;
+
 using Code = Error::ErrorCode;
 
 constexpr auto default_config{"res/config/default_config"};
@@ -44,7 +48,7 @@ auto main(int argc, char** argv) -> int {
         auto parseResult = args.ProcessInputStream(configFile,
             "([a-zA-Z0-9 \\_\\-]+)");
         if (static_cast<int>(Code::NoError) == parseResult.value()) {
-            Application::AppRunner<Application::SDLApplication,
+            Application::AppRunner<SandboxApplication::SDLSandboxApplication,
                 Event::SDLEventListener> appRunner {args};
             return appRunner.Run();
         } else {

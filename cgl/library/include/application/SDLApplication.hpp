@@ -14,10 +14,6 @@
 
 #include <application/IApplication.hpp>
 
-#include <command/ICommand.hpp>
-#include <display/IWindow.hpp>
-#include <display/IRenderer.hpp>
-#include <display/ITexture.hpp>
 #include <error/CGLError.hpp>
 #include <event/IEvent.hpp>
 #include <system/Arguments.hpp>
@@ -63,26 +59,6 @@ private:
      */
     const ::cgl::system::Arguments& mArguments;
     /**
-     * @brief The SDL window.
-     */
-    std::unique_ptr<::cgl::display::IWindow> mWindow;
-    /**
-     * @brief The SDL renderer.
-     */
-    std::unique_ptr<::cgl::display::IRenderer> mRenderer;
-    /**
-     * @brief The command queue for renderer operations.
-     */
-    std::vector<std::unique_ptr<::cgl::command::ICommand>> mRendererCommands;
-    /**
-     * @brief An update has been requested.
-     */
-    bool mUpdateRequested;
-    /**
-     * @brief Pointer to the texture.
-     */
-    std::unique_ptr<::cgl::display::ITexture> mTexture;
-    /**
      * @brief Process the std::string flags.
      * 
      * @param flags The flags in std::string format.
@@ -102,14 +78,6 @@ private:
      */
     auto Cleanup() -> void;
     /**
-     * @brief Handle keyboard press events
-     * 
-     * @param event The SDL keyboard event.
-     * @return true The event was processed.
-     * @return false An error has occurred or quit the application.
-     */
-    auto OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool;
-    /**
      * @brief Handle keyboard release events
      * 
      * @param event The SDL keyboard event.
@@ -117,10 +85,6 @@ private:
      * @return false An error has occurred or quit the application.
      */
     auto OnKeyUpEvent(const SDL_KeyboardEvent& event) -> bool;
-    /**
-     * @brief Update renderer
-     */
-    auto OnUpdate() -> void;
 };
 
 

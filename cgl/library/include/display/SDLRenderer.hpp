@@ -70,6 +70,8 @@ public:
      * @param texture The texture to be copied
      * @return true The operation succeeded.
      * @return false The operation failed.
+     * 
+     * @note Might want to change the return to std::error_condition.
      */
     auto Copy(ITexture& texture) -> bool override;
 private:

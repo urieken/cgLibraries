@@ -17,7 +17,7 @@ namespace display {
 SDLRenderer::SDLRenderer(std::uint32_t windowId,
     int index, std::uint32_t flags) {
     if (mRenderer = ::SDL_CreateRenderer(::SDL_GetWindowFromID(windowId),
-        index, flags);nullptr == mRenderer) {
+        index, flags); nullptr == mRenderer) {
         ::SDL_Log("Failed to create renderer : %s", ::SDL_GetError());
     }
 }
@@ -54,7 +54,6 @@ auto SDLRenderer::Get() const -> void* {
 auto SDLRenderer::Copy(ITexture& texture) -> bool {
     if (0 == ::SDL_RenderCopy(mRenderer,
         static_cast<SDL_Texture*>(texture.Get()), nullptr, nullptr)) {
-        SDL_Log("Texture copied.");
         return true;
     }
    ::SDL_Log("Failed to copy texture to renderer : %s",
