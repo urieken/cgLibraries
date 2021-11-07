@@ -61,5 +61,18 @@ auto SDLRenderer::Copy(ITexture& texture) -> bool {
     return false;
 }
 
+auto SDLRenderer::Copy(ITexture& texture,
+    const Rect& source, const Rect& dest) -> bool {
+    SDL_Rect src{source.top, source.left, source.width, source.height};
+    SDL_Rect dst{dest.top, dest.left, dest.width, dest.height};
+    if (0 == ::SDL_RenderCopy(mRenderer,
+        static_cast<SDL_Texture*>(texture.Get()), &src, &dst)) {
+        return true;
+    }
+   ::SDL_Log("Failed to copy texture to renderer : %s",
+        SDL_GetError());
+    return false;
+}
+
 }  // namespace display
 }  // namespace cgl

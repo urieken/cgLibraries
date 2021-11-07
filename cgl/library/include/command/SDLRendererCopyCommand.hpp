@@ -15,6 +15,9 @@
 #include <command/SDLRendererCommand.hpp>
 
 #include <display/ITexture.hpp>
+#include <display/Rect.hpp>
+
+#include <SDL2/SDL.h>
 
 namespace cgl {
 namespace command {
@@ -33,6 +36,19 @@ public:
     SDLRendererCopyCommand(::cgl::display::IRenderer& renderer,
         const Operation& operation, ::cgl::display::ITexture& texture);
     /**
+     * @brief Construct a new SDLRendererCopyCommand object
+     * 
+     * @param renderer The renderer to operated upon.
+     * @param operation The operation to be executed.
+     * @param texture The texture for the operation.
+     * @param sourceRect The source rectangle.
+     * @param destinationRect The destination rectangle.
+     */
+    SDLRendererCopyCommand(::cgl::display::IRenderer& renderer,
+        const Operation& operation, ::cgl::display::ITexture& texture,
+        const ::cgl::display::Rect& sourceRect,
+        const ::cgl::display::Rect& destinationRect);
+    /**
      * @brief Execute the command.
      * 
      * @return std::error_condition The operation result.
@@ -43,6 +59,14 @@ private:
      * @brief The texture to be used for the copy operation.
      */
     ::cgl::display::ITexture& mTexture;
+    /**
+     * @brief The source rectangle.
+     */
+    ::cgl::display::Rect mSourceRect;
+    /**
+     * @brief The desination rectangle.
+     */
+    ::cgl::display::Rect mDesinationRect;
 };
 
 }  // namespace command

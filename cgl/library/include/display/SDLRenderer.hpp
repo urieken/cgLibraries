@@ -74,6 +74,19 @@ public:
      * @note Might want to change the return to std::error_condition.
      */
     auto Copy(ITexture& texture) -> bool override;
+    /**
+     * @brief Copy a texture to the rendererer
+     * 
+     * @param texture The texture to be copied
+     * @param source The source rectangle.
+     * @param dest The destination rectingle.
+     * @return true The operation succeeded.
+     * @return false The operation failed.
+     * 
+     * @note Might want to change the return to std::error_condition.
+     */
+    auto Copy(ITexture& texture,
+        const Rect& source, const Rect& dest) -> bool override;
 private:
     /**
      * @brief Pointer to the opaque renderer.

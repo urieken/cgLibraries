@@ -160,6 +160,50 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
                 RenderOperation::CopyTexture, *mTexture));
             mUpdateRequested = true;
         } break;
+        case SDLK_UP : {
+            ::SDL_Log("UP");
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
+            Display::Rect rect{390, 0, 500, 500};
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+                RenderOperation::CopyTextureRect, *mTexture, rect, rect));
+            mUpdateRequested = true;
+        } break;
+        case SDLK_DOWN : {
+            ::SDL_Log("DOWN");
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
+            Display::Rect rect{390, 220, 500, 500};
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+                RenderOperation::CopyTextureRect, *mTexture, rect, rect));
+            mUpdateRequested = true;
+        } break;
+        case SDLK_LEFT : {
+            ::SDL_Log("LEFT");
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
+            Display::Rect rect{0, 110, 500, 500};
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+                RenderOperation::CopyTextureRect, *mTexture, rect, rect));
+            mUpdateRequested = true;
+        } break;
+        case SDLK_RIGHT : {
+            ::SDL_Log("RIGHT");
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
+            Display::Rect rect{780, 110, 500, 500};
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+                RenderOperation::CopyTextureRect, *mTexture, rect, rect));
+            mUpdateRequested = true;
+        } break;
         default:break;
     }
     return true;

@@ -36,6 +36,7 @@ public:
         Present,
         SetDrawColor,
         CopyTexture,
+        CopyTextureRect,
         Unknown
     };
     SDLRendererCommand() = delete;

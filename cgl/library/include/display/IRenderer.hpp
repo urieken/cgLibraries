@@ -13,6 +13,7 @@
 #define CGL_LIBRARY_INCLUDE_DISPLAY_IRENDERER_HPP_
 
 #include <display/IRenderer.hpp>
+#include <display/Rect.hpp>
 
 #include <cstdint>
 
@@ -59,6 +60,17 @@ public:
      * @return false The operation failed.
      */
     virtual auto Copy(ITexture& texture) -> bool = 0;
+    /**
+     * @brief Copy a texture to the rendererer
+     * 
+     * @param texture The texture to be copied
+     * @param source The source rectangle.
+     * @param dest The destination rectingle.
+     * @return true The operation succeeded.
+     * @return false The operation failed.
+     */
+    virtual auto Copy(ITexture& texture,
+        const Rect& source, const Rect& dest) -> bool = 0;
 };
 
 }  // namespace display
