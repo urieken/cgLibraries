@@ -14,6 +14,8 @@
 
 #include <geometry/IGeometryElement.hpp>
 
+#include <display/Color.hpp>
+
 #include <utility>
 
 namespace cgl {
@@ -35,6 +37,15 @@ public:
      * @param y The y coordinate.
      */
     Point(const int& x, const int& y);
+    /**
+     * @brief Construct a new Point object
+     * 
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param drawColor The draw color.
+     */
+    Point(const int& x, const int& y,
+        const ::cgl::display::Color& drawColor);
     /**
      * @brief Retrieves the Point's x coortinate.
      * 

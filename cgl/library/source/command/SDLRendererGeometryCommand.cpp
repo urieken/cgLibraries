@@ -27,6 +27,7 @@ SDLRendererGeometryCommand::SDLRendererGeometryCommand(
     SDLRendererCommand{renderer, operation} {
     mElement = std::make_unique<Geometry::Point>(element.getX(),
         element.getY());
+    mElement->setDrawColor(element.getDrawColor());
 }
 
 auto SDLRendererGeometryCommand::Execute() -> std::error_condition {
@@ -35,7 +36,15 @@ auto SDLRendererGeometryCommand::Execute() -> std::error_condition {
             auto coordinates = 
                 static_cast<::Geometry::Point*>(mElement.get())
                     ->getCoordinates();
-            ::SDL_RenderDrawPoint(static_cast<SDL_Renderer*>(mRenderer.Get()),
+            auto drawColor = 
+                static_cast<::Geometry::Point*>(mElement.get())
+                    ->getDrawColor();
+            ::SDL_SetRenderDrawColor(
+                static_cast<SDL_Renderer*>(mRenderer.Get()),
+                drawColor.red, drawColor.green, drawColor.blue,
+                drawColor.alpha);
+            ::SDL_RenderDrawPoint(
+                static_cast<SDL_Renderer*>(mRenderer.Get()),
                 coordinates.first, coordinates.second);
         } break;
         case Operation::Unknown : [[fallthrough]];

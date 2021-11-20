@@ -12,6 +12,10 @@
 #ifndef CGL_LIBRARY_SOURCE_GEOMETRY_IGEOMETRY_ELEMENT_HPP_
 #define CGL_LIBRARY_SOURCE_GEOMETRY_IGEOMETRY_ELEMENT_HPP_
 
+#include <display/Color.hpp>
+
+#include <utility>
+
 namespace cgl {
 namespace geometry {
 /**
@@ -20,6 +24,63 @@ namespace geometry {
 class IGeometryElement {
 public:
     virtual ~IGeometryElement() = default;
+    /**
+     * @brief Set the draw and fill colors.
+     * 
+     * @param colors The draw and fill colors.
+     */
+    auto setColors(const std::pair<::cgl::display::Color,
+        ::cgl::display::Color>& colors) -> void {
+        mColors = colors;
+    }
+    /**
+     * @brief Get the draw and fill colors.
+     * 
+     * @return std::pair<::cgl::display::Color,
+     * ::cgl::display::Color> The draw and fill colors.
+     */
+    auto getColors() const -> std::pair<::cgl::display::Color,
+        ::cgl::display::Color> {
+        return mColors;
+    }
+    /**
+     * @brief Set the draw color.
+     * 
+     * @param color The draw color.
+     */
+    auto setDrawColor(const ::cgl::display::Color& color) -> void {
+        mColors.first = color;
+    }
+    /**
+     * @brief Get the draw color.
+     * 
+     * @return ::cgl::display::Color The draw color.
+     */
+    auto getDrawColor() const -> ::cgl::display::Color {
+        return mColors.first;
+    }
+    /**
+     * @brief Set the fill color.
+     * 
+     * @param color The fill color.
+     */
+    auto setFillColor(const ::cgl::display::Color& color) -> void {
+        mColors.first = color;
+    }
+    /**
+     * @brief Get the fill color.
+     * 
+     * @return ::cgl::display::Color The fill color.
+     */
+    auto getFillColor() const -> ::cgl::display::Color {
+        return mColors.first;
+    }
+private:
+    /**
+     * @brief The draw(first) and fill(second) colors.
+     */
+    std::pair<::cgl::display::Color,
+        ::cgl::display::Color> mColors;
 };
 
 }  // namespace geometry
