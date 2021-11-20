@@ -14,6 +14,7 @@
 #include <command/SDLRendererCommand.hpp>
 #include <command/SDLRendererCopyCommand.hpp>
 #include <command/SDLRendererGeometryCommand.hpp>
+#include <display/Color.hpp>
 #include <display/SDLRenderer.hpp>
 #include <display/SDLTexture.hpp>
 #include <display/SDLWindow.hpp>
@@ -32,6 +33,7 @@ namespace Geometry = ::cgl::geometry;
 namespace System = ::cgl::system;
 
 using Code = Error::ErrorCode;
+using Color = Display::Color;
 using RenderOperation = Command::SDLRendererCommand::Operation;
 
 namespace cgl {
@@ -208,20 +210,7 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
             mUpdateRequested = true;
         } break;
         case SDLK_p : {
-            // Move this to fill/border in IGeometryElement interface - begin
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::SetDrawColor,
-                SDL_Color{0UL, 0UL, 0UL, 255UL}));
-            // Move this to fill/border in IGeometryElement interface - end
-            // mRendererCommands.push_back(
-            //     std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-            //     RenderOperation::Clear));
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::SetDrawColor,
-                SDL_Color{255UL, 255UL, 255UL, 255UL}));
-            Geometry::Point point{100, 100};
+            Geometry::Point point{100, 100, {255UL, 255UL, 255UL, 255UL}};
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererGeometryCommand>(
                 *mRenderer, RenderOperation::DrawPoint, point));

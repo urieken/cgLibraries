@@ -11,15 +11,28 @@
 
 #include <geometry/Point.hpp>
 
+#include <utility>
+
+using Color = ::cgl::display::Color;
+
 namespace cgl {
 namespace geometry {
 
 Point::Point() :
     mX{0}, mY{0} {
+    setColors({});
 }
 
 Point::Point(const int& x, const int& y) :
     mX{x}, mY{y} {
+    setColors({});
+}
+
+Point::Point(const int& x, const int& y,
+    const Color& color) :
+    mX{x}, mY{y} {
+    setColors(std::make_pair<Color, Color>({
+        color.red, color.green, color.blue, color.alpha}, {}));
 }
 
 auto Point::getX() const -> const int {
