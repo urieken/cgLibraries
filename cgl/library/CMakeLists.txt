@@ -19,6 +19,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/source/application/SDLApplication.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererCopyCommand.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererGeometryCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLRenderer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLTexture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLWindow.cpp
@@ -27,6 +28,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/CoreEvent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/SDLEventListener.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/SDLEvent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/geometry/Point.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/system/Arguments.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/system/Compilers.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/system/KeyPairString.cpp)
@@ -68,6 +70,7 @@ set(TEST_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/CGLError.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/Compilers.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/CoreEvent.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/Point.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/KeyPairString.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/SDLEvent.test.cpp)
 

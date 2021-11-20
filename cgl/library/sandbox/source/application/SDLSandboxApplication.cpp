@@ -13,9 +13,11 @@
 
 #include <command/SDLRendererCommand.hpp>
 #include <command/SDLRendererCopyCommand.hpp>
+#include <command/SDLRendererGeometryCommand.hpp>
 #include <display/SDLRenderer.hpp>
 #include <display/SDLTexture.hpp>
 #include <display/SDLWindow.hpp>
+#include <geometry/Point.hpp>
 #include <error/CGLError.hpp>
 #include <event/CoreEvent.hpp>
 
@@ -26,6 +28,7 @@ namespace Command = ::cgl::command;
 namespace Display = ::cgl::display;
 namespace Error = ::cgl::error;
 namespace Event = ::cgl::event;
+namespace Geometry = ::cgl::geometry;
 namespace System = ::cgl::system;
 
 using Code = Error::ErrorCode;
@@ -202,6 +205,26 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
                 RenderOperation::CopyTextureRect, *mTexture, rect, rect));
+            mUpdateRequested = true;
+        } break;
+        case SDLK_p : {
+            // Move this to fill/border in IGeometryElement interface - begin
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::SetDrawColor,
+                SDL_Color{0UL, 0UL, 0UL, 255UL}));
+            // Move this to fill/border in IGeometryElement interface - end
+            // mRendererCommands.push_back(
+            //     std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+            //     RenderOperation::Clear));
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::SetDrawColor,
+                SDL_Color{255UL, 255UL, 255UL, 255UL}));
+            Geometry::Point point{100, 100};
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererGeometryCommand>(
+                *mRenderer, RenderOperation::DrawPoint, point));
             mUpdateRequested = true;
         } break;
         default:break;

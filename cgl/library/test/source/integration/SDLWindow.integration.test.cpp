@@ -41,7 +41,7 @@ protected:
 TEST_F(SDLWindowTest, testConstructionWithSDLUnitialized) {
     mWindow = std::make_unique<Display::SDLWindow>("SDLWindowTest",
         100, 100, 200, 200, SDL_WINDOW_SHOWN);
-    EXPECT_EQ(0, ::SDL_WasInit(SDL_INIT_EVERYTHING));
+    EXPECT_NE(0, ::SDL_WasInit(SDL_INIT_EVERYTHING));
     EXPECT_NE(0, mWindow->GetId());
     ::SDL_Delay(100);
 }

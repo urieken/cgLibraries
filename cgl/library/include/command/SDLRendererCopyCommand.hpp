@@ -17,7 +17,7 @@
 #include <display/ITexture.hpp>
 #include <display/Rect.hpp>
 
-#include <SDL2/SDL.h>
+#include <system_error>
 
 namespace cgl {
 namespace command {

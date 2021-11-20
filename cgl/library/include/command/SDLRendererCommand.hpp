@@ -18,6 +18,7 @@
 #include <display/ITexture.hpp>
 
 #include <cstdint>
+#include <system_error>
 
 #include <SDL2/SDL.h>
 
@@ -37,6 +38,7 @@ public:
         SetDrawColor,
         CopyTexture,
         CopyTextureRect,
+        DrawPoint,
         Unknown
     };
     SDLRendererCommand() = delete;
