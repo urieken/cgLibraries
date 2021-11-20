@@ -39,6 +39,7 @@ public:
         CopyTexture,
         CopyTextureRect,
         DrawPoint,
+        DrawLine,
         Unknown
     };
     SDLRendererCommand() = delete;

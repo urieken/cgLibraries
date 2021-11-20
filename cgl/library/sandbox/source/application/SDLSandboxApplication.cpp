@@ -18,6 +18,7 @@
 #include <display/SDLRenderer.hpp>
 #include <display/SDLTexture.hpp>
 #include <display/SDLWindow.hpp>
+#include <geometry/Line.hpp>
 #include <geometry/Point.hpp>
 #include <error/CGLError.hpp>
 #include <event/CoreEvent.hpp>
@@ -216,6 +217,15 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
                 *mRenderer, RenderOperation::DrawPoint, point));
             mUpdateRequested = true;
         } break;
+        case SDLK_l : {
+            Geometry::Line line{{100, 100}, {300, 300},
+                {25UL, 50UL, 255UL, 255UL}};
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererGeometryCommand>(
+                *mRenderer, RenderOperation::DrawLine, line));
+            mUpdateRequested = true;
+        } break;
+
         default:break;
     }
     return true;
