@@ -48,43 +48,6 @@ public:
     Line(std::pair<std::int16_t, std::int16_t> begin,
         std::pair<std::int16_t, std::int16_t> end,
         const ::cgl::display::Color& color);
-    /**
-     * @brief Set the starting point of the line.
-     * 
-     * @param begin The starting point of the line.
-     */
-    auto setBegin(const std::pair<std::int16_t,
-        std::int16_t>& begin) -> void;
-    /**
-     * @brief Get the starting point of the line.
-     * 
-     * @return std::pair<std::int16_t, std::int16_t>
-     * The starting point of the line.
-     */
-    auto getBegin() const -> std::pair<std::int16_t, std::int16_t>;
-    /**
-     * @brief Set the ending point of the line.
-     * 
-     * @param end The ending point of the line.
-     */
-    auto setEnd(const std::pair<std::int16_t,
-        std::int16_t>& end) -> void;
-    /**
-     * @brief Get the ending point of the line.
-     * 
-     * @return std::pair<std::int16_t, std::int16_t>
-     * The ending point of the line.
-     */
-    auto getEnd() const -> std::pair<std::int16_t, std::int16_t>;
-private:
-    /**
-     * @brief The starting point of the line.
-     */
-    std::pair<std::int16_t, std::int16_t> mBegin;
-    /**
-     * @brief The ending point of the line.
-     */
-    std::pair<std::int16_t, std::int16_t> mEnd;
 };
 
 }  // namespace geometry

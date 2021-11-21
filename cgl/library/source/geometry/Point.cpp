@@ -19,45 +19,20 @@ namespace cgl {
 namespace geometry {
 
 Point::Point() :
-    mX{0}, mY{0} {
+    IGeometryElement{{}} {
     setColors({});
 }
 
-Point::Point(const int& x, const int& y) :
-    mX{x}, mY{y} {
+Point::Point(const std::int16_t& x, const std::int16_t& y) :
+    IGeometryElement{{x, y}} {
     setColors({});
 }
 
-Point::Point(const int& x, const int& y,
+Point::Point(const std::int16_t& x, const std::int16_t& y,
     const Color& color) :
-    mX{x}, mY{y} {
+    IGeometryElement{{x, y}} {
     setColors(std::make_pair<Color, Color>({
         color.red, color.green, color.blue, color.alpha}, {}));
-}
-
-auto Point::getX() const -> const int {
-    return mX;
-}
-
-auto Point::getY() const -> const int {
-    return mY;
-}
-
-auto Point::getCoordinates() const -> const std::pair<int, int> {
-    return {mX, mY};
-}
-
-auto Point::setX(const int& x) -> void {
-    mX = x;
-}
-
-auto Point::setY(const int& y) -> void {
-    mY = y;
-}
-
-auto Point::setCoordinates(const int& x, const int& y) -> void {
-    mX = x;
-    mY = y;
 }
 
 }  // namespace geometry
