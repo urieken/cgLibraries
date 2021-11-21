@@ -41,15 +41,6 @@ SDLRendererGeometryCommand::SDLRendererGeometryCommand(
     mElement->setDrawColor(element.getDrawColor());
 }
 
-SDLRendererGeometryCommand::SDLRendererGeometryCommand(
-    ::cgl::display::IRenderer& renderer, const Operation& operation,
-    const Geometry::Line& element) :
-    SDLRendererCommand{renderer, operation} {
-    mElement = std::make_unique<Geometry::Line>(element.getBegin(),
-        element.getEnd());
-    mElement->setDrawColor(element.getDrawColor());
-}
-
 auto SDLRendererGeometryCommand::Execute() -> std::error_condition {
     ::SDL_Log("METHOD : %s\n", __PRETTY_FUNCTION__);
     switch (mOperation) {
