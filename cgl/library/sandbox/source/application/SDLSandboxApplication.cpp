@@ -20,6 +20,7 @@
 #include <display/SDLWindow.hpp>
 #include <geometry/Line.hpp>
 #include <geometry/Point.hpp>
+#include <geometry/Rectangle.hpp>
 #include <error/CGLError.hpp>
 #include <event/CoreEvent.hpp>
 
@@ -134,7 +135,7 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererCommand>(*mRenderer,
                 RenderOperation::SetDrawColor,
-                SDL_Color{255UL, 0UL, 0UL, 255UL}));
+                SDL_Color{255, 0, 0, 255}));
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererCommand>(*mRenderer,
                 RenderOperation::Clear));
@@ -144,7 +145,7 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererCommand>(*mRenderer,
                 RenderOperation::SetDrawColor,
-                SDL_Color{0UL, 255UL, 0UL, 255UL}));
+                SDL_Color{0, 255, 0, 255}));
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererCommand>(*mRenderer,
                 RenderOperation::Clear));
@@ -154,7 +155,7 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererCommand>(*mRenderer,
                 RenderOperation::SetDrawColor,
-                SDL_Color{0UL, 0UL, 255UL, 255UL}));
+                SDL_Color{0, 0, 255, 255}));
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererCommand>(*mRenderer,
                 RenderOperation::Clear));
@@ -211,21 +212,66 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
             mUpdateRequested = true;
         } break;
         case SDLK_p : {
-            Geometry::Point point{100, 100, {255UL, 255UL, 255UL, 255UL}};
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::SetDrawColor,
+                SDL_Color{0, 0, 0, 0}));
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
+            Geometry::Point point{100, 100, {255, 255, 255, 255}};
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererGeometryCommand>(
                 *mRenderer, RenderOperation::DrawPoint, point));
             mUpdateRequested = true;
         } break;
         case SDLK_l : {
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::SetDrawColor,
+                SDL_Color{0, 0, 0, 0}));
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
             Geometry::Line line{{100, 100}, {300, 300},
-                {25UL, 50UL, 255UL, 255UL}};
+                {25, 50, 255, 255}};
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererGeometryCommand>(
                 *mRenderer, RenderOperation::DrawLine, line));
             mUpdateRequested = true;
         } break;
+        case SDLK_f : {
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::SetDrawColor,
+                SDL_Color{0, 50, 0, 255}));
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
 
+            Geometry::Rectangle rect{{780, 110}, {500, 500},
+                {{25, 50, 255, 255}, {50, 150, 255, 255}}};
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererGeometryCommand>(
+                *mRenderer, RenderOperation::DrawFillRect, rect));
+            mUpdateRequested = true;
+        } break;
+        case SDLK_d : {
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::SetDrawColor,
+                SDL_Color{0, 50, 0, 255}));
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+                RenderOperation::Clear));
+
+            Geometry::Rectangle rect{{0, 110}, {500, 500},
+                {{50, 150, 255, 255}, {25, 50, 255, 255}}};
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererGeometryCommand>(
+                *mRenderer, RenderOperation::DrawRect, rect));
+            mUpdateRequested = true;
+        } break;
         default:break;
     }
     return true;

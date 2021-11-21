@@ -25,39 +25,51 @@ namespace command {
 
 SDLRendererGeometryCommand::SDLRendererGeometryCommand(
     ::cgl::display::IRenderer& renderer, const Operation& operation,
-    const Geometry::Point& element) :
+    const GeometryElement& element) :
     SDLRendererCommand{renderer, operation} {
     mElement =
         std::make_unique<GeometryElement>(element.getCoordinates());
-    mElement->setDrawColor(element.getDrawColor());
-}
-
-SDLRendererGeometryCommand::SDLRendererGeometryCommand(
-    ::cgl::display::IRenderer& renderer, const Operation& operation,
-    const Geometry::Line& element) :
-    SDLRendererCommand{renderer, operation} {
-    mElement =
-        std::make_unique<GeometryElement>(element.getCoordinates());
-    mElement->setDrawColor(element.getDrawColor());
+    mElement->setColors(element.getColors());
 }
 
 auto SDLRendererGeometryCommand::Execute() -> std::error_condition {
-    ::SDL_Log("METHOD : %s\n", __PRETTY_FUNCTION__);
-        auto coordinates = mElement->getCoordinates();
-        auto drawColor = mElement->getDrawColor();
-        ::SDL_SetRenderDrawColor(
-            static_cast<SDL_Renderer*>(mRenderer.Get()),
-            drawColor.red, drawColor.green, drawColor.blue,
-            drawColor.alpha);
+    auto coordinates = mElement->getCoordinates();
     switch (mOperation) {
         case Operation::DrawPoint : {
-            ::SDL_RenderDrawPoint(
-                static_cast<SDL_Renderer*>(mRenderer.Get()),
+            auto drawColor = mElement->getDrawColor();
+            ::SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(mRenderer.Get()),
+                drawColor.red, drawColor.green, drawColor.blue,
+                drawColor.alpha);
+            ::SDL_RenderDrawPoint(static_cast<SDL_Renderer*>(mRenderer.Get()),
                 coordinates[0], coordinates[1]);
         } break;
         case Operation::DrawLine : {
+            auto drawColor = mElement->getDrawColor();
+            ::SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(mRenderer.Get()),
+                drawColor.red, drawColor.green, drawColor.blue,
+                drawColor.alpha);
             ::SDL_RenderDrawLine(static_cast<SDL_Renderer*>(mRenderer.Get()),
                 coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
+        } break;
+        case Operation::DrawRect : {
+            auto drawColor = mElement->getDrawColor();
+            ::SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(mRenderer.Get()),
+                drawColor.red, drawColor.green, drawColor.blue,
+                drawColor.alpha);
+            SDL_Rect rect{coordinates[0],coordinates[1],coordinates[2],
+                coordinates[3]};
+            ::SDL_RenderDrawRect(static_cast<SDL_Renderer*>(mRenderer.Get()),
+                &rect);
+        } break;
+        case Operation::DrawFillRect : {
+            auto fillColor = mElement->getFillColor();
+            ::SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(mRenderer.Get()),
+                fillColor.red, fillColor.green, fillColor.blue,
+                fillColor.alpha);
+            SDL_Rect rect{coordinates[0],coordinates[1],coordinates[2],
+                coordinates[3]};
+            ::SDL_RenderFillRect(static_cast<SDL_Renderer*>(mRenderer.Get()),
+                &rect);
         } break;
         case Operation::Unknown : [[fallthrough]];
         default:break;
