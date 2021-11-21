@@ -253,7 +253,7 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
                 {{25, 50, 255, 255}, {50, 150, 255, 255}}};
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererGeometryCommand>(
-                *mRenderer, RenderOperation::DrawRect, rect));
+                *mRenderer, RenderOperation::DrawFillRect, rect));
             mUpdateRequested = true;
         } break;
         case SDLK_d : {
@@ -269,7 +269,7 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
                 {{50, 150, 255, 255}, {25, 50, 255, 255}}};
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererGeometryCommand>(
-                *mRenderer, RenderOperation::DrawFillRect, rect));
+                *mRenderer, RenderOperation::DrawRect, rect));
             mUpdateRequested = true;
         } break;
         default:break;

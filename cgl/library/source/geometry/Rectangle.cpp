@@ -11,8 +11,6 @@
 
 #include <geometry/Rectangle.hpp>
 
-#include <SDL2/SDL.h>
-
 using Color = ::cgl::display::Color;
 
 namespace cgl {
@@ -44,19 +42,6 @@ Rectangle::Rectangle(const std::pair<int, int>& topLeft,
         bottomRight.second
     }} {
     setColors(colors);
-    ::SDL_Log("DRAW COLOR: R:%d nG:%d B:%d A:%d\n",
-        colors.first.red, colors.first.green,
-        colors.first.blue, colors.first.alpha);
-    ::SDL_Log("FILL COLOR: R:%d G:%d B:%d A:%d\n",
-        colors.second.red, colors.second.green,
-        colors.second.blue, colors.second.alpha);
-    auto clr = getColors();
-    ::SDL_Log("DRAW COLOR: R:%d G:%d B:%d A:%d\n",
-        clr.first.red, clr.first.green,
-        clr.first.blue, clr.first.alpha);
-    ::SDL_Log("FILL COLOR: R:%d G:%d B:%d A:%d\n",
-        clr.second.red, clr.second.green,
-        clr.second.blue, clr.second.alpha);
 }
 
 }  // namespace geometry

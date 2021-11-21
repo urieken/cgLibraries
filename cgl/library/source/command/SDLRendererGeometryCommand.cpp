@@ -29,7 +29,7 @@ SDLRendererGeometryCommand::SDLRendererGeometryCommand(
     SDLRendererCommand{renderer, operation} {
     mElement =
         std::make_unique<GeometryElement>(element.getCoordinates());
-    mElement->setDrawColor(element.getDrawColor());
+    mElement->setColors(element.getColors());
 }
 
 auto SDLRendererGeometryCommand::Execute() -> std::error_condition {
@@ -56,9 +56,6 @@ auto SDLRendererGeometryCommand::Execute() -> std::error_condition {
             ::SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(mRenderer.Get()),
                 drawColor.red, drawColor.green, drawColor.blue,
                 drawColor.alpha);
-            // ::SDL_Log("DRAW COLOR:\nR:%d\nG:%d\nB:%d\nA:%d\n",
-            //     drawColor.red, drawColor.green, drawColor.blue,
-            //     drawColor.alpha);
             SDL_Rect rect{coordinates[0],coordinates[1],coordinates[2],
                 coordinates[3]};
             ::SDL_RenderDrawRect(static_cast<SDL_Renderer*>(mRenderer.Get()),
@@ -69,9 +66,6 @@ auto SDLRendererGeometryCommand::Execute() -> std::error_condition {
             ::SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(mRenderer.Get()),
                 fillColor.red, fillColor.green, fillColor.blue,
                 fillColor.alpha);
-            // ::SDL_Log("FILL COLOR:\nR:%d\nG:%d\nB:%d\nA:%d\n",
-            //     fillColor.red, fillColor.green, fillColor.blue,
-            //     fillColor.alpha);
             SDL_Rect rect{coordinates[0],coordinates[1],coordinates[2],
                 coordinates[3]};
             ::SDL_RenderFillRect(static_cast<SDL_Renderer*>(mRenderer.Get()),
