@@ -20,8 +20,8 @@ Line::Line() : IGeometryElement{{}} {
     setColors({});
 }
 
-Line::Line(std::pair<std::int16_t, std::int16_t> begin,
-    std::pair<std::int16_t, std::int16_t> end) :
+Line::Line(std::pair<int, int> begin,
+    std::pair<int, int> end) :
     IGeometryElement{{
         begin.first,
         begin.second,
@@ -31,8 +31,8 @@ Line::Line(std::pair<std::int16_t, std::int16_t> begin,
     setColors({});
 }
 
-Line::Line(std::pair<std::int16_t, std::int16_t> begin,
-    std::pair<std::int16_t, std::int16_t> end, const Color& color) :
+Line::Line(std::pair<int, int> begin,
+    std::pair<int, int> end, const Color& color) :
     IGeometryElement{{
         begin.first,
         begin.second,
