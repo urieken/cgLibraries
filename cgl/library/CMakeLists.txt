@@ -28,6 +28,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/CoreEvent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/SDLEventListener.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/SDLEvent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/geometry/Line.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/geometry/Point.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/system/Arguments.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/system/Compilers.cpp

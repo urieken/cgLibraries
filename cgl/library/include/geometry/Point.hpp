@@ -16,7 +16,7 @@
 
 #include <display/Color.hpp>
 
-#include <utility>
+#include <cstdint>
 
 namespace cgl {
 namespace geometry {
@@ -36,7 +36,7 @@ public:
      * @param x The x coordinate.
      * @param y The y coordinate.
      */
-    Point(const int& x, const int& y);
+    Point(const std::int16_t& x,const std::int16_t& y);
     /**
      * @brief Construct a new Point object
      * 
@@ -44,54 +44,8 @@ public:
      * @param y The y coordinate.
      * @param drawColor The draw color.
      */
-    Point(const int& x, const int& y,
+    Point(const std::int16_t& x, const std::int16_t& y,
         const ::cgl::display::Color& drawColor);
-    /**
-     * @brief Retrieves the Point's x coortinate.
-     * 
-     * @return const int The x coordinate.
-     */
-    auto getX() const -> const int;
-    /**
-     * @brief Retrieves the Point's y coortinate.
-     * 
-     * @return const int The y coordinate.
-     */
-    auto getY() const -> const int;
-    /**
-     * @brief Get the x and y coordinates.
-     * 
-     * @return const std::pair<int, int> The x and y coordinates/
-     */
-    auto getCoordinates() const -> const std::pair<int, int>;
-    /**
-     * @brief Set the x coordinate.
-     * 
-     * @param x The x coordinate.
-     */
-    auto setX(const int& x) -> void;
-    /**
-     * @brief Set the y coordinate.
-     * 
-     * @param x The y coordinate.
-     */
-    auto setY(const int& y) -> void;
-    /**
-     * @brief Set the x and y coordinates.
-     * 
-     * @param x The x coordinate.
-     * @param y The y coordinate.
-     */
-    auto setCoordinates(const int& x, const int& y) -> void;
-private:
-    /**
-     * @brief The x coordinate.
-     */
-    int mX;
-    /**
-     * @brief The y coordinate.
-     */
-    int mY;
 };
 
 }  // namespace geometry

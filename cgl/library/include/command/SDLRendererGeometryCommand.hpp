@@ -18,6 +18,7 @@
 
 #include <display/IRenderer.hpp>
 #include <geometry/IGeometryElement.hpp>
+#include <geometry/Line.hpp>
 #include <geometry/Point.hpp>
 
 namespace cgl {
@@ -37,6 +38,16 @@ public:
     SDLRendererGeometryCommand(::cgl::display::IRenderer& renderer,
         const Operation& operation,
         const ::cgl::geometry::Point& element);
+    /**
+     * @brief Construct a new SDLRendererGeometryCommand object
+     * 
+     * @param renderer The renderer to operated upon.
+     * @param operation The operation to be executed.
+     * @param element The element to be used in the command.
+     */
+    SDLRendererGeometryCommand(::cgl::display::IRenderer& renderer,
+        const Operation& operation,
+        const ::cgl::geometry::Line& element);
     /**
      * @brief Execute the command.
      * 
