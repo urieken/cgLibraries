@@ -44,9 +44,8 @@ protected:
  */
 TEST_F(RectangleTest, testDefaultsAfterConstruction) {
     mElement = std::make_unique<Geometry::Rectangle>();
-    const auto rect = static_cast<Geometry::Rectangle*>(mElement.get());
 
-    EXPECT_EQ(0, rect->getCoordinates().size());
+    EXPECT_EQ(0, mElement->getCoordinates().size());
 }
 /**
  * @brief Construct a new test object.
@@ -57,12 +56,11 @@ TEST_F(RectangleTest, testValuesfterConstruction) {
     const std::pair<int, int> topLeft = std::pair<int, int>(1, 2);
     const std::pair<int, int> bottomRight = std::pair<int, int>(3, 4);
     mElement = std::make_unique<Geometry::Rectangle>(topLeft, bottomRight);
-    const auto rect = static_cast<Geometry::Rectangle*>(mElement.get());
 
-    EXPECT_EQ(topLeft.first, rect->getCoordinates().at(0));
-    EXPECT_EQ(topLeft.second, rect->getCoordinates().at(1));
-    EXPECT_EQ(bottomRight.first, rect->getCoordinates().at(2));
-    EXPECT_EQ(bottomRight.second, rect->getCoordinates().at(3));
+    EXPECT_EQ(topLeft.first, mElement->getCoordinates().at(0));
+    EXPECT_EQ(topLeft.second, mElement->getCoordinates().at(1));
+    EXPECT_EQ(bottomRight.first, mElement->getCoordinates().at(2));
+    EXPECT_EQ(bottomRight.second, mElement->getCoordinates().at(3));
 }
 /**
  * @brief Construct a new test object.
@@ -75,7 +73,6 @@ TEST_F(RectangleTest, testColors) {
     const std::pair<Color, Color> colors{{16, 32, 64, 128}, {10, 20, 30, 40}};
     mElement = std::make_unique<Geometry::Rectangle>(topLeft, bottomRight,
         colors);
-    const auto rect = static_cast<Geometry::Rectangle*>(mElement.get());
 
     EXPECT_EQ(colors.first.red, mElement->getDrawColor().red);
     EXPECT_EQ(colors.first.green, mElement->getDrawColor().green);
