@@ -10,6 +10,8 @@
  */
 
 #include <geometry/IGeometryElement.hpp>
+
+#include <display/Color.hpp>
 #include <geometry/Point.hpp>
 
 #include <memory>
@@ -17,6 +19,8 @@
 #include <gtest/gtest.h>
 
 namespace Geometry = ::cgl::geometry;
+
+using Color = ::cgl::display::Color;
 
 namespace cgl {
 namespace geometry {
@@ -41,10 +45,7 @@ TEST_F(PointTest, testDefaultsAfterConstruction) {
     mElement = std::make_unique<Geometry::Point>();
     const auto point = static_cast<Geometry::Point*>(mElement.get());
 
-    EXPECT_EQ(0, point->getX());
-    EXPECT_EQ(0, point->getY());
-    EXPECT_EQ(0, point->getCoordinates().first);
-    EXPECT_EQ(0, point->getCoordinates().second);
+    EXPECT_EQ(0, point->getCoordinates().size());
 }
 /**
  * @brief Construct a new test object.
@@ -57,37 +58,25 @@ TEST_F(PointTest, testValuesfterConstruction) {
     mElement = std::make_unique<Geometry::Point>(X, Y);
     const auto point = static_cast<Geometry::Point*>(mElement.get());
 
-    EXPECT_EQ(X, point->getX());
-    EXPECT_EQ(Y, point->getY());
-    EXPECT_EQ(X, point->getCoordinates().first);
-    EXPECT_EQ(Y, point->getCoordinates().second);
+    EXPECT_EQ(X, point->getCoordinates().at(0));
+    EXPECT_EQ(Y, point->getCoordinates().at(1));
 }
 /**
  * @brief Construct a new test object.
  * 
- * @test Verify default properties after setting new values.
+ * @test Verify default colors.
  */
-TEST_F(PointTest, testValues) {
+TEST_F(PointTest, testColors) {
     constexpr auto X{1};
     constexpr auto Y{2};
-    mElement = std::make_unique<Geometry::Point>();
+    Color color{16, 32, 64, 128};
+    mElement = std::make_unique<Geometry::Point>(X, Y, color);
     const auto point = static_cast<Geometry::Point*>(mElement.get());
 
-    EXPECT_EQ(0, point->getX());
-    EXPECT_EQ(0, point->getY());
-    EXPECT_EQ(0, point->getCoordinates().first);
-    EXPECT_EQ(0, point->getCoordinates().second);
-    point->setX(X);
-    point->setY(Y);
-    EXPECT_EQ(X, point->getX());
-    EXPECT_EQ(Y, point->getY());
-    EXPECT_EQ(X, point->getCoordinates().first);
-    EXPECT_EQ(Y, point->getCoordinates().second);
-    point->setCoordinates(0, 0);
-    EXPECT_EQ(0, point->getX());
-    EXPECT_EQ(0, point->getY());
-    EXPECT_EQ(0, point->getCoordinates().first);
-    EXPECT_EQ(0, point->getCoordinates().second);
+    EXPECT_EQ(color.red, mElement->getDrawColor().red);
+    EXPECT_EQ(color.green, mElement->getDrawColor().green);
+    EXPECT_EQ(color.blue, mElement->getDrawColor().blue);
+    EXPECT_EQ(color.alpha, mElement->getDrawColor().alpha);
 }
 
 }  // namespace test

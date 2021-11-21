@@ -40,6 +40,8 @@ public:
         CopyTextureRect,
         DrawPoint,
         DrawLine,
+        DrawRect,
+        DrawFillRect,
         Unknown
     };
     SDLRendererCommand() = delete;

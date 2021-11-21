@@ -14,7 +14,6 @@
 
 #include <display/Color.hpp>
 
-#include <cstdint>
 #include <utility>
 #include <vector>
 
@@ -32,7 +31,7 @@ public:
      * 
      * @param coordinates The coordinate set for the element.
      */
-    IGeometryElement(const std::vector<std::int16_t>& coordinates) :
+    explicit IGeometryElement(const std::vector<int>& coordinates) :
         mCoordinates{coordinates} {}
     /**
      * @brief Set the draw and fill colors.
@@ -41,7 +40,8 @@ public:
      */
     auto setColors(const std::pair<::cgl::display::Color,
         ::cgl::display::Color>& colors) -> void {
-        mColors = colors;
+        mColors.first = colors.first;
+        mColors.second = colors.second;
     }
     /**
      * @brief Get the draw and fill colors.
@@ -75,7 +75,7 @@ public:
      * @param color The fill color.
      */
     auto setFillColor(const ::cgl::display::Color& color) -> void {
-        mColors.first = color;
+        mColors.second = color;
     }
     /**
      * @brief Get the fill color.
@@ -83,22 +83,22 @@ public:
      * @return ::cgl::display::Color The fill color.
      */
     auto getFillColor() const -> ::cgl::display::Color {
-        return mColors.first;
+        return mColors.second;
     }
     /**
      * @brief Set the coordinate set for the element.
      * 
      * @param coordinates The coordinate set for the element.
      */
-    auto setCoordinates(const std::vector<std::int16_t>& coordinates) -> void {
+    auto setCoordinates(const std::vector<int>& coordinates) -> void {
         mCoordinates = coordinates;
     }
     /**
      * @brief Get the coordinate set for the element.
      * 
-     * @return std::vector<std::int16_t> The coordinate set for the element.
+     * @return std::vector<int> The coordinate set for the element.
      */
-    auto getCoordinates() const -> std::vector<std::int16_t> {
+    auto getCoordinates() const -> std::vector<int> {
         return mCoordinates;
     }
 private:
@@ -110,7 +110,7 @@ private:
     /**
      * @brief The coordinate set for the element.
      */
-    std::vector<std::int16_t> mCoordinates;
+    std::vector<int> mCoordinates;
 };
 
 }  // namespace geometry
