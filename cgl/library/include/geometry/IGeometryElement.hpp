@@ -14,7 +14,9 @@
 
 #include <display/Color.hpp>
 
+#include <cstdint>
 #include <utility>
+#include <vector>
 
 namespace cgl {
 namespace geometry {
@@ -23,7 +25,15 @@ namespace geometry {
  */
 class IGeometryElement {
 public:
+    IGeometryElement() = delete;
     virtual ~IGeometryElement() = default;
+    /**
+     * @brief Construct a new IGeometryElement object
+     * 
+     * @param coordinates The coordinate set for the element.
+     */
+    IGeometryElement(const std::vector<std::int16_t>& coordinates) :
+        mCoordinates{coordinates} {}
     /**
      * @brief Set the draw and fill colors.
      * 
@@ -75,12 +85,32 @@ public:
     auto getFillColor() const -> ::cgl::display::Color {
         return mColors.first;
     }
+    /**
+     * @brief Set the coordinate set for the element.
+     * 
+     * @param coordinates The coordinate set for the element.
+     */
+    auto setCoordinates(const std::vector<std::int16_t>& coordinates) -> void {
+        mCoordinates = coordinates;
+    }
+    /**
+     * @brief Get the coordinate set for the element.
+     * 
+     * @return std::vector<std::int16_t> The coordinate set for the element.
+     */
+    auto getCoordinates() const -> std::vector<std::int16_t> {
+        return mCoordinates;
+    }
 private:
     /**
      * @brief The draw(first) and fill(second) colors.
      */
     std::pair<::cgl::display::Color,
         ::cgl::display::Color> mColors;
+    /**
+     * @brief The coordinate set for the element.
+     */
+    std::vector<std::int16_t> mCoordinates;
 };
 
 }  // namespace geometry
