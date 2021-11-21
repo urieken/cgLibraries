@@ -36,8 +36,8 @@ public:
      * @param begin The starting point of the line.
      * @param end The ending point of the line.
      */
-    Line(std::pair<std::int16_t, std::int16_t> begin,
-        std::pair<std::int16_t, std::int16_t> end);
+    Line(std::pair<int, int> begin,
+        std::pair<int, int> end);
     /**
      * @brief Construct a new Line object
      * 
@@ -45,8 +45,8 @@ public:
      * @param end The ending point of the line.
      * @param color The draw color.
      */
-    Line(std::pair<std::int16_t, std::int16_t> begin,
-        std::pair<std::int16_t, std::int16_t> end,
+    Line(std::pair<int, int> begin,
+        std::pair<int, int> end,
         const ::cgl::display::Color& color);
 };
 
