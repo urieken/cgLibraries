@@ -1,6 +1,0 @@
-[submodule "vendors/stb"]
-	path = vendors/stb
-	url = https://github.com/nothings/stb.git
-[submodule "vendors/googletest"]
-	path = vendors/googletest
-	url = https://github.com/google/googletest
