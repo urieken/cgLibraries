@@ -43,25 +43,19 @@ SDLRendererGeometryCommand::SDLRendererGeometryCommand(
 
 auto SDLRendererGeometryCommand::Execute() -> std::error_condition {
     ::SDL_Log("METHOD : %s\n", __PRETTY_FUNCTION__);
+        auto coordinates = mElement->getCoordinates();
+        auto drawColor = mElement->getDrawColor();
+        ::SDL_SetRenderDrawColor(
+            static_cast<SDL_Renderer*>(mRenderer.Get()),
+            drawColor.red, drawColor.green, drawColor.blue,
+            drawColor.alpha);
     switch (mOperation) {
         case Operation::DrawPoint : {
-            auto coordinates = mElement->getCoordinates();
-            auto drawColor = mElement->getDrawColor();
-            ::SDL_SetRenderDrawColor(
-                static_cast<SDL_Renderer*>(mRenderer.Get()),
-                drawColor.red, drawColor.green, drawColor.blue,
-                drawColor.alpha);
             ::SDL_RenderDrawPoint(
                 static_cast<SDL_Renderer*>(mRenderer.Get()),
                 coordinates[0], coordinates[1]);
         } break;
         case Operation::DrawLine : {
-            auto coordinates = mElement->getCoordinates();
-            auto drawColor = mElement->getDrawColor();
-            ::SDL_SetRenderDrawColor(
-                static_cast<SDL_Renderer*>(mRenderer.Get()),
-                drawColor.red, drawColor.green, drawColor.blue,
-                drawColor.alpha);
             ::SDL_RenderDrawLine(static_cast<SDL_Renderer*>(mRenderer.Get()),
                 coordinates[0], coordinates[1], coordinates[2], coordinates[3]);
         } break;
