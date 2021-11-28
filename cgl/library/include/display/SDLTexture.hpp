@@ -14,10 +14,12 @@
 
 #include <display/ITexture.hpp>
 
+#include <display/Color.hpp>
 #include <display/SDLRenderer.hpp>
 
 #include <string>
 #include <system_error>
+#include <utility>
 
 #include <SDL2/SDL.h>
 
@@ -35,17 +37,34 @@ public:
     /**
      * @brief Load a texture from file.
      * 
-     * @param path The path to the texture file.
+     * @param path The path to the texture file.0
+     * @param renderer The renderer where the texture will be created from.
      * @return std::error_condition Error result from the operation.
      */
-    auto Load(const std::string& path,
-        IRenderer& renderer) -> std::error_condition override;
+    auto Load(const std::string& path, IRenderer& renderer)
+        -> std::error_condition override;
+    /**
+     * @brief Load a texture from file.
+     * 
+     * @param path The path to the texture file.
+     * @param renderer The renderer where the texture will be created from.
+     * @param key The color key.
+     * @return std::error_condition Error result from the operation.
+     */
+    auto Load(const std::string& path, IRenderer& renderer,
+        const Color& key) -> std::error_condition override;
     /**
      * @brief Get the raw pointer to the texture structure.
      * 
      * @return void* The raw pointer to the texture structure.
      */
     auto Get() const -> void* override;
+    /**
+     * @brief Get the texture dimensions.
+     * 
+     * @return std::pair<int, int> The texture dimensions.
+     */
+    auto GetDimensions() const -> std::pair<int, int> override;
 private:
     /**
      * @brief Pointer to the SDL texture structure.

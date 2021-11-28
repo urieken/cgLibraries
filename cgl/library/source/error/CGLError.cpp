@@ -19,6 +19,7 @@ constexpr auto MalformedKeyPair{"MalformedKeyPair"};
 constexpr auto Unknown{"Unknown"};
 constexpr auto CGLErrorCategory{"CGLErrorCategory"};
 constexpr auto ImageLoadFailure{"ImageLoadFailure"};
+constexpr auto ColorKeySetFailure{"ColorKeySetFailure"};
 constexpr auto TextureCreationFailure{"TextureCreationFailure"};
 
 auto CGLError::name() const noexcept -> const char* {
@@ -34,6 +35,8 @@ auto CGLError::message(int code) const -> std::string {
         message = MalformedKeyPair; break;
     case ErrorCode::ImageLoadFailure :
         message = ImageLoadFailure; break;
+    case ErrorCode::ColorKeySetFailure :
+        message = ColorKeySetFailure;
     case ErrorCode::TextureCreationFailure :
         message = TextureCreationFailure; break;
     case ErrorCode::Unknown :

@@ -38,5 +38,9 @@ auto SDLWindow::GetId() const -> const std::uint32_t {
     return ::SDL_GetWindowID(mWindow);
 }
 
+auto SDLWindow::SetSize(const int& width, const int& height) -> void {
+    ::SDL_SetWindowSize(mWindow, width, height);
+}
+
 }  // namespace display
 }  // namespace cgl
