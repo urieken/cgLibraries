@@ -14,6 +14,7 @@
 #include <command/SDLRendererCommand.hpp>
 #include <command/SDLRendererCopyCommand.hpp>
 #include <command/SDLRendererGeometryCommand.hpp>
+#include <command/SDLRendererViewportCommand.hpp>
 #include <display/Color.hpp>
 #include <display/SDLRenderer.hpp>
 #include <display/SDLTexture.hpp>
@@ -131,6 +132,13 @@ auto SDLSandboxApplication::Setup() -> bool {
 auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
      -> bool {
     switch(event.keysym.sym) {
+        case SDLK_v : {
+            ::SDL_Log("Setting viewport");
+            mRendererCommands.push_back(
+                std::make_unique<Command::SDLRendererViewportCommand>(*mRenderer,
+                RenderOperation::SetViewport,
+                Display::Viewport{010, Display::Rect{100, 100, 200, 200}}));
+        } break;
         case SDLK_r : {
             mRendererCommands.push_back(
                 std::make_unique<Command::SDLRendererCommand>(*mRenderer,

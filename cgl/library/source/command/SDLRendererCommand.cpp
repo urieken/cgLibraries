@@ -52,5 +52,9 @@ auto SDLRendererCommand::Execute() -> std::error_condition {
     return Error::makeErrorCondition(Error::ErrorCode::NoError);
 }
 
+auto SDLRendererCommand::getRenderer() -> SDL_Renderer* {
+    return static_cast<SDL_Renderer*>(mRenderer.Get());
+}
+
 }  // namespace command
 }  // namespace cgl
