@@ -26,6 +26,7 @@
 #include <event/CoreEvent.hpp>
 
 #include <sstream>
+#include <utility>
 #include <vector>
 
 namespace Command = ::cgl::command;
@@ -110,7 +111,10 @@ auto SDLSandboxApplication::OnEvent(
 
 auto SDLSandboxApplication::Setup() -> bool {
     ::SDL_Log("Setting up SDLSandboxApplication");
-    constexpr auto file{"res/img/2387345452.png"};
+    // constexpr auto file{"res/img/2387345452.png"};
+    // constexpr auto file{"res/img/paper.png"};
+    // constexpr auto file{"res/img/Terra.png"};
+    constexpr auto file{"res/img/Celes_Chere.png"};
     mWindow = std::make_unique<Display::SDLWindow>(
         GetStringProperty("name", mArguments),
         GetIntegerProperty("top", mArguments),
@@ -122,10 +126,12 @@ auto SDLSandboxApplication::Setup() -> bool {
         mWindow->GetId(), -1, SDL_RENDERER_ACCELERATED);
     mTexture = std::make_unique<Display::SDLTexture>();
     if (static_cast<int>(Code::NoError) !=
-        mTexture->Load(file, *mRenderer).value()) {
+        mTexture->Load(file, *mRenderer, {0x00, 0x80, 0x80, 0x00}).value()) {
         return false;
     }
     ::SDL_Log("Loaded %s", file);
+    auto dimensions = mTexture->GetDimensions();
+    mWindow->SetSize(std::get<0>(dimensions), std::get<1>(dimensions));
     return true;
 }
 

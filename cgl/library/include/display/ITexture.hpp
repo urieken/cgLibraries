@@ -14,8 +14,11 @@
 
 #include <display/IRenderer.hpp>
 
+#include <display/Color.hpp>
+
 #include <string>
 #include <system_error>
+#include <utility>
 
 namespace cgl {
 namespace display {
@@ -35,11 +38,27 @@ public:
     virtual auto Load(const std::string& path,
         IRenderer& renderer) -> std::error_condition = 0;
     /**
+     * @brief Load a texture from file.
+     * 
+     * @param path The path to the texture file.
+     * @param renderer The renderer where the texture will be created from.
+     * @param key The color key.
+     * @return std::error_condition Error result from the operation.
+     */
+    virtual auto Load(const std::string& path,
+        IRenderer& renderer, const Color& key) -> std::error_condition = 0;
+    /**
      * @brief Get the raw pointer to the texture structure.
      * 
      * @return void* The raw pointer to the texture structure.
      */
     virtual auto Get() const -> void* = 0;
+    /**
+     * @brief Get the texture dimensions.
+     * 
+     * @return std::pair<int, int> The texture dimensions.
+     */
+    virtual auto GetDimensions() const -> std::pair<int, int> = 0;
 };
 
 }  // namespace display

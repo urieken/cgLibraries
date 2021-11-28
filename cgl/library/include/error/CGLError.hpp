@@ -25,6 +25,7 @@ enum class ErrorCode {
     NoError = 0UL,
     MalformedKeyPair,
     ImageLoadFailure,
+    ColorKeySetFailure,
     TextureCreationFailure,
     /**
      * @brief The max value for error code.
