@@ -51,6 +51,13 @@ public:
      * @return const std::uint32_t The the window ID.
      */
     auto GetId() const -> const std::uint32_t override;
+    /**
+     * @brief Resize the window.
+     * 
+     * @param width The new window width.
+     * @param height The new window height.
+     */
+    auto SetSize(const int& width, const int& height) -> void override;
 private:
     /**
      * @brief Pointer to SDLWindow

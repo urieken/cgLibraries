@@ -29,6 +29,13 @@ public:
      * @return const std::uint32_t The the window ID.
      */
     virtual auto GetId() const -> const std::uint32_t = 0;
+    /**
+     * @brief Resize the window.
+     * 
+     * @param width The new window width.
+     * @param height The new window height.
+     */
+    virtual auto SetSize(const int& width, const int& height) -> void = 0;
 };
 
 }  // namespace display
