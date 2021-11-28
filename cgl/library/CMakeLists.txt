@@ -20,9 +20,11 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererCopyCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererGeometryCommand.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererViewportCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLRenderer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLTexture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLWindow.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/display/Viewport.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/error/CGLError.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/IEvent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/CoreEvent.cpp
@@ -77,7 +79,8 @@ set(TEST_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/Point.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/Rectangle.test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/KeyPairString.test.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/SDLEvent.test.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/SDLEvent.test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/source/unit/Viewport.test.cpp)
 
 add_executable(${PROJECT_NAME}_test
     ${TEST_FILES}

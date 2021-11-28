@@ -42,6 +42,7 @@ public:
         DrawLine,
         DrawRect,
         DrawFillRect,
+        SetViewport,
         Unknown
     };
     SDLRendererCommand() = delete;
@@ -78,6 +79,12 @@ protected:
      * @brief Reference to the renderer instance.
      */
     ::cgl::display::IRenderer& mRenderer;
+    /**
+     * @brief Get the raw pointer to the Renderer.
+     * 
+     * @return SDL_Renderer* The raw pointer to the Renderer.
+     */
+    auto getRenderer() -> SDL_Renderer*;
 private:
     /**
      * @brief The render color.

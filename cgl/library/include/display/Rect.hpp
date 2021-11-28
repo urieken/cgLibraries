@@ -12,8 +12,6 @@
 #ifndef CGL_LIBRARY_INCLUDE_DISPLAY_IRECT_HPP_
 #define CGL_LIBRARY_INCLUDE_DISPLAY_IRECT_HPP_
 
-#include <cstdint>
-
 namespace cgl {
 namespace display {
 
@@ -24,19 +22,19 @@ struct Rect {
     /**
      * @brief The top coordinate.
      */
-    std::int16_t top;
+    int top;
     /**
      * @brief The left coordinate.
      */
-    std::int16_t left;
+    int left;
     /**
      * @brief The rectnagle's width
      */
-    std::int16_t width;
+    int width;
     /**
      * @brief The rectnagle's height
      */
-    std::int16_t height;
+    int height;
 };
 
 }  // namespace display

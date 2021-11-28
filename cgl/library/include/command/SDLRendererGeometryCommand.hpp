@@ -14,13 +14,14 @@
 
 #include <command/SDLRendererCommand.hpp>
 
-#include <memory>
-
 #include <display/IRenderer.hpp>
 #include <geometry/IGeometryElement.hpp>
 #include <geometry/Line.hpp>
 #include <geometry/Point.hpp>
 #include <geometry/Rectangle.hpp>
+
+#include <memory>
+#include <system_error>
 
 namespace cgl {
 namespace command {
