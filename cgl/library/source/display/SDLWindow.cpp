@@ -17,10 +17,10 @@ namespace display {
 SDLWindow::SDLWindow(const std::string& title,
     int left, int top, int width, int height,
     std::uint32_t flags) {
-    if (mWindow = ::SDL_CreateWindow(title.c_str(), top, left, width,
-        height, flags);nullptr == mWindow) {
-        ::SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create window : %s",
-            ::SDL_GetError());
+    if (mWindow = ::SDL_CreateWindow(title.c_str(),
+        top, left, width, height, flags);nullptr == mWindow) {
+        ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
+            "Failed to create window : %s", ::SDL_GetError());
     }
 }
 
@@ -40,6 +40,14 @@ auto SDLWindow::GetId() const -> const std::uint32_t {
 
 auto SDLWindow::SetSize(const int& width, const int& height) -> void {
     ::SDL_SetWindowSize(mWindow, width, height);
+}
+
+auto SDLWindow::Visible(bool flag) -> void {
+    if (flag) {
+        ::SDL_ShowWindow(mWindow);
+    } else {
+        ::SDL_HideWindow(mWindow);
+    }
 }
 
 }  // namespace display

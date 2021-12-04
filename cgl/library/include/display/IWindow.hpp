@@ -36,6 +36,12 @@ public:
      * @param height The new window height.
      */
     virtual auto SetSize(const int& width, const int& height) -> void = 0;
+    /**
+     * @brief Set the window visibility
+     * 
+     * @param flag True to show the window. False otherwise.
+     */
+    virtual auto Visible(bool flag) -> void = 0;
 };
 
 }  // namespace display

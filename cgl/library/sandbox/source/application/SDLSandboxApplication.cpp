@@ -81,7 +81,8 @@ SDLSandboxApplication::SDLSandboxApplication(
     mRenderer{nullptr},
     mRendererCommands{},
     mUpdateRequested{false},
-    mTexture{nullptr} {
+    mTexture{nullptr},
+    mBackground{nullptr} {
 }
 
 auto SDLSandboxApplication::OnEvent(
@@ -110,11 +111,26 @@ auto SDLSandboxApplication::OnEvent(
 }
 
 auto SDLSandboxApplication::Setup() -> bool {
-    ::SDL_Log("Setting up SDLSandboxApplication");
-    // constexpr auto file{"res/img/2387345452.png"};
-    // constexpr auto file{"res/img/paper.png"};
-    // constexpr auto file{"res/img/Terra.png"};
-    constexpr auto file{"res/img/Celes_Chere.png"};
+    if (SetupWindowAndRenderer()) {
+        if (LoadImages()) {
+            auto dimensions = mTexture->GetDimensions();
+            ::cgl::display::Rect src{0, 1, mTerra.width, mTerra.height};
+            ::cgl::display::Rect dest{0, 1, mTerra.width, mTerra.height};
+            mRendererCommands.push_back(   
+                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+                    RenderOperation::CopyTexture, *mBackground));
+            mRendererCommands.push_back(   
+                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+                    RenderOperation::CopyTextureRect, *mTexture, src, dest));
+            mUpdateRequested = true;
+            mWindow->Visible(true);
+        }
+        return true;
+    }
+    return false;
+}
+
+auto SDLSandboxApplication::SetupWindowAndRenderer() -> bool {
     mWindow = std::make_unique<Display::SDLWindow>(
         GetStringProperty("name", mArguments),
         GetIntegerProperty("top", mArguments),
@@ -122,22 +138,96 @@ auto SDLSandboxApplication::Setup() -> bool {
         GetIntegerProperty("width", mArguments),
         GetIntegerProperty("height", mArguments),
         GetIntegerProperty("sdl_window_flags", mArguments));
-    mRenderer = std::make_unique<Display::SDLRenderer>(
-        mWindow->GetId(), -1, SDL_RENDERER_ACCELERATED);
-    mTexture = std::make_unique<Display::SDLTexture>();
-    if (static_cast<int>(Code::NoError) !=
-        mTexture->Load(file, *mRenderer, {0x00, 0x80, 0x80, 0x00}).value()) {
+    if (nullptr == mWindow) {
         return false;
     }
-    ::SDL_Log("Loaded %s", file);
-    auto dimensions = mTexture->GetDimensions();
+    mRenderer = std::make_unique<Display::SDLRenderer>(
+        mWindow->GetId(), -1, SDL_RENDERER_ACCELERATED);
+    return nullptr != mRenderer;
+}
+
+auto SDLSandboxApplication::LoadImages() -> bool {
+    ::SDL_Log("Setting up SDLSandboxApplication");
+    constexpr auto backgroundImage{"res/img/paper.png"};
+    constexpr auto spriteImage{"res/img/Terra.png"};
+
+    Display::Color colorKey{0x00, 0x80, 0x80, 0x00};
+
+    mBackground = std::make_unique<Display::SDLTexture>();
+    mTexture = std::make_unique<Display::SDLTexture>();
+   
+    if (static_cast<int>(Code::NoError) !=
+        mBackground->Load(backgroundImage, *mRenderer, colorKey).value()) {
+        return false;
+    }
+    if (static_cast<int>(Code::NoError) !=
+        mTexture->Load(spriteImage, *mRenderer, colorKey).value()) {
+        return false;
+    }
+    ::SDL_Log("Loaded %s", backgroundImage);
+    auto dimensions = mBackground->GetDimensions();
     mWindow->SetSize(std::get<0>(dimensions), std::get<1>(dimensions));
+    mTerra.texture.Load(spriteImage, *mRenderer, colorKey);
+    mTerra.width = 30;
+    mTerra.height = 48;
+    mTerra.indices = {0, 32, 64, 96, 128, 160, 192, 224};
     return true;
 }
 
 auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
      -> bool {
+    int index{0};
     switch(event.keysym.sym) {
+        case  SDLK_SPACE : {
+            ::SDL_Log("SPACE");
+            auto dimensions = mTexture->GetDimensions();
+            ::cgl::display::Rect src{0, 1, mTerra.width, mTerra.height};
+            ::cgl::display::Rect dest{0, 1, mTerra.width, mTerra.height};
+            mRendererCommands.push_back(   
+                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+                    RenderOperation::CopyTexture, *mBackground, src, dest));
+            mUpdateRequested = true;
+        }break;
+        case  SDLK_1 : {
+            index = 0;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
+        } break;
+        case  SDLK_2 : {
+            index = 1;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
+        } break;
+        case  SDLK_3 : {
+            index = 2;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
+        } break;
+        case  SDLK_4 : {
+            index = 3;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
+        } break;
+        case  SDLK_5 : {
+            index = 4;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
+        } break;
+        case  SDLK_6 : {
+            index = 5;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
+        } break;
+        case  SDLK_7 : {
+            index = 6;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
+        } break;
+        case  SDLK_8 : {
+            index = 7;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
+        } break;
         default:break;
     }
     return true;
@@ -155,6 +245,20 @@ auto SDLSandboxApplication::OnUpdate() -> void {
         mRendererCommands.clear();
     }
 }
+
+auto SDLSandboxApplication::UpdateSprite(int index) -> void {
+    Display::Rect src{mTerra.indices[index], 1, mTerra.width, mTerra.height};
+    Display::Rect dest{0, 1, mTerra.width, mTerra.height};
+    
+    mRendererCommands.push_back(   
+        std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+            RenderOperation::CopyTexture, *mBackground, src, dest));
+    mRendererCommands.push_back(   
+        std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+            RenderOperation::CopyTextureRect, *mTexture, src, dest));
+    mUpdateRequested = true;
+}
+
 
 }  // namespace sandbox
 }  // namespace application

@@ -18,7 +18,8 @@ SDLRenderer::SDLRenderer(std::uint32_t windowId,
     int index, std::uint32_t flags) {
     if (mRenderer = ::SDL_CreateRenderer(::SDL_GetWindowFromID(windowId),
         index, flags); nullptr == mRenderer) {
-        ::SDL_Log("Failed to create renderer : %s", ::SDL_GetError());
+         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
+            "Failed to create renderer : %s", ::SDL_GetError());
     }
 }
 
@@ -31,15 +32,16 @@ SDLRenderer::~SDLRenderer() {
 
 auto SDLRenderer::Clear() -> void {
     if (0 != ::SDL_RenderClear(mRenderer)) {
-        ::SDL_Log("Failed to clear the renderer : %s", SDL_GetError());
+         ::SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+            "Failed to clear the renderer : %s", SDL_GetError());
     }
 }
 
 auto SDLRenderer::SetDrawColor(std::uint8_t red, std::uint8_t green,
     std::uint8_t blue, std::uint8_t alpha) -> void {
     if (0 != ::SDL_SetRenderDrawColor(mRenderer, red, green, blue, alpha)) {
-        ::SDL_Log("Failed to set the renderer draw color : %s",
-            SDL_GetError());
+         ::SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+            "Failed to set the renderer draw color : %s", SDL_GetError());
     }
 }
 
@@ -56,8 +58,8 @@ auto SDLRenderer::Copy(ITexture& texture) -> bool {
         static_cast<SDL_Texture*>(texture.Get()), nullptr, nullptr)) {
         return true;
     }
-   ::SDL_Log("Failed to copy texture to renderer : %s",
-        SDL_GetError());
+    ::SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+        "Failed to copy texture to renderer : %s", SDL_GetError());
     return false;
 }
 
@@ -69,8 +71,8 @@ auto SDLRenderer::Copy(ITexture& texture,
         static_cast<SDL_Texture*>(texture.Get()), &src, &dst)) {
         return true;
     }
-   ::SDL_Log("Failed to copy texture to renderer : %s",
-        SDL_GetError());
+    ::SDL_LogError(SDL_LOG_CATEGORY_ERROR,
+        "Failed to copy texture to renderer : %s", SDL_GetError());
     return false;
 }
 
