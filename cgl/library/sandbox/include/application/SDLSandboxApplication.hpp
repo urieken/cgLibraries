@@ -31,7 +31,12 @@
 namespace cgl {
 namespace application {
 namespace sandbox {
-
+/**
+ * @brief The spritesheet structure.
+ *
+ * @note Might want to create a spritesheet generator.
+ * (e.g) Use command in copying from source texture.
+ */
 struct SpriteSheet {
     ::cgl::display::SDLTexture texture;
     int width;
