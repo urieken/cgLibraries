@@ -22,6 +22,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererGeometryCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/command/SDLRendererViewportCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLRenderer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLSpriteSheet.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLTexture.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/SDLWindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/Viewport.cpp

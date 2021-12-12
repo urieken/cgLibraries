@@ -58,6 +58,12 @@ public:
      * @param height The new window height.
      */
     auto SetSize(const int& width, const int& height) -> void override;
+    /**
+     * @brief Set the window visibility
+     * 
+     * @param flag True to show the window. False otherwise.
+     */
+    auto Visible(bool flag) -> void override;
 private:
     /**
      * @brief Pointer to SDLWindow

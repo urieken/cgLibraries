@@ -18,6 +18,7 @@
 #include <display/IWindow.hpp>
 #include <display/IRenderer.hpp>
 #include <display/ITexture.hpp>
+#include <display/SDLTexture.hpp>
 #include <error/CGLError.hpp>
 #include <event/IEvent.hpp>
 #include <system/Arguments.hpp>
@@ -30,6 +31,19 @@
 namespace cgl {
 namespace application {
 namespace sandbox {
+/**
+ * @brief The spritesheet structure.
+ *
+ * @note Might want to create a spritesheet generator.
+ * (e.g) Use command in copying from source texture.
+ */
+struct SpriteSheet {
+    ::cgl::display::SDLTexture texture;
+    int width;
+    int height;
+    std::vector<int> indices;
+};
+
 /**
  * @brief SDL application for sandbox.
  */
@@ -79,12 +93,34 @@ private:
      */
     std::unique_ptr<::cgl::display::ITexture> mTexture;
     /**
+     * @brief Pointer to the background texture.
+     */
+    std::unique_ptr<::cgl::display::ITexture> mBackground;
+    /**
+     * @brief Spritesheet for Terra.
+     */
+    SpriteSheet mTerra;
+    /**
      * @brief Setup internal properties.
      * 
      * @return true Setup succeeded.
      * @return false Setup failed.
      */
     auto Setup() -> bool;
+    /**
+     * @brief Create window and renderer.
+     * 
+     * @return true Setup succeeded.
+     * @return false Setup failed.
+     */
+    auto SetupWindowAndRenderer() -> bool;
+    /**
+     * @brief Load image resources.
+     * 
+     * @return true Setup succeeded.
+     * @return false Setup failed.
+     */
+    auto LoadImages() -> bool;
     /**
      * @brief Handle keyboard press events
      * 
@@ -105,6 +141,12 @@ private:
      * @brief Update renderer
      */
     auto OnUpdate() -> void;
+    /**
+     * @brief Update sprite.
+     * 
+     * @param index The spritesheet index.
+     */
+    auto UpdateSprite(int index) -> void;
 };
 
 }  // namespace sandbox

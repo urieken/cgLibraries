@@ -81,7 +81,8 @@ SDLSandboxApplication::SDLSandboxApplication(
     mRenderer{nullptr},
     mRendererCommands{},
     mUpdateRequested{false},
-    mTexture{nullptr} {
+    mTexture{nullptr},
+    mBackground{nullptr} {
 }
 
 auto SDLSandboxApplication::OnEvent(
@@ -110,11 +111,26 @@ auto SDLSandboxApplication::OnEvent(
 }
 
 auto SDLSandboxApplication::Setup() -> bool {
-    ::SDL_Log("Setting up SDLSandboxApplication");
-    // constexpr auto file{"res/img/2387345452.png"};
-    // constexpr auto file{"res/img/paper.png"};
-    // constexpr auto file{"res/img/Terra.png"};
-    constexpr auto file{"res/img/Celes_Chere.png"};
+    if (SetupWindowAndRenderer()) {
+        if (LoadImages()) {
+            auto dimensions = mTexture->GetDimensions();
+            ::cgl::display::Rect src{0, 1, mTerra.width, mTerra.height};
+            ::cgl::display::Rect dest{0, 1, mTerra.width, mTerra.height};
+            mRendererCommands.push_back(   
+                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+                    RenderOperation::CopyTexture, *mBackground));
+            mRendererCommands.push_back(   
+                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+                    RenderOperation::CopyTextureRect, *mTexture, src, dest));
+            mUpdateRequested = true;
+            mWindow->Visible(true);
+        }
+        return true;
+    }
+    return false;
+}
+
+auto SDLSandboxApplication::SetupWindowAndRenderer() -> bool {
     mWindow = std::make_unique<Display::SDLWindow>(
         GetStringProperty("name", mArguments),
         GetIntegerProperty("top", mArguments),
@@ -122,169 +138,95 @@ auto SDLSandboxApplication::Setup() -> bool {
         GetIntegerProperty("width", mArguments),
         GetIntegerProperty("height", mArguments),
         GetIntegerProperty("sdl_window_flags", mArguments));
-    mRenderer = std::make_unique<Display::SDLRenderer>(
-        mWindow->GetId(), -1, SDL_RENDERER_ACCELERATED);
-    mTexture = std::make_unique<Display::SDLTexture>();
-    if (static_cast<int>(Code::NoError) !=
-        mTexture->Load(file, *mRenderer, {0x00, 0x80, 0x80, 0x00}).value()) {
+    if (nullptr == mWindow) {
         return false;
     }
-    ::SDL_Log("Loaded %s", file);
-    auto dimensions = mTexture->GetDimensions();
+    mRenderer = std::make_unique<Display::SDLRenderer>(
+        mWindow->GetId(), -1, SDL_RENDERER_ACCELERATED);
+    return nullptr != mRenderer;
+}
+
+auto SDLSandboxApplication::LoadImages() -> bool {
+    ::SDL_Log("Setting up SDLSandboxApplication");
+    constexpr auto backgroundImage{"res/img/paper.png"};
+    constexpr auto spriteImage{"res/img/Terra.png"};
+
+    Display::Color colorKey{0x00, 0x80, 0x80, 0x00};
+
+    mBackground = std::make_unique<Display::SDLTexture>();
+    mTexture = std::make_unique<Display::SDLTexture>();
+   
+    if (static_cast<int>(Code::NoError) !=
+        mBackground->Load(backgroundImage, *mRenderer, colorKey).value()) {
+        return false;
+    }
+    if (static_cast<int>(Code::NoError) !=
+        mTexture->Load(spriteImage, *mRenderer, colorKey).value()) {
+        return false;
+    }
+    ::SDL_Log("Loaded %s", backgroundImage);
+    auto dimensions = mBackground->GetDimensions();
     mWindow->SetSize(std::get<0>(dimensions), std::get<1>(dimensions));
+    mTerra.texture.Load(spriteImage, *mRenderer, colorKey);
+    mTerra.width = 30;
+    mTerra.height = 48;
+    mTerra.indices = {0, 32, 64, 96, 128, 160, 192, 224};
     return true;
 }
 
 auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
      -> bool {
+    int index{0};
     switch(event.keysym.sym) {
-        case SDLK_v : {
-            ::SDL_Log("Setting viewport");
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererViewportCommand>(*mRenderer,
-                RenderOperation::SetViewport,
-                Display::Viewport{010, Display::Rect{100, 100, 200, 200}}));
-        } break;
-        case SDLK_r : {
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::SetDrawColor,
-                SDL_Color{255, 0, 0, 255}));
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-            mUpdateRequested = true;
-        } break;
-        case SDLK_g : {
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::SetDrawColor,
-                SDL_Color{0, 255, 0, 255}));
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-            mUpdateRequested = true;
-        } break;
-        case SDLK_b : {
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::SetDrawColor,
-                SDL_Color{0, 0, 255, 255}));
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-            mUpdateRequested = true;
-        } break;
-        case SDLK_c : {
-            mRendererCommands.push_back(
+        case  SDLK_SPACE : {
+            ::SDL_Log("SPACE");
+            auto dimensions = mTexture->GetDimensions();
+            ::cgl::display::Rect src{0, 1, mTerra.width, mTerra.height};
+            ::cgl::display::Rect dest{0, 1, mTerra.width, mTerra.height};
+            mRendererCommands.push_back(   
                 std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
-                RenderOperation::CopyTexture, *mTexture));
+                    RenderOperation::CopyTexture, *mBackground, src, dest));
             mUpdateRequested = true;
+        }break;
+        case  SDLK_1 : {
+            index = 0;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
         } break;
-        case SDLK_UP : {
-            ::SDL_Log("UP");
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-            Display::Rect rect{390, 0, 500, 500};
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
-                RenderOperation::CopyTextureRect, *mTexture, rect, rect));
-            mUpdateRequested = true;
+        case  SDLK_2 : {
+            index = 1;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
         } break;
-        case SDLK_DOWN : {
-            ::SDL_Log("DOWN");
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-            Display::Rect rect{390, 220, 500, 500};
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
-                RenderOperation::CopyTextureRect, *mTexture, rect, rect));
-            mUpdateRequested = true;
+        case  SDLK_3 : {
+            index = 2;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
         } break;
-        case SDLK_LEFT : {
-            ::SDL_Log("LEFT");
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-            Display::Rect rect{0, 110, 500, 500};
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
-                RenderOperation::CopyTextureRect, *mTexture, rect, rect));
-            mUpdateRequested = true;
+        case  SDLK_4 : {
+            index = 3;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
         } break;
-        case SDLK_RIGHT : {
-            ::SDL_Log("RIGHT");
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-            Display::Rect rect{780, 110, 500, 500};
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
-                RenderOperation::CopyTextureRect, *mTexture, rect, rect));
-            mUpdateRequested = true;
+        case  SDLK_5 : {
+            index = 4;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
         } break;
-        case SDLK_p : {
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::SetDrawColor,
-                SDL_Color{0, 0, 0, 0}));
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-            Geometry::Point point{100, 100, {255, 255, 255, 255}};
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererGeometryCommand>(
-                *mRenderer, RenderOperation::DrawPoint, point));
-            mUpdateRequested = true;
+        case  SDLK_6 : {
+            index = 5;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
         } break;
-        case SDLK_l : {
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::SetDrawColor,
-                SDL_Color{0, 0, 0, 0}));
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-            Geometry::Line line{{100, 100}, {300, 300},
-                {25, 50, 255, 255}};
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererGeometryCommand>(
-                *mRenderer, RenderOperation::DrawLine, line));
-            mUpdateRequested = true;
+        case  SDLK_7 : {
+            index = 6;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
         } break;
-        case SDLK_f : {
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::SetDrawColor,
-                SDL_Color{0, 50, 0, 255}));
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-
-            Geometry::Rectangle rect{{780, 110}, {500, 500},
-                {{25, 50, 255, 255}, {50, 150, 255, 255}}};
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererGeometryCommand>(
-                *mRenderer, RenderOperation::DrawFillRect, rect));
-            mUpdateRequested = true;
-        } break;
-        case SDLK_d : {
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::SetDrawColor,
-                SDL_Color{0, 50, 0, 255}));
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-                RenderOperation::Clear));
-
-            Geometry::Rectangle rect{{0, 110}, {500, 500},
-                {{50, 150, 255, 255}, {25, 50, 255, 255}}};
-            mRendererCommands.push_back(
-                std::make_unique<Command::SDLRendererGeometryCommand>(
-                *mRenderer, RenderOperation::DrawRect, rect));
-            mUpdateRequested = true;
+        case  SDLK_8 : {
+            index = 7;
+            ::SDL_Log("INDEX %d", index);
+            UpdateSprite(index);
         } break;
         default:break;
     }
@@ -303,6 +245,20 @@ auto SDLSandboxApplication::OnUpdate() -> void {
         mRendererCommands.clear();
     }
 }
+
+auto SDLSandboxApplication::UpdateSprite(int index) -> void {
+    Display::Rect src{mTerra.indices[index], 1, mTerra.width, mTerra.height};
+    Display::Rect dest{0, 1, mTerra.width, mTerra.height};
+    
+    mRendererCommands.push_back(   
+        std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+            RenderOperation::CopyTexture, *mBackground, src, dest));
+    mRendererCommands.push_back(   
+        std::make_unique<Command::SDLRendererCopyCommand>(*mRenderer,
+            RenderOperation::CopyTextureRect, *mTexture, src, dest));
+    mUpdateRequested = true;
+}
+
 
 }  // namespace sandbox
 }  // namespace application

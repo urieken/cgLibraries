@@ -1,0 +1,4 @@
+image_file:res/config/Terra.png
+width:30
+height:48
+indices:0 32 64 96 128 160 192 224

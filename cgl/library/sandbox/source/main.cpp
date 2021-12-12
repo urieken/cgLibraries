@@ -12,13 +12,16 @@
 #include <application/AppRunner.hpp>
 
 #include <application/SDLSandboxApplication.hpp>
-
 #include <application/SDLApplication.hpp>
+
 #include <display/SDLRenderer.hpp>
 #include <display/SDLWindow.hpp>
+
 #include <error/CGLError.hpp>
+
 #include <event/SDLEventListener.hpp>
 
+#include <system/Arguments.hpp>
 #include <system/Compilers.hpp>
 
 #include <cstdio>
@@ -49,7 +52,7 @@ auto main(int argc, char** argv) -> int {
             "([a-zA-Z0-9 \\_\\-]+)");
         if (static_cast<int>(Code::NoError) == parseResult.value()) {
             Application::AppRunner<SandboxApplication::SDLSandboxApplication,
-                Event::SDLEventListener> appRunner {args};
+                Event::SDLEventListener>appRunner{args};
             return appRunner.Run();
         } else {
             std::printf("Failed to parse input stream : %s\n",

@@ -1,18 +1,18 @@
 /**
- * @file SDLTexture.hpp
+ * @file SDLSpriteSheet.hpp
  * @author Ulysses Don Rieken (ulysses.rieken@gmail.com)
- * @brief Header for SDLTexture
+ * @brief Header for SDLSpriteSheet
  * @version 0.1
- * @date 2021-10-30
+ * @date 2021-12-05
  * 
  * @copyright Copyright (c) 2021
  * 
  */
 
-#ifndef CGL_LIBRARY_INCLUDE_DISPLAY_SDL_TEXTURE_HPP_
-#define CGL_LIBRARY_INCLUDE_DISPLAY_SDL_TEXTURE_HPP_
+#ifndef FBAB3647_759A_457A_A7F6_EF66E28E273F
+#define FBAB3647_759A_457A_A7F6_EF66E28E273F
 
-#include <display/ITexture.hpp>
+#include <display/SDLTexture.hpp>
 
 #include <display/Color.hpp>
 #include <display/SDLRenderer.hpp>
@@ -21,19 +21,14 @@
 #include <system_error>
 #include <utility>
 
-#include <SDL2/SDL.h>
-
 namespace cgl {
 namespace display {
 /**
- * @brief Wrapper for SDL_Texture
+ * @brief Wrapper class for spritesheet texture.
  */
-class SDLTexture : public ITexture {
+class SDLSpriteSheet : SDLTexture {
 public:
-    /**
-     * @brief Destroy the SDLTexture object
-     */
-    virtual ~SDLTexture();
+    virtual ~SDLSpriteSheet() = default;
     /**
      * @brief Load a texture from file.
      * 
@@ -53,27 +48,9 @@ public:
      */
     auto Load(const std::string& path, IRenderer& renderer,
         const Color& key) -> std::error_condition override;
-    /**
-     * @brief Get the raw pointer to the texture structure.
-     * 
-     * @return void* The raw pointer to the texture structure.
-     */
-    auto Get() const -> void* override;
-    /**
-     * @brief Get the texture dimensions.
-     * 
-     * @return std::pair<int, int> The texture dimensions.
-     */
-    auto GetDimensions() const -> std::pair<int, int> override;
-protected:
-    /**
-     * @brief Pointer to the SDL texture structure.
-     */
-    SDL_Texture* mTexture;
 };
 
 }  // namespace display
 }  // namespace cgl
 
-
-#endif /* CGL_LIBRARY_INCLUDE_DISPLAY_SDL_TEXTURE_HPP_ */
+#endif /* FBAB3647_759A_457A_A7F6_EF66E28E273F */
