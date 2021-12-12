@@ -55,10 +55,20 @@ add_executable(${PROJECT_NAME}_sandbox
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/application/SDLSandboxApplication.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/main.cpp)
 target_include_directories(${PROJECT_NAME}_sandbox PRIVATE
+    ${CMAKE_SOURCE_DIR}/vendors/imgui
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/include)
+target_link_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_BINARY_DIR}/lib
+    /opt/sdl2/lib)
 target_link_libraries(${PROJECT_NAME}_sandbox
-    SDL2main SDL2 SDL2_image ${PROJECT_NAME})
+    /opt/sdl2/lib/libSDL2main.a
+    /opt/sdl2/lib/libSDL2.a
+    SDL2_image
+    pthread
+    ${CMAKE_BINARY_DIR}/lib/libimgui.a
+    ${CMAKE_DL_LIBS}
+    ${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME}_sandbox
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
@@ -90,10 +100,10 @@ add_executable(${PROJECT_NAME}_test
 target_include_directories(${PROJECT_NAME}_test PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/test/mock
-    /opt/googletest/include)
+    ${CMAKE_SOURCE_DIR}/vendors/googletest/googletest/include
+    ${CMAKE_SOURCE_DIR}/vendors/googletest/googlemock/include)
 target_link_directories(${PROJECT_NAME}_test PRIVATE
-    ${CMAKE_BINARY_DIR}/lib
-    /opt/googletest/lib)
+    ${CMAKE_BINARY_DIR}/lib)
 target_link_libraries(${PROJECT_NAME}_test
     SDL2main SDL2 SDL2_image gtest gmock pthread)
 set_target_properties(${PROJECT_NAME}_test

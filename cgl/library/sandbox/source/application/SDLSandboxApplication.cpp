@@ -9,6 +9,7 @@
  * 
  */
 
+#include <SDL2/SDL_render.h>
 #include <application/SDLSandboxApplication.hpp>
 
 #include <command/SDLRendererCommand.hpp>
@@ -28,6 +29,10 @@
 #include <sstream>
 #include <utility>
 #include <vector>
+
+#include <imgui.h>
+#include <backends/imgui_impl_sdl.h>
+#include <backends/imgui_impl_sdlrenderer.h>
 
 namespace Command = ::cgl::command;
 namespace Display = ::cgl::display;
@@ -70,7 +75,9 @@ auto GetIntegerProperty(const std::string& key,
 }
 
 SDLSandboxApplication::~SDLSandboxApplication() {
-
+    ::ImGui_ImplSDLRenderer_Shutdown();
+    ::ImGui_ImplSDL2_Shutdown();
+    ::ImGui::DestroyContext();
 }
 
 SDLSandboxApplication::SDLSandboxApplication(
@@ -95,7 +102,11 @@ auto SDLSandboxApplication::OnEvent(
                 case SDL_KEYDOWN : {
                     result = OnKeyDownEvent(data->key);
                 }break;
-                default : break;
+                default : {
+                    mUpdateRequested = ::ImGui_ImplSDL2_ProcessEvent(data);
+                    ::SDL_Log("Update requested : %s",
+                        mUpdateRequested ? "true" : "false");
+                } break;
             }
         } else {
             switch (event.Type()) {
@@ -112,6 +123,17 @@ auto SDLSandboxApplication::OnEvent(
 
 auto SDLSandboxApplication::Setup() -> bool {
     if (SetupWindowAndRenderer()) {
+        IMGUI_CHECKVERSION();
+
+        ::ImGui::CreateContext();
+        ImGuiIO io = ::ImGui::GetIO();
+        (void)io;
+                
+        ::ImGui::StyleColorsDark();
+
+        ::ImGui_ImplSDL2_InitForSDLRenderer(static_cast<SDL_Window*>(mWindow->Get()));
+        ::ImGui_ImplSDLRenderer_Init(static_cast<SDL_Renderer*>(mRenderer->Get()));
+
         if (LoadImages()) {
             auto dimensions = mTexture->GetDimensions();
             ::cgl::display::Rect src{0, 1, mTerra.width, mTerra.height};
@@ -234,7 +256,17 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
 }
 
 auto SDLSandboxApplication::OnUpdate() -> void {
+
+    ::ImGui_ImplSDLRenderer_NewFrame();
+    ::ImGui_ImplSDL2_NewFrame(static_cast<SDL_Window*>(mWindow->Get()));
+
+    ::ImGui::NewFrame();
+    ::ImGui::Begin("Test Window");
+    ::ImGui::Text("Sample text");
+    ::ImGui::End();
+    ::ImGui::Render();
     if (mUpdateRequested) {
+        // ::SDL_RenderClear(static_cast<SDL_Renderer*>(mRenderer->Get()));
         mRendererCommands.push_back(
             std::make_unique<Command::SDLRendererCommand>(*mRenderer,
             RenderOperation::Present));
@@ -244,6 +276,8 @@ auto SDLSandboxApplication::OnUpdate() -> void {
         }
         mRendererCommands.clear();
     }
+    ::ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+    ::SDL_RenderPresent(static_cast<SDL_Renderer*>(mRenderer->Get()));
 }
 
 auto SDLSandboxApplication::UpdateSprite(int index) -> void {

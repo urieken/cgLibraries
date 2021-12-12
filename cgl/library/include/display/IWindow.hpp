@@ -42,6 +42,12 @@ public:
      * @param flag True to show the window. False otherwise.
      */
     virtual auto Visible(bool flag) -> void = 0;
+    /**
+     * @brief Retrieve the window raw pointer.
+     * 
+     * @return void* The window raw pointer.
+     */
+    virtual auto Get() -> void* = 0;
 };
 
 }  // namespace display
