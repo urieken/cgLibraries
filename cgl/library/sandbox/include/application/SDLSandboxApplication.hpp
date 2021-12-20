@@ -12,6 +12,7 @@
 #ifndef CGL_LIBRARY_SANDBOX_INCLUDE_APPLICATION_SDL_SANDBOX_APPLICATION_HPP_
 #define CGL_LIBRARY_SANDBOX_INCLUDE_APPLICATION_SDL_SANDBOX_APPLICATION_HPP_
 
+#include <imgui/IMGuiSDLRenderer.hpp>
 #include <application/SDLApplication.hpp>
 
 #include <command/ICommand.hpp>
@@ -100,6 +101,10 @@ private:
      * @brief Spritesheet for Terra.
      */
     SpriteSheet mTerra;
+    /**
+     * @brief Pointer to the IMGUI wrapper.
+     */
+    std::unique_ptr<::cgl::sandbox::imgui::IMGuiSDLRenderer> mImGui;
     /**
      * @brief Setup internal properties.
      * 

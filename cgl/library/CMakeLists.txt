@@ -52,6 +52,7 @@ set_target_properties(${PROJECT_NAME}
 
 add_executable(${PROJECT_NAME}_sandbox
     ${SOURCE_FILES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/imgui/IMGuiSDLRenderer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/application/SDLSandboxApplication.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/main.cpp)
 target_include_directories(${PROJECT_NAME}_sandbox PRIVATE
