@@ -64,6 +64,12 @@ public:
      * @param flag True to show the window. False otherwise.
      */
     auto Visible(bool flag) -> void override;
+    /**
+     * @brief Retrieve the window raw pointer.
+     * 
+     * @return void* The window raw pointer.
+     */
+    auto Get() -> void* override;
 private:
     /**
      * @brief Pointer to SDLWindow

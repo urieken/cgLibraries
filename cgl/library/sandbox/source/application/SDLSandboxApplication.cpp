@@ -9,6 +9,7 @@
  * 
  */
 
+#include <imgui/IMGuiSDLRenderer.hpp>
 #include <application/SDLSandboxApplication.hpp>
 
 #include <command/SDLRendererCommand.hpp>
@@ -25,6 +26,7 @@
 #include <error/CGLError.hpp>
 #include <event/CoreEvent.hpp>
 
+#include <memory>
 #include <sstream>
 #include <utility>
 #include <vector>
@@ -70,7 +72,6 @@ auto GetIntegerProperty(const std::string& key,
 }
 
 SDLSandboxApplication::~SDLSandboxApplication() {
-
 }
 
 SDLSandboxApplication::SDLSandboxApplication(
@@ -91,6 +92,7 @@ auto SDLSandboxApplication::OnEvent(
     if (result = SDLApplication::OnEvent(event); true == result) {
         if (Event::EventSource::SDL == event.Source()) {
             auto data = static_cast<const SDL_Event*>(event.Data());
+            mUpdateRequested = mImGui->OnEvent(data);
             switch(data->type) {
                 case SDL_KEYDOWN : {
                     result = OnKeyDownEvent(data->key);
@@ -112,6 +114,10 @@ auto SDLSandboxApplication::OnEvent(
 
 auto SDLSandboxApplication::Setup() -> bool {
     if (SetupWindowAndRenderer()) {
+        mImGui = std::make_unique<::cgl::sandbox::imgui::IMGuiSDLRenderer>(
+            mArguments,
+            static_cast<SDL_Window*>(mWindow->Get()),
+            static_cast<SDL_Renderer*>(mRenderer->Get()));
         if (LoadImages()) {
             auto dimensions = mTexture->GetDimensions();
             ::cgl::display::Rect src{0, 1, mTerra.width, mTerra.height};
@@ -234,16 +240,22 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
 }
 
 auto SDLSandboxApplication::OnUpdate() -> void {
+    auto drawColor = mImGui->DrawColor();
+    ::SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(mRenderer->Get()),
+        drawColor[0], drawColor[1], drawColor[2], 255);
+    ::SDL_RenderClear(static_cast<SDL_Renderer*>(mRenderer->Get()));
     if (mUpdateRequested) {
-        mRendererCommands.push_back(
-            std::make_unique<Command::SDLRendererCommand>(*mRenderer,
-            RenderOperation::Present));
+        // mRendererCommands.push_back(
+        //     std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+        //     RenderOperation::Present));
         mUpdateRequested = false;
         for (auto& command : mRendererCommands) {
             command->Execute();
         }
         mRendererCommands.clear();
     }
+    mImGui->OnUpdate(static_cast<SDL_Window*>(mWindow->Get()));
+    ::SDL_RenderPresent(static_cast<SDL_Renderer*>(mRenderer->Get()));
 }
 
 auto SDLSandboxApplication::UpdateSprite(int index) -> void {

@@ -50,5 +50,9 @@ auto SDLWindow::Visible(bool flag) -> void {
     }
 }
 
+auto SDLWindow::Get() -> void* {
+    return static_cast<void*>(mWindow);
+}
+
 }  // namespace display
 }  // namespace cgl

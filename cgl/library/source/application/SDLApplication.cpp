@@ -9,6 +9,7 @@
  * 
  */
 
+#include <SDL2/SDL_version.h>
 #include <application/SDLApplication.hpp>
 
 #include <error/CGLError.hpp>
@@ -102,6 +103,9 @@ auto SDLApplication::Setup() -> bool {
             "Failed to initialize SDL. Error = %s", ::SDL_GetError());
         return false;
     }
+    SDL_version ver;
+    ::SDL_GetVersion(&ver);
+    ::SDL_Log("SDL Version : %d.%d.%d", ver.major, ver.minor, ver.patch);
     return true;
 }
 
