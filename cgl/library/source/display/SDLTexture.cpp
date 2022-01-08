@@ -9,6 +9,7 @@
  * 
  */
 
+#include <SDL2/SDL_render.h>
 #include <display/SDLTexture.hpp>
 
 #include <error/CGLError.hpp>
@@ -84,6 +85,14 @@ auto SDLTexture::GetDimensions() const -> std::pair<int, int> {
             "Failed to query texture dimensions. [%s]", ::SDL_GetError());
     }
     return {width, height};
+}
+
+auto SDLTexture::SetColorModulation(std::uint8_t red,
+    std::uint8_t green, std::uint8_t blue) -> void {
+    if(0 != ::SDL_SetTextureColorMod(mTexture, red, green, blue)){
+        ::SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
+            "Failed to set texture color modulation. [%s]", ::SDL_GetError());
+    }
 }
 
 }  // namespace display

@@ -61,11 +61,21 @@ public:
      * @return std::vector<int> The draw color.
      */
     auto DrawColor() -> std::vector<int>;
+    /**
+     * @brief Retrieve the modulation color.
+     * 
+     * @return std::vector<int> The modulation color.
+     */
+    auto ModulationColor() -> std::vector<int>;
 private:
     /**
      * @brief The draw color
      */
     std::vector<int> mDrawColor;
+    /**
+     * @brief The modulation color
+     */
+    std::vector<int> mModulationColor;
     /**
      * @brief The application arguments.
      */

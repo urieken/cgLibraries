@@ -65,6 +65,15 @@ public:
      * @return std::pair<int, int> The texture dimensions.
      */
     auto GetDimensions() const -> std::pair<int, int> override;
+    /**
+     * @brief Set the color modulation components.
+     * 
+     * @param red The red component
+     * @param green The green component
+     * @param blue The blue component
+     */
+    auto SetColorModulation(std::uint8_t red,
+        std::uint8_t green, std::uint8_t blue) -> void override;
 protected:
     /**
      * @brief Pointer to the SDL texture structure.

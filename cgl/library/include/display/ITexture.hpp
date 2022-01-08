@@ -16,6 +16,7 @@
 
 #include <display/Color.hpp>
 
+#include <cstdint>
 #include <string>
 #include <system_error>
 #include <utility>
@@ -59,6 +60,15 @@ public:
      * @return std::pair<int, int> The texture dimensions.
      */
     virtual auto GetDimensions() const -> std::pair<int, int> = 0;
+    /**
+     * @brief Set the color modulation components.
+     * 
+     * @param red The red component
+     * @param green The green component
+     * @param blue The blue component
+     */
+    virtual auto SetColorModulation(std::uint8_t red,
+        std::uint8_t green, std::uint8_t blue) -> void = 0;
 };
 
 }  // namespace display
