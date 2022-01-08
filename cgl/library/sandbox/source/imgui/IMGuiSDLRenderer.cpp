@@ -27,6 +27,7 @@ namespace imgui {
 IMGuiSDLRenderer::IMGuiSDLRenderer(const ::cgl::system::Arguments& arguments,
     SDL_Window* window, SDL_Renderer* renderer) :
     mDrawColor{0, 0, 0, 255},
+    mModulationColor{0, 0, 0, 255},
     mArguments{arguments} {
     IMGUI_CHECKVERSION();
     ::ImGui::CreateContext();
@@ -59,6 +60,10 @@ auto IMGuiSDLRenderer::OnUpdate(SDL_Window* window) -> void {
 
 auto IMGuiSDLRenderer::DrawColor() -> std::vector<int> {
     return mDrawColor;
+}
+
+auto IMGuiSDLRenderer::ModulationColor() -> std::vector<int> {
+    return mModulationColor;
 }
 
 auto IMGuiSDLRenderer::SystemInformation() -> void {
@@ -131,7 +136,7 @@ auto GenerateColor(int index, float saturation) -> ::ImColor {
 }
 
 auto IMGuiSDLRenderer::DrawColorInformation() -> void {
-    ::ImGui::SetNextWindowSize(::ImVec2{120, 210},
+    ::ImGui::SetNextWindowSize(::ImVec2{170, 210},
         ::ImGuiCond_Always);
     ::ImGui::Begin("Draw Color", nullptr,
         ::ImGuiWindowFlags_NoResize);
@@ -155,6 +160,31 @@ auto IMGuiSDLRenderer::DrawColorInformation() -> void {
             ::ImGui::PushStyleColor(::ImGuiCol_SliderGrab, grabColor);
             ::ImGui::VSliderInt("##v",
                 ::ImVec2{20, 150}, &mDrawColor[i], 0, 255, "%d");
+            ::ImGui::PopStyleColor(4);
+            ::ImGui::PopID();            
+        }
+        ::ImGui::PopStyleVar();
+        ::ImGui::TreePop();
+    }
+    if (::ImGui::TreeNode("Modulation Color")) {
+        const float spacing{4.0f};
+        ::ImGui::PushStyleVar(::ImGuiStyleVar_ItemSpacing,
+            ::ImVec2{spacing, spacing});
+        for (auto i = 0; i < 3; i++) {
+            if (0 < i) {
+                ::ImGui::SameLine();
+            }
+            ::ImVec4 backColor = GenerateColor(i, 0.5f);
+            ::ImVec4 hoverColor = GenerateColor(i, 0.75f);
+            ::ImVec4 activeColor = GenerateColor(i, 0.85f);
+            ::ImVec4 grabColor = GenerateColor(i, 1.0f);
+            ::ImGui::PushID(i);
+            ::ImGui::PushStyleColor(::ImGuiCol_FrameBg, backColor);
+            ::ImGui::PushStyleColor(::ImGuiCol_FrameBgHovered, hoverColor);
+            ::ImGui::PushStyleColor(::ImGuiCol_FrameBgActive, activeColor);
+            ::ImGui::PushStyleColor(::ImGuiCol_SliderGrab, grabColor);
+            ::ImGui::VSliderInt("##v",
+                ::ImVec2{20, 150}, &mModulationColor[i], 0, 255, "%d");
             ::ImGui::PopStyleColor(4);
             ::ImGui::PopID();            
         }
