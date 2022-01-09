@@ -10,6 +10,7 @@
  */
 
 #include <imgui/IMGuiSDLRenderer.hpp>
+#include <application/SDLSandboxApplication.hpp>
 
 #include <iomanip>
 #include <sstream>
@@ -26,29 +27,33 @@ namespace imgui {
 
 IMGuiSDLRenderer::IMGuiSDLRenderer(const ::cgl::system::Arguments& arguments,
     SDL_Window* window, SDL_Renderer* renderer) :
+    mApplication{nullptr},
+    mWindow{window},
+    mRenderer{renderer},
     mDrawColor{0, 0, 0, 255},
     mModulationColor{0, 0, 0, 255},
     mArguments{arguments} {
     IMGUI_CHECKVERSION();
     ::ImGui::CreateContext();
     ::ImGui::StyleColorsDark();
-    ::ImGui_ImplSDL2_InitForSDLRenderer(window);
-    ::ImGui_ImplSDLRenderer_Init(renderer);
+    ::ImGui_ImplSDL2_InitForSDLRenderer(mWindow);
+    ::ImGui_ImplSDLRenderer_Init(mRenderer);
 }
 
 IMGuiSDLRenderer::~IMGuiSDLRenderer() {
     ::ImGui_ImplSDLRenderer_Shutdown();
     ::ImGui_ImplSDL2_Shutdown();
     ::ImGui::DestroyContext();
+    mApplication = nullptr;
 }
 
 auto IMGuiSDLRenderer::OnEvent(const SDL_Event *event) -> bool {
     return ::ImGui_ImplSDL2_ProcessEvent(event);
 }
 
-auto IMGuiSDLRenderer::OnUpdate(SDL_Window* window) -> void {
+auto IMGuiSDLRenderer::OnUpdate() -> void {
     ::ImGui_ImplSDLRenderer_NewFrame();
-    ::ImGui_ImplSDL2_NewFrame(window);
+    ::ImGui_ImplSDL2_NewFrame(mWindow);
     ::ImGui::NewFrame();
     SystemInformation();
     Arguments();
@@ -66,16 +71,21 @@ auto IMGuiSDLRenderer::ModulationColor() -> std::vector<int> {
     return mModulationColor;
 }
 
+auto IMGuiSDLRenderer::Register(
+    ::cgl::application::sandbox::SDLSandboxApplication* application) -> void {
+    mApplication = application;
+}
+
 auto IMGuiSDLRenderer::SystemInformation() -> void {
     ::ImGui::SetNextWindowSize(::ImVec2{180, 110},
         ::ImGuiCond_Always);
     ::ImGui::Begin("System Information", nullptr,
         ::ImGuiWindowFlags_NoResize);
-    ::ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "Platform :");
+    ::ImGui::TextColored(ImVec4(1.0f, 0.0f, 1.0f, 1.0f), "PLATFORM :");
     ::ImGui::SameLine();
-    ::ImGui::Text("%s", SDL_GetPlatform());
-    ::ImGui::Text("CPU cores: %d", SDL_GetCPUCount());
-    ::ImGui::Text("RAM: %.2f GB", SDL_GetSystemRAM() / 1024.0f);   
+    ::ImGui::Text("%s", ::SDL_GetPlatform());
+    ::ImGui::Text("CORES    : %d", ::SDL_GetCPUCount());
+    ::ImGui::Text("MEMORY   : %.2f GB", ::SDL_GetSystemRAM() / 1024.0f);   
     if (::ImGui::Button("Quit", ::ImVec2{160, 20})) {
         SDL_Event event{SDL_QUIT};
         ::SDL_PushEvent(&event);
@@ -158,8 +168,11 @@ auto IMGuiSDLRenderer::DrawColorInformation() -> void {
             ::ImGui::PushStyleColor(::ImGuiCol_FrameBgHovered, hoverColor);
             ::ImGui::PushStyleColor(::ImGuiCol_FrameBgActive, activeColor);
             ::ImGui::PushStyleColor(::ImGuiCol_SliderGrab, grabColor);
-            ::ImGui::VSliderInt("##v",
-                ::ImVec2{20, 150}, &mDrawColor[i], 0, 255, "%d");
+            if ((::ImGui::VSliderInt("##v",
+                ::ImVec2{20, 150}, &mDrawColor[i], 0, 255, "%d"))&&
+                (nullptr != mApplication)) {
+                mApplication->OnClearColorChange(mDrawColor);
+            }
             ::ImGui::PopStyleColor(4);
             ::ImGui::PopID();            
         }
@@ -170,6 +183,7 @@ auto IMGuiSDLRenderer::DrawColorInformation() -> void {
         const float spacing{4.0f};
         ::ImGui::PushStyleVar(::ImGuiStyleVar_ItemSpacing,
             ::ImVec2{spacing, spacing});
+        
         for (auto i = 0; i < 3; i++) {
             if (0 < i) {
                 ::ImGui::SameLine();
@@ -183,8 +197,11 @@ auto IMGuiSDLRenderer::DrawColorInformation() -> void {
             ::ImGui::PushStyleColor(::ImGuiCol_FrameBgHovered, hoverColor);
             ::ImGui::PushStyleColor(::ImGuiCol_FrameBgActive, activeColor);
             ::ImGui::PushStyleColor(::ImGuiCol_SliderGrab, grabColor);
-            ::ImGui::VSliderInt("##v",
-                ::ImVec2{20, 150}, &mModulationColor[i], 0, 255, "%d");
+            if ((::ImGui::VSliderInt("##v",
+                ::ImVec2{20, 150}, &mModulationColor[i], 0, 255, "%d"))&&
+                (nullptr != mApplication)) {
+                mApplication->OnModulationColorChange(mModulationColor);
+            }
             ::ImGui::PopStyleColor(4);
             ::ImGui::PopID();            
         }

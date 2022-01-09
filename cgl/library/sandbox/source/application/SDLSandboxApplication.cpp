@@ -9,8 +9,9 @@
  * 
  */
 
-#include <SDL2/SDL_events.h>
-#include <imgui/IMGuiSDLRenderer.hpp>
+
+#include "imgui/IMGuiCommand.hpp"
+#include "log/ILog.hpp"
 #include <application/SDLSandboxApplication.hpp>
 
 #include <command/SDLRendererCommand.hpp>
@@ -21,16 +22,15 @@
 #include <display/SDLRenderer.hpp>
 #include <display/SDLTexture.hpp>
 #include <display/SDLWindow.hpp>
+#include <error/CGLError.hpp>
+#include <event/CoreEvent.hpp>
 #include <geometry/Line.hpp>
 #include <geometry/Point.hpp>
 #include <geometry/Rectangle.hpp>
-#include <error/CGLError.hpp>
-#include <event/CoreEvent.hpp>
 
 #include <memory>
 #include <sstream>
 #include <utility>
-#include <vector>
 
 namespace Command = ::cgl::command;
 namespace Display = ::cgl::display;
@@ -38,6 +38,7 @@ namespace Error = ::cgl::error;
 namespace Event = ::cgl::event;
 namespace Geometry = ::cgl::geometry;
 namespace System = ::cgl::system;
+namespace ImGui = ::cgl::sandbox::imgui;
 
 using Code = Error::ErrorCode;
 using Color = Display::Color;
@@ -94,7 +95,6 @@ auto SDLSandboxApplication::OnEvent(
         if (Event::EventSource::SDL == event.Source()) {
             auto data = static_cast<const SDL_Event*>(event.Data());
             mUpdateRequested = mImGui->OnEvent(data);
-            mImGui->OnUpdate(static_cast<SDL_Window*>(mWindow->Get()));
             switch(data->type) {
                 case SDL_KEYDOWN : {
                     result = OnKeyDownEvent(data->key);
@@ -137,8 +137,10 @@ auto SDLSandboxApplication::Setup() -> bool {
                     RenderOperation::CopyTextureRect, *mTexture, src, dest));
             mUpdateRequested = true;
             mWindow->Visible(true);
+            mImGui->Register(this);
+            return true;
         }
-        return true;
+        return false;
     }
     return false;
 }
@@ -160,7 +162,11 @@ auto SDLSandboxApplication::SetupWindowAndRenderer() -> bool {
 }
 
 auto SDLSandboxApplication::LoadImages() -> bool {
-    ::SDL_Log("Setting up SDLSandboxApplication");
+    // ::SDL_Log("Setting up SDLSandboxApplication");
+    // mLog.Push(::cgl::log::ILog::Severity::Debug,
+    //     ::cgl::log::ILog::Category::Input,
+    //     "Setting up SDLSandboxApplication");
+    mLog.Push("Setting up SDLSandboxApplication");
     constexpr auto backgroundImage{"res/img/paper.png"};
     constexpr auto spriteImage{"res/img/Terra.png"};
 
@@ -177,9 +183,14 @@ auto SDLSandboxApplication::LoadImages() -> bool {
         mTexture->Load(spriteImage, *mRenderer, colorKey).value()) {
         return false;
     }
-    ::SDL_Log("Loaded %s", backgroundImage);
+    // ::SDL_Log("Loaded %s", backgroundImage);
+    // mLog.Push(::cgl::log::ILog::Severity::Debug,
+    //     ::cgl::log::ILog::Category::Input,
+    //     std::string("Loaded : ") + backgroundImage);
+    mLog.Push(std::string("Loaded : ") + backgroundImage);
     auto dimensions = mBackground->GetDimensions();
     mWindow->SetSize(std::get<0>(dimensions), std::get<1>(dimensions));
+    // mWindow->SetSize(1280, 720);
     mTerra.texture.Load(spriteImage, *mRenderer, colorKey);
     mTerra.width = 30;
     mTerra.height = 48;
@@ -247,23 +258,18 @@ auto SDLSandboxApplication::OnKeyDownEvent(const SDL_KeyboardEvent& event)
 }
 
 auto SDLSandboxApplication::OnUpdate() -> void {
-    auto drawColor = mImGui->DrawColor();
-    // ::SDL_SetRenderDrawColor(static_cast<SDL_Renderer*>(mRenderer->Get()),
-    //     drawColor[0], drawColor[1], drawColor[2], 255);
-    // ::SDL_RenderClear(static_cast<SDL_Renderer*>(mRenderer->Get()));
-    // mImGui->OnUpdate(static_cast<SDL_Window*>(mWindow->Get()));
-    if (mUpdateRequested) {
+    // if (mUpdateRequested) {
+        mRendererCommands.push_back(
+            std::make_unique<::cgl::application::sandbox::imgui::IMGuiCommand>(*mImGui));
         mRendererCommands.push_back(
             std::make_unique<Command::SDLRendererCommand>(*mRenderer,
             RenderOperation::Present));
-        mUpdateRequested = false;
         for (auto& command : mRendererCommands) {
             command->Execute();
         }
         mRendererCommands.clear();
-    }
-    // mImGui->OnUpdate(static_cast<SDL_Window*>(mWindow->Get()));
-    // ::SDL_RenderPresent(static_cast<SDL_Renderer*>(mRenderer->Get()));
+        mUpdateRequested = false;
+    // }
 }
 
 auto SDLSandboxApplication::UpdateSprite(int index) -> void {
@@ -279,6 +285,33 @@ auto SDLSandboxApplication::UpdateSprite(int index) -> void {
     mUpdateRequested = true;
 }
 
+auto SDLSandboxApplication::OnClearColorChange(std::vector<int>& clearColor)
+    -> void {
+    ::SDL_Log("Clear color : %d-%d-%d",
+        clearColor[0], clearColor[1], clearColor[2]);
+    mRendererCommands.push_back(
+        std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+        RenderOperation::SetDrawColor,
+        SDL_Color{
+            static_cast<std::uint8_t>(clearColor[0]),
+            static_cast<std::uint8_t>(clearColor[1]),
+            static_cast<std::uint8_t>(clearColor[2]),
+            255}));
+    mRendererCommands.push_back(
+        std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+        RenderOperation::Clear));
+    mUpdateRequested = true;
+}
+
+auto SDLSandboxApplication::OnModulationColorChange(std::vector<int>& modulationColor)
+    -> void {
+    ::SDL_Log("Modulation color : %d-%d-%d",
+        modulationColor[0], modulationColor[1], modulationColor[2]);
+    mTexture->SetColorModulation(modulationColor[0],
+        modulationColor[1], modulationColor[2]);
+    UpdateSprite(0);
+    mUpdateRequested = true;
+}
 
 }  // namespace sandbox
 }  // namespace application
