@@ -12,6 +12,8 @@
 #ifndef CGL_LIBRARY_SANDBOX_INCLUDE_IMGUI_SDL_RENDERER_HPP_
 #define CGL_LIBRARY_SANDBOX_INCLUDE_IMGUI_SDL_RENDERER_HPP_
 
+#include <SDL2/SDL_render.h>
+#include <SDL2/SDL_video.h>
 #include <system/Arguments.hpp>
 
 #include <vector>
@@ -19,6 +21,11 @@
 #include <SDL2/SDL.h>
 
 namespace cgl {
+namespace application {
+namespace sandbox {
+class SDLSandboxApplication;
+}  // namespace sandbox
+}  // namespace application
 namespace sandbox {
 namespace imgui {
 
@@ -27,6 +34,14 @@ namespace imgui {
  */
 class IMGuiSDLRenderer {
 public:
+    /**
+     * @brief ImGui event type
+     */
+    enum class ImGuiEvent {
+        ClearColorChange = 0UL,
+        ModulationColorChange,
+        Unkown
+    };
     IMGuiSDLRenderer() = delete;
     /**
      * @brief Construct a new IMGuiSDLRenderer object
@@ -52,9 +67,8 @@ public:
     /**
      * @brief Update user interface.
      *
-     * @param window The window to update
      */
-    auto OnUpdate(SDL_Window* window) -> void;
+    auto OnUpdate() -> void;
     /**
      * @brief Retrieve the draw color.
      * 
@@ -67,7 +81,25 @@ public:
      * @return std::vector<int> The modulation color.
      */
     auto ModulationColor() -> std::vector<int>;
+    /**
+     * @brief Set a pointer to the sandbox application.
+     * 
+     * @param application The pointer to the sandbox application.
+     */
+    auto Register(::cgl::application::sandbox::SDLSandboxApplication* application) -> void;
 private:
+    /**
+     * @brief Pointer to the sanbox application
+     */
+    ::cgl::application::sandbox::SDLSandboxApplication* mApplication;
+    /**
+     * @brief Pointer to the window instance
+     */
+    SDL_Window* mWindow;
+    /**
+     * @brief Pointer to the renderer instance.
+     */
+    SDL_Renderer* mRenderer;
     /**
      * @brief The draw color
      */

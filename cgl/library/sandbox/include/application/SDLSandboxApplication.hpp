@@ -12,7 +12,6 @@
 #ifndef CGL_LIBRARY_SANDBOX_INCLUDE_APPLICATION_SDL_SANDBOX_APPLICATION_HPP_
 #define CGL_LIBRARY_SANDBOX_INCLUDE_APPLICATION_SDL_SANDBOX_APPLICATION_HPP_
 
-#include <imgui/IMGuiSDLRenderer.hpp>
 #include <application/SDLApplication.hpp>
 
 #include <command/ICommand.hpp>
@@ -22,7 +21,10 @@
 #include <display/SDLTexture.hpp>
 #include <error/CGLError.hpp>
 #include <event/IEvent.hpp>
+#include <log/SDLLog.hpp>
 #include <system/Arguments.hpp>
+
+#include <imgui/IMGuiSDLRenderer.hpp>
 
 #include <cstdint>
 #include <memory>
@@ -68,7 +70,23 @@ public:
      * @return false An error has occurred or quit the application.
      */
     auto OnEvent(const ::cgl::event::IEvent& event) -> bool override;
+    /**
+     * @brief Event handler for clear color change.
+     * 
+     * @param clearColor The clear color.
+     */
+    auto OnClearColorChange(std::vector<int>& clearColor) -> void;
+    /**
+     * @brief Event handler for modulation color change.
+     * 
+     * @param modulationColor The modulation color.
+     */
+    auto OnModulationColorChange(std::vector<int>& modulationColor) -> void;
 private:
+    /**
+     * @brief SDL_Log wrapper
+     */
+    ::cgl::log::SDLLog mLog;
     /**
      * @brief Arguments for the application.
      */
