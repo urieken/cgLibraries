@@ -28,8 +28,9 @@
 
 #include <cstdint>
 #include <memory>
+#include <queue>
 #include <string>
-#include <vector>
+#include <unordered_map>
 
 namespace cgl {
 namespace application {
@@ -46,6 +47,27 @@ struct SpriteSheet {
     int height;
     std::vector<int> indices;
 };
+/**
+ * @brief Group for window, window id, renderer
+ *
+ * @note Might just need the window ID here.
+ */
+struct WindowGroup {
+    /**
+     * @brief The SDL window.
+     */
+    std::unique_ptr<::cgl::display::IWindow> mWindow;
+    /**
+     * @brief The SDL renderer.
+     */
+    std::unique_ptr<::cgl::display::IRenderer> mRenderer;
+};
+/**
+ * @brief Alias for the window group map.
+ *
+ * @note Might just need to store the renderer instead of the entire group.
+ */
+using WindowGroupMap = std::unordered_map<std::uint32_t, WindowGroup>;
 
 /**
  * @brief SDL application for sandbox.
@@ -83,6 +105,7 @@ public:
      */
     auto OnModulationColorChange(std::vector<int>& modulationColor) -> void;
 private:
+    std::uint32_t mMainWindow;
     /**
      * @brief SDL_Log wrapper
      */
@@ -92,17 +115,9 @@ private:
      */
     const ::cgl::system::Arguments& mArguments;
     /**
-     * @brief The SDL window.
-     */
-    std::unique_ptr<::cgl::display::IWindow> mWindow;
-    /**
-     * @brief The SDL renderer.
-     */
-    std::unique_ptr<::cgl::display::IRenderer> mRenderer;
-    /**
      * @brief The command queue for renderer operations.
      */
-    std::vector<std::unique_ptr<::cgl::command::ICommand>> mRendererCommands;
+    std::queue<std::unique_ptr<::cgl::command::ICommand>> mCommandQueue;
     /**
      * @brief An update has been requested.
      */
@@ -123,6 +138,10 @@ private:
      * @brief Pointer to the IMGUI wrapper.
      */
     std::unique_ptr<::cgl::sandbox::imgui::IMGuiSDLRenderer> mImGui;
+    /**
+     * @brief Window and renderer map.
+     */
+    WindowGroupMap mWindowGroupMap;
     /**
      * @brief Setup internal properties.
      * 
