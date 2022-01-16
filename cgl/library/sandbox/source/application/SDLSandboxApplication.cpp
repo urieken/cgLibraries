@@ -19,18 +19,19 @@
 #include <command/SDLRendererGeometryCommand.hpp>
 #include <command/SDLRendererViewportCommand.hpp>
 #include <display/Color.hpp>
+#include <display/IScene.hpp>
 #include <display/SDLRenderer.hpp>
 #include <display/SDLTexture.hpp>
 #include <display/SDLWindow.hpp>
 #include <error/CGLError.hpp>
 #include <event/CoreEvent.hpp>
+#include <functional>
 #include <geometry/Line.hpp>
 #include <geometry/Point.hpp>
 #include <geometry/Rectangle.hpp>
 
 #include <memory>
 #include <sstream>
-#include <string>
 #include <utility>
 
 namespace Command = ::cgl::command;
@@ -100,22 +101,27 @@ auto SDLSandboxApplication::OnEvent(
             auto windowId = data->window.windowID;
             mUpdateRequested = mImGui->OnEvent(data);
             switch(data->type) {
-                case SDL_KEYDOWN : {
+                case SDL_KEYDOWN : {                    
                     result = OnKeyDownEvent(data->key);
                 }break;
-                case SDL_MOUSEMOTION:
-                case SDL_MOUSEBUTTONDOWN:
-                case SDL_MOUSEBUTTONUP: {
-                    mUpdateRequested = true;
-                    mLog.Push(std::string("ID : ") +
-                        std::to_string(data->window.windowID));
-                }break;
                 default : break;
+            }
+            // if (mScene->Id() == data->window.windowID) {
+            //     mScene->OnEvent(event);
+            // }
+            // if (mHandlers.end() != mHandlers.find(data->window.windowID)) {
+            //     mHandlers.at(data->window.windowID)->OnEvent(event);
+            // }
+            if(auto iter = mHandlers.find(data->window.windowID);
+                mHandlers.end() != iter) {
+                iter->second->OnEvent(event);
             }
         } else {
             switch (event.Type()) {
                 case Event::EventType::Init : {
                     result = Setup();
+                    mScene->OnEvent(event);
+                    mHandlers[mScene->Id()] = mScene.get();
                 }break;
                 default : break;
             }
@@ -147,6 +153,7 @@ auto SDLSandboxApplication::Setup() -> bool {
                 RenderOperation::CopyTextureRect, *mTexture, src, dest));
             mUpdateRequested = true;
             mWindowGroupMap[mMainWindow].mWindow->Visible(true);
+            mScene = std::make_unique<Display::L01Scene>();
             mImGui->Register(this);
             return true;
         }
@@ -287,6 +294,7 @@ auto SDLSandboxApplication::OnUpdate() -> void {
             mCommandQueue.front()->Execute();
             mCommandQueue.pop();
         }
+        mScene->OnUpdate();
         mUpdateRequested = false;
     // }
 }

@@ -14,6 +14,9 @@
 
 #include <event/IEvent.hpp>
 
+#include <cstddef>
+#include <string>
+
 namespace cgl {
 namespace event {
 /**
@@ -32,6 +35,15 @@ public:
      * @param source The EventSource.
      */
     CoreEvent(const EventType& type, const EventSource& source);
+    /**
+     * @brief Construct a new CoreEvent object
+     * 
+     * @param type The CoreEvent.
+     * @param source The EventSource.
+     * @param data Additional event data.
+     */
+    CoreEvent(const EventType& type, const EventSource& source,
+        const std::string& data);
     ~CoreEvent() = default;
     /**
      * @brief Returns a pointer to event data.
@@ -39,6 +51,11 @@ public:
      * @return const void* The pointer event data.
      */
     auto Data() const -> const void* override;
+public:
+    /**
+     * @brief Event data.
+     */
+    std::string mData;
 };
 
 }  // namespace event

@@ -16,6 +16,7 @@
 #include <system/Arguments.hpp>
 
 #include <memory>
+#include <string>
 #include <utility>
 
 namespace Event = ::cgl::event;
@@ -52,8 +53,22 @@ public:
      */
     auto Run() -> int {
         LISTENER listener{*mApp};
-        listener.PushEvent(Event::CoreEvent(Event::EventType::Init,
-            Event::EventSource::None));
+        listener.PushEvent(Event::CoreEvent{
+            Event::EventType::Init,
+            Event::EventSource::None});
+        return listener.Start();
+    }
+    /**
+     * @brief Run the application.
+     * 
+     * @param data Additional data.
+     * @return int The application return code.
+     */
+    auto Run(const std::string& data) -> int {
+        LISTENER listener{*mApp};
+        listener.PushEvent(Event::CoreEvent{
+            Event::EventType::InitWithData,
+            Event::EventSource::None, data});
         return listener.Start();
     }
 private:

@@ -12,12 +12,14 @@
 #ifndef CGL_LIBRARY_SANDBOX_INCLUDE_APPLICATION_SDL_SANDBOX_APPLICATION_HPP_
 #define CGL_LIBRARY_SANDBOX_INCLUDE_APPLICATION_SDL_SANDBOX_APPLICATION_HPP_
 
+#include "display/IScene.hpp"
 #include <application/SDLApplication.hpp>
 
 #include <command/ICommand.hpp>
 #include <display/IWindow.hpp>
 #include <display/IRenderer.hpp>
 #include <display/ITexture.hpp>
+#include <display/IScene.hpp>
 #include <display/SDLTexture.hpp>
 #include <error/CGLError.hpp>
 #include <event/IEvent.hpp>
@@ -27,6 +29,7 @@
 #include <imgui/IMGuiSDLRenderer.hpp>
 
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <queue>
 #include <string>
@@ -142,6 +145,17 @@ private:
      * @brief Window and renderer map.
      */
     WindowGroupMap mWindowGroupMap;
+    /**
+     * @brief Pointer to the scene instance.
+     */
+    std::unique_ptr<::cgl::display::IScene> mScene;
+    /**
+     * @brief Event handlers for scene instances.
+     * 
+     * @note Attempt to change to std::function instead of pointer
+     * to the scene instance.
+     */
+    std::unordered_map<std::uint32_t,::cgl::display::IScene*> mHandlers;
     /**
      * @brief Setup internal properties.
      * 
