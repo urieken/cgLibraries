@@ -19,7 +19,7 @@
 #include <command/SDLRendererGeometryCommand.hpp>
 #include <command/SDLRendererViewportCommand.hpp>
 #include <display/Color.hpp>
-#include <display/IScene.hpp>
+#include <display/L01Scene.hpp>
 #include <display/SDLRenderer.hpp>
 #include <display/SDLTexture.hpp>
 #include <display/SDLWindow.hpp>
