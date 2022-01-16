@@ -15,16 +15,24 @@ namespace cgl {
 namespace event {
 
 CoreEvent::CoreEvent() :
-    IEvent{} {
+    IEvent{},
+    mData{} {
 }
 
 CoreEvent::CoreEvent(const EventType& type,
     const EventSource& source) :
-    IEvent{type, source} {
+    IEvent{type, source},
+    mData{} {
+}
+
+CoreEvent::CoreEvent(const EventType& type, const EventSource& source,
+    const std::string& data) :
+    IEvent{type, source},
+    mData{data} {
 }
 
 auto CoreEvent::Data() const -> const void* {
-    return nullptr;
+    return mData.data();
 }
 
 }  // namespace event

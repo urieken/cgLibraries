@@ -48,6 +48,7 @@ SDLApplication::SDLApplication(const System::Arguments& args) :
 }
 
 SDLApplication::~SDLApplication() {
+    Cleanup();
 }
 
 auto SDLApplication::OnEvent(const Event::IEvent& event) -> bool {

@@ -53,6 +53,7 @@ set_target_properties(${PROJECT_NAME}
 
 add_executable(${PROJECT_NAME}_sandbox
     ${SOURCE_FILES}
+    ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/L01Scene.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/imgui/IMGuiCommand.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/imgui/IMGuiSDLRenderer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/application/SDLSandboxApplication.cpp

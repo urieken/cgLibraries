@@ -12,12 +12,14 @@
 #ifndef CGL_LIBRARY_SANDBOX_INCLUDE_APPLICATION_SDL_SANDBOX_APPLICATION_HPP_
 #define CGL_LIBRARY_SANDBOX_INCLUDE_APPLICATION_SDL_SANDBOX_APPLICATION_HPP_
 
+#include "display/IScene.hpp"
 #include <application/SDLApplication.hpp>
 
 #include <command/ICommand.hpp>
 #include <display/IWindow.hpp>
 #include <display/IRenderer.hpp>
 #include <display/ITexture.hpp>
+#include <display/IScene.hpp>
 #include <display/SDLTexture.hpp>
 #include <error/CGLError.hpp>
 #include <event/IEvent.hpp>
@@ -27,9 +29,11 @@
 #include <imgui/IMGuiSDLRenderer.hpp>
 
 #include <cstdint>
+#include <functional>
 #include <memory>
+#include <queue>
 #include <string>
-#include <vector>
+#include <unordered_map>
 
 namespace cgl {
 namespace application {
@@ -46,6 +50,27 @@ struct SpriteSheet {
     int height;
     std::vector<int> indices;
 };
+/**
+ * @brief Group for window, window id, renderer
+ *
+ * @note Might just need the window ID here.
+ */
+struct WindowGroup {
+    /**
+     * @brief The SDL window.
+     */
+    std::unique_ptr<::cgl::display::IWindow> mWindow;
+    /**
+     * @brief The SDL renderer.
+     */
+    std::unique_ptr<::cgl::display::IRenderer> mRenderer;
+};
+/**
+ * @brief Alias for the window group map.
+ *
+ * @note Might just need to store the renderer instead of the entire group.
+ */
+using WindowGroupMap = std::unordered_map<std::uint32_t, WindowGroup>;
 
 /**
  * @brief SDL application for sandbox.
@@ -83,6 +108,7 @@ public:
      */
     auto OnModulationColorChange(std::vector<int>& modulationColor) -> void;
 private:
+    std::uint32_t mMainWindow;
     /**
      * @brief SDL_Log wrapper
      */
@@ -92,17 +118,9 @@ private:
      */
     const ::cgl::system::Arguments& mArguments;
     /**
-     * @brief The SDL window.
-     */
-    std::unique_ptr<::cgl::display::IWindow> mWindow;
-    /**
-     * @brief The SDL renderer.
-     */
-    std::unique_ptr<::cgl::display::IRenderer> mRenderer;
-    /**
      * @brief The command queue for renderer operations.
      */
-    std::vector<std::unique_ptr<::cgl::command::ICommand>> mRendererCommands;
+    std::queue<std::unique_ptr<::cgl::command::ICommand>> mCommandQueue;
     /**
      * @brief An update has been requested.
      */
@@ -123,6 +141,21 @@ private:
      * @brief Pointer to the IMGUI wrapper.
      */
     std::unique_ptr<::cgl::sandbox::imgui::IMGuiSDLRenderer> mImGui;
+    /**
+     * @brief Window and renderer map.
+     */
+    WindowGroupMap mWindowGroupMap;
+    /**
+     * @brief Pointer to the scene instance.
+     */
+    std::unique_ptr<::cgl::display::IScene> mScene;
+    /**
+     * @brief Event handlers for scene instances.
+     * 
+     * @note Attempt to change to std::function instead of pointer
+     * to the scene instance.
+     */
+    std::unordered_map<std::uint32_t,::cgl::display::IScene*> mHandlers;
     /**
      * @brief Setup internal properties.
      * 
