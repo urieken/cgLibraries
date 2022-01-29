@@ -14,10 +14,30 @@
 
 #include <event/IEvent.hpp>
 
+#include <cstdint>
+
 #include <SDL2/SDL.h>
 
 namespace cgl {
 namespace event {
+/**
+ * @brief Custom SDL event.
+ */
+struct CustomSDLEevent {
+    /**
+     * @brief The event type.
+     */
+    std::uint32_t type;
+    /**
+     * @brief Can be as id for window, scene, etc.
+     */
+    std::uint32_t id;
+    /**
+     * @brief The event code.
+     */
+    std::uint32_t code;
+};
+
 /**
  * @brief Wrapper for SDL events.
  */

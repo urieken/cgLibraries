@@ -15,7 +15,7 @@ namespace cgl {
 namespace display {
 
 Viewport::Viewport(const std::uint8_t& id, const Rect& rect) :
-    mId{id}, mRect{rect} {}
+    mRect{rect}, mId{id} {}
 
 auto Viewport::getId() const -> const std::uint8_t {
     return mId;

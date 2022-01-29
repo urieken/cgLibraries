@@ -34,11 +34,10 @@ SDLRendererViewportCommand::SDLRendererViewportCommand(
 auto SDLRendererViewportCommand::Execute() -> std::error_condition {
     switch(mOperation) {
         case Operation::SetViewport : {
+            auto dimensions = mViewport->getRect();
             SDL_Rect rect{
-                mViewport->getRect().top,
-                mViewport->getRect().left,
-                mViewport->getRect().width,
-                mViewport->getRect().height,
+                dimensions.top, dimensions.left,
+                dimensions.width, dimensions.height
             };
             ::SDL_RenderSetViewport(getRenderer(), &rect);
         } break;

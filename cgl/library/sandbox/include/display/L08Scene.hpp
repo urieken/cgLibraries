@@ -1,17 +1,19 @@
 /**
- * @file L01Scene.hpp
+ * @file L08Scene.hpp
  * @author Ulysses Don Rieken (ulysses.rieken@gmail.com)
- * @brief Header for lesson 01 scene
+ * @brief Header for lesson 08 scene
  * @version 0.1
- * @date 2022-01-16
+ * @date 2022-01-21
  * 
  * @copyright Copyright (c) 2022
  * 
  */
 
-#ifndef CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L01SCENE_HPP_
-#define CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L01SCENE_HPP_
+#ifndef CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L08SCENE_HPP_
+#define CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L08SCENE_HPP_
 
+#include "command/SDLRendererCommand.hpp"
+#include "display/Color.hpp"
 #include <display/IScene.hpp>
 
 #include <command/ICommand.hpp>
@@ -28,21 +30,21 @@
 namespace cgl {
 namespace display {
 /**
- * @brief Scene class for lesson 01
+ * @brief Scene class for lesson 08
  */
-class L01Scene final : public IScene {
+class L08Scene final : public IScene {
 public:
-    L01Scene() = delete;
+    L08Scene() = delete;
     /**
-     * @brief Construct a new L01Scene object
+     * @brief Construct a new L08Scene object
      * 
      * @param event Event type for this scene.
      */
-    explicit L01Scene(const std::uint32_t& event);
+    explicit L08Scene(const std::uint32_t& event);
     /**
-     * @brief Destroy the L01Scene object
+     * @brief Destroy the L08Scene object
      */
-    virtual ~L01Scene();
+    virtual ~L08Scene();
     /**
      * @brief Handle events.
      * 
@@ -85,6 +87,18 @@ private:
      */
     std::queue<std::unique_ptr<::cgl::command::ICommand>> mCommandQueue;
     /**
+     * @brief The clear color.
+     */
+    SDL_Color mClearColor;
+    /**
+     * @brief The draw color.
+     */
+    SDL_Color mDrawColor;
+    /**
+     * @brief The fill color.
+     */
+    SDL_Color mFillColor;
+    /**
      * @brief Setup the window and renderer.
      * 
      * @return true On success.
@@ -108,13 +122,19 @@ private:
      */
     auto OnWindowEvent(const SDL_WindowEvent& event) -> bool;
     /**
-     * @brief Append a set draw color command to the command queue.
-     * 
-     * @param color Draw color for the command.
+     * @brief Append set draw color commands to the command queue.
      */
-    auto AppendSetDrawColorCommand(const SDL_Color& color) -> void;
+    auto AppendSetDrawColorCommand() -> void;
+    /**
+     * @brief Append draw commands to the command queue.
+     * 
+     * @param operation The draw operation.
+     */
+    auto AppendDrawCommand(
+        const ::cgl::command::SDLRendererCommand::Operation& operation)
+        -> void;
 };
 }  // namespace display
 }  // namespace cgl
 
-#endif//CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L01SCENE_HPP_
+#endif//CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L08SCENE_HPP_

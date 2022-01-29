@@ -46,13 +46,13 @@ public:
     auto getRect() const -> const Rect;
 private:
     /**
-     * @brief The viewport ID.
-     */
-    std::uint8_t mId;
-    /**
      * @brief The viewport coordinates.
      */
     Rect mRect;
+    /**
+     * @brief The viewport ID.
+     */
+    std::uint8_t mId;
 };
 
 }  // namespace display

@@ -33,6 +33,7 @@ enum class EventType {
 enum class EventSource {
     None = 0UL,
     SDL,
+    IMGUI,
     // Maximum value for EventSource. Any new
     // items should be added before this.
     Unknown

@@ -103,14 +103,14 @@ public:
     }
 private:
     /**
+     * @brief The coordinate set for the element.
+     */
+    std::vector<int> mCoordinates;
+    /**
      * @brief The draw(first) and fill(second) colors.
      */
     std::pair<::cgl::display::Color,
         ::cgl::display::Color> mColors;
-    /**
-     * @brief The coordinate set for the element.
-     */
-    std::vector<int> mCoordinates;
 };
 
 }  // namespace geometry

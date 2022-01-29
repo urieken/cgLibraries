@@ -42,6 +42,12 @@ public:
      * @return std::uint32_t The scene id.
      */
     virtual auto Id() const -> std::uint32_t = 0;
+    /**
+     * @brief Show or hide the scene.
+     * 
+     * @param visible Scene visibility flag.
+     */
+    virtual auto Visible(bool visible) -> void = 0;
 };
 }  // namespace display
 }  // namespace cgl

@@ -12,10 +12,10 @@
 #ifndef CGL_LIBRARY_SANDBOX_INCLUDE_IMGUI_SDL_RENDERER_HPP_
 #define CGL_LIBRARY_SANDBOX_INCLUDE_IMGUI_SDL_RENDERER_HPP_
 
-#include <SDL2/SDL_render.h>
-#include <SDL2/SDL_video.h>
+#include <event/SDLEvent.hpp>
 #include <system/Arguments.hpp>
 
+#include <unordered_map>
 #include <vector>
 
 #include <SDL2/SDL.h>
@@ -28,7 +28,6 @@ class SDLSandboxApplication;
 }  // namespace application
 namespace sandbox {
 namespace imgui {
-
 /**
  * @brief Wrapper class for imgui SDL and SDL_Renderer
  */
@@ -38,9 +37,11 @@ public:
      * @brief ImGui event type
      */
     enum class ImGuiEvent {
-        ClearColorChange = 0UL,
+        ClearColorChange = 0,
+        DrawColorChange,
+        FillColorChange,
         ModulationColorChange,
-        Unkown
+        Unknown
     };
     IMGuiSDLRenderer() = delete;
     /**
@@ -82,16 +83,14 @@ public:
      */
     auto ModulationColor() -> std::vector<int>;
     /**
-     * @brief Set a pointer to the sandbox application.
+     * @brief Add custom event details.
      * 
-     * @param application The pointer to the sandbox application.
+     * @param key The event key.
+     * @param event The custom event details.
      */
-    auto Register(::cgl::application::sandbox::SDLSandboxApplication* application) -> void;
+    auto AddCustomEvent(const std::string& key,
+        const ::cgl::event::CustomSDLEevent& event) -> void;
 private:
-    /**
-     * @brief Pointer to the sanbox application
-     */
-    ::cgl::application::sandbox::SDLSandboxApplication* mApplication;
     /**
      * @brief Pointer to the window instance
      */
@@ -113,9 +112,48 @@ private:
      */
     const ::cgl::system::Arguments& mArguments;
     /**
+     * @brief Clear color.
+     */
+    std::vector<float> mClearColors;
+    /**
+     * @brief Draw color.
+     */
+    std::vector<float> mDrawColors;
+    /**
+     * @brief Fill color.
+     */
+    std::vector<float> mFillColors;
+    /**
+     * @brief Custom SDL events
+     */
+    std::unordered_map<std::string,
+        ::cgl::event::CustomSDLEevent> mUserEvents;
+    /**
      * @brief Display system information.
      */
     auto SystemInformation() -> void;
+    /**
+     * @brief Video display information details.
+     */
+    auto DisplayInformation() -> void;
+    /**
+     * @brief Details for the current display.
+     * 
+     * @param index The current display index.
+     */
+    auto DisplayDetails(const int& index) -> void;
+    /**
+     * @brief Bounds for the current display.
+     * 
+     * @param index The current display index.
+     */
+    auto DisplayBounds(const int& index) -> void;
+    /**
+     * @brief Display modes for the current display.
+     * 
+     * @param index The current display index.
+     */
+    auto DisplayModes(const int& index) -> void;
     /**
      * @brief Display application arguments.
      */
@@ -128,6 +166,18 @@ private:
      * @brief Display event details.
      */
     auto Events() -> void;
+    /**
+     * @brief Display lesson 01 details.
+     *
+     * @note Some trivial lessons are incorporated.
+     */
+    auto Lesson01() -> void;
+    /**
+     * @brief Display lesson 08 details.
+     *
+     * @note Some trivial lessons are incorporated.
+     */
+    auto Lesson08() -> void;
 };
 
 }  // namespace imgui
