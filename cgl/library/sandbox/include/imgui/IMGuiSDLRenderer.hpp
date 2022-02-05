@@ -40,6 +40,7 @@ public:
         ClearColorChange = 0,
         DrawColorChange,
         FillColorChange,
+        LoadImages,
         ModulationColorChange,
         Unknown
     };
@@ -178,6 +179,12 @@ private:
      * @note Some trivial lessons are incorporated.
      */
     auto Lesson08() -> void;
+    /**
+     * @brief Display lesson 15 details.
+     *
+     * @note Some trivial lessons are incorporated.
+     */
+    auto Lesson15() -> void;
 };
 
 }  // namespace imgui

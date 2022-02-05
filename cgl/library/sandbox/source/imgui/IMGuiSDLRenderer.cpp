@@ -83,6 +83,7 @@ auto IMGuiSDLRenderer::OnUpdate() -> void {
     // Events();
     Lesson01();
     Lesson08();
+    Lesson15();
     ::ImGui::Render();
 
     
@@ -386,6 +387,32 @@ auto IMGuiSDLRenderer::Lesson08() -> void {
             event.user.code =
                 static_cast<Sint32>(ImGuiEvent::FillColorChange);
             event.user.data1 = mFillColors.data();
+            event.window.windowID = iter->second.id;
+
+            ::SDL_PushEvent(&event);
+        }
+    }
+    ::ImGui::End();
+}
+
+auto IMGuiSDLRenderer::Lesson15() -> void {
+    ::ImGui::SetNextWindowSize(::ImVec2{270, 150}, ::ImGuiCond_Always);
+    ::ImGui::Begin("LESSON 15", nullptr, ::ImGuiWindowFlags_NoResize);
+    ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+        "Texture and sprite rendering");
+    if (::ImGui::Button("Load Images", ::ImVec2{270, 25})) {
+        // SDL_Event event{SDL_QUIT};
+        // ::SDL_PushEvent(&event);
+        if(auto iter = mUserEvents.find("LESSON_15");
+            mUserEvents.end() != iter) {
+            SDL_Event event;
+
+            ::SDL_memset(&event, 0, sizeof(event));
+
+            event.type = iter->second.type;
+            event.user.code =
+                static_cast<Sint32>(ImGuiEvent::LoadImages);
+            event.user.data1 = mDrawColor.data();
             event.window.windowID = iter->second.id;
 
             ::SDL_PushEvent(&event);

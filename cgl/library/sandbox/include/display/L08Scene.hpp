@@ -12,11 +12,10 @@
 #ifndef CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L08SCENE_HPP_
 #define CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L08SCENE_HPP_
 
-#include "command/SDLRendererCommand.hpp"
-#include "display/Color.hpp"
-#include <display/IScene.hpp>
+#include <display/SandboxScene.hpp>
 
 #include <command/ICommand.hpp>
+#include <command/SDLRendererCommand.hpp>
 #include <display/IRenderer.hpp>
 #include <display/IWindow.hpp>
 #include <event/IEvent.hpp>
@@ -32,7 +31,7 @@ namespace display {
 /**
  * @brief Scene class for lesson 08
  */
-class L08Scene final : public IScene {
+class L08Scene final : public SandboxScene {
 public:
     L08Scene() = delete;
     /**
@@ -42,9 +41,14 @@ public:
      */
     explicit L08Scene(const std::uint32_t& event);
     /**
-     * @brief Destroy the L08Scene object
+     * @brief Construct a new L08Scene object
+     * 
+     * @param event Event type for this scene.
+     * @param title The scene title.
+     * @param rect The scene dimensions.
      */
-    virtual ~L08Scene();
+    L08Scene(const std::uint32_t& event, const std::string& title,
+        const Rect& rect);
     /**
      * @brief Handle events.
      * 
@@ -53,39 +57,7 @@ public:
      * @return false An error has occurred or quit the application.
      */
     auto OnEvent(const ::cgl::event::IEvent& event) -> bool override;
-    /**
-     * @brief Update the scene.
-     */
-    auto OnUpdate() -> void override;
-    /**
-     * @brief Get the scene id.
-     * 
-     * @return std::uint32_t The scene id.
-     */
-    auto Id() const -> std::uint32_t override;
-    /**
-     * @brief Show or hide the scene.
-     * 
-     * @param visible Scene visibility flag.
-     */
-    virtual auto Visible(bool visible) -> void override;
 private:
-    /**
-     * @brief The scene event
-     */
-    std::uint32_t mSceneEvent;
-    /**
-     * @brief The window for the scene.
-     */
-    std::unique_ptr<::cgl::display::IWindow> mWindow;
-    /**
-     * @brief The window renderer.
-     */
-    std::unique_ptr<::cgl::display::IRenderer> mRenderer;
-    /**
-     * @brief The scene command queue.
-     */
-    std::queue<std::unique_ptr<::cgl::command::ICommand>> mCommandQueue;
     /**
      * @brief The clear color.
      */
@@ -98,13 +70,6 @@ private:
      * @brief The fill color.
      */
     SDL_Color mFillColor;
-    /**
-     * @brief Setup the window and renderer.
-     * 
-     * @return true On success.
-     * @return false On failure.
-     */
-    auto Setup() -> bool;
     /**
      * @brief Handle keyboard press events
      * 

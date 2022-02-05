@@ -12,7 +12,7 @@
 #ifndef CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L01SCENE_HPP_
 #define CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L01SCENE_HPP_
 
-#include <display/IScene.hpp>
+#include <display/SandboxScene.hpp>
 
 #include <command/ICommand.hpp>
 #include <display/IRenderer.hpp>
@@ -30,7 +30,7 @@ namespace display {
 /**
  * @brief Scene class for lesson 01
  */
-class L01Scene final : public IScene {
+class L01Scene final : public SandboxScene {
 public:
     L01Scene() = delete;
     /**
@@ -40,9 +40,14 @@ public:
      */
     explicit L01Scene(const std::uint32_t& event);
     /**
-     * @brief Destroy the L01Scene object
+     * @brief Construct a new L01Scene object
+     * 
+     * @param event Event type for this scene.
+     * @param title The scene title.
+     * @param rect The scene dimensions.
      */
-    virtual ~L01Scene();
+    L01Scene(const std::uint32_t& event, const std::string& title,
+        const Rect& rect);
     /**
      * @brief Handle events.
      * 
@@ -51,46 +56,7 @@ public:
      * @return false An error has occurred or quit the application.
      */
     auto OnEvent(const ::cgl::event::IEvent& event) -> bool override;
-    /**
-     * @brief Update the scene.
-     */
-    auto OnUpdate() -> void override;
-    /**
-     * @brief Get the scene id.
-     * 
-     * @return std::uint32_t The scene id.
-     */
-    auto Id() const -> std::uint32_t override;
-    /**
-     * @brief Show or hide the scene.
-     * 
-     * @param visible Scene visibility flag.
-     */
-    virtual auto Visible(bool visible) -> void override;
 private:
-    /**
-     * @brief The scene event
-     */
-    std::uint32_t mSceneEvent;
-    /**
-     * @brief The window for the scene.
-     */
-    std::unique_ptr<::cgl::display::IWindow> mWindow;
-    /**
-     * @brief The window renderer.
-     */
-    std::unique_ptr<::cgl::display::IRenderer> mRenderer;
-    /**
-     * @brief The scene command queue.
-     */
-    std::queue<std::unique_ptr<::cgl::command::ICommand>> mCommandQueue;
-    /**
-     * @brief Setup the window and renderer.
-     * 
-     * @return true On success.
-     * @return false On failure.
-     */
-    auto Setup() -> bool;
     /**
      * @brief Handle keyboard press events
      * 

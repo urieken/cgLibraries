@@ -12,15 +12,12 @@
 #include <display/L01Scene.hpp>
 
 #include <command/SDLRendererCommand.hpp>
-#include <display/SDLRenderer.hpp>
-#include <display/SDLWindow.hpp>
 #include <imgui/IMGuiSDLRenderer.hpp>
 
 #include <memory>
 #include <stdexcept>
 
 namespace Command = ::cgl::command;
-namespace Display = ::cgl::display;
 namespace Event = ::cgl::event;
 namespace ImGui = ::cgl::sandbox::imgui;
 
@@ -36,13 +33,11 @@ constexpr auto WIDTH{150};
 constexpr auto HEIGHT{150};
 
 L01Scene::L01Scene(const std::uint32_t& event) :
-    mSceneEvent{event},
-    mWindow{nullptr},
-    mRenderer{nullptr} {
-}
+    L01Scene{event, TITLE, {TOP, LEFT, WIDTH, HEIGHT}} {}
 
-L01Scene::~L01Scene() {
-}
+L01Scene::L01Scene(const std::uint32_t& event,
+    const std::string& title, const Rect& rect) :
+    SandboxScene{event, title, rect} {}
 
 auto L01Scene::OnEvent(const Event::IEvent& event) -> bool {
     if (Event::EventSource::SDL == event.Source()) {
@@ -55,8 +50,8 @@ auto L01Scene::OnEvent(const Event::IEvent& event) -> bool {
                 return OnWindowEvent(data->window);
             }break;
             default: {
-                if ((mSceneEvent == data->type) &&
-                   (mWindow->GetId() == data->window.windowID)) {
+                if ((EventType() == data->type) &&
+                   (Id() == data->window.windowID)) {
                     
                     switch(static_cast<ImGuiEvent>(data->user.code)) {
                     case ImGuiEvent::ClearColorChange : {
@@ -76,47 +71,9 @@ auto L01Scene::OnEvent(const Event::IEvent& event) -> bool {
             }break;
         }
     } else {
-        switch(event.Type()) {
-            case Event::EventType::Init : {
-                return Setup();
-            }break;
-            default:break;
-        }
+        return SandboxScene::OnEvent(event);
     }
     return false;
-}
-
-auto L01Scene::OnUpdate() -> void {
-    while(!mCommandQueue.empty()) {
-        mCommandQueue.front()->Execute();
-        mCommandQueue.pop();
-    }    
-}
-
-auto L01Scene::Id() const -> std::uint32_t {
-    if (nullptr == mWindow) {
-        throw std::runtime_error{
-            std::string(__PRETTY_FUNCTION__) + ":Window = nullptr"};
-    }
-    return mWindow->GetId();
-}
-
-auto L01Scene::Visible(bool visible) -> void {
-    mWindow->Visible(visible);
-}
-
-auto L01Scene::Setup() -> bool {
-    if (mWindow = std::make_unique<Display::SDLWindow>(TITLE, TOP,
-        LEFT, WIDTH, HEIGHT, SDL_WINDOW_HIDDEN);nullptr == mWindow) {
-        ::SDL_Log("Failed to create window : %s", ::SDL_GetError());
-        return false;
-    }
-    if (mRenderer = std::make_unique<Display::SDLRenderer>(mWindow->GetId(),
-        -1, SDL_RENDERER_ACCELERATED); nullptr == mRenderer) {
-        ::SDL_Log("Failed to create renderer : %s", ::SDL_GetError());
-        return false;
-    }
-    return true;
 }
 
 auto L01Scene::OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool {
@@ -151,14 +108,15 @@ auto L01Scene::OnWindowEvent(const SDL_WindowEvent& event) -> bool {
 }
 
 auto L01Scene::AppendSetDrawColorCommand(const SDL_Color& color) -> void {
-    mCommandQueue.push(
-        std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+    auto commands = CommandQueue();
+    commands->push(
+        std::make_unique<Command::SDLRendererCommand>(*GetRenderer(),
         Command::SDLRendererCommand::Operation::SetDrawColor, color));
-    mCommandQueue.push(
-        std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+    commands->push(
+        std::make_unique<Command::SDLRendererCommand>(*GetRenderer(),
         Command::SDLRendererCommand::Operation::Clear));
-    mCommandQueue.push(
-        std::make_unique<Command::SDLRendererCommand>(*mRenderer,
+    commands->push(
+        std::make_unique<Command::SDLRendererCommand>(*GetRenderer(),
         Command::SDLRendererCommand::Operation::Present));
 }
 

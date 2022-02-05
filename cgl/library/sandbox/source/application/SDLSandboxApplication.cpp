@@ -20,7 +20,9 @@
 #include <display/Color.hpp>
 #include <display/L01Scene.hpp>
 #include <display/L08Scene.hpp>
+#include <display/L15Scene.hpp>
 #include <display/MainScene.hpp>
+#include <display/SandboxScene.hpp>
 #include <display/SDLRenderer.hpp>
 #include <display/SDLTexture.hpp>
 #include <display/SDLWindow.hpp>
@@ -128,6 +130,7 @@ auto SDLSandboxApplication::Setup() -> bool {
     mCustomEventStart = ::SDL_RegisterEvents(3);
     auto scene01 = std::make_unique<Display::L01Scene>(mCustomEventStart + 1);
     auto scene08 = std::make_unique<Display::L08Scene>(mCustomEventStart + 2);
+    auto scene15 = std::make_unique<Display::L15Scene>(mCustomEventStart + 3);
 
     auto event = Event::CoreEvent{
         Event::EventType::Init,
@@ -135,7 +138,8 @@ auto SDLSandboxApplication::Setup() -> bool {
     };
 
     scene01->OnEvent(event);
-    scene08->OnEvent(event);          
+    scene08->OnEvent(event);
+    scene15->OnEvent(event);
 
     std::vector<std::pair<std::string,
         ::cgl::event::CustomSDLEevent>> events {
@@ -156,6 +160,15 @@ auto SDLSandboxApplication::Setup() -> bool {
                 0
                 // static_cast<Sint32>(ImGuiEvent::ClearColorChange)
             }
+        },
+        {
+            "LESSON_15",
+            {
+                mCustomEventStart + 3,
+                scene15->Id(),
+                0
+                // static_cast<Sint32>(ImGuiEvent::ClearColorChange)
+            }
         }
     };
 
@@ -166,6 +179,7 @@ auto SDLSandboxApplication::Setup() -> bool {
     mScenes[mainScene->Id()] = std::move(mainScene);
     mScenes[scene01->Id()] = std::move(scene01);
     mScenes[scene08->Id()] = std::move(scene08);
+    mScenes[scene15->Id()] = std::move(scene15);
 
     for(auto& scene : mScenes) {
         scene.second->Visible(true);
