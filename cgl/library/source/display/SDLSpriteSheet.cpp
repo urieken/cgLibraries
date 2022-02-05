@@ -18,10 +18,9 @@
 #include <fstream>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
 namespace Error = ::cgl::error;
-namespace System = ::cgl::system;
+// namespace System = ::cgl::system;
 
 using Code = Error::ErrorCode;
 
