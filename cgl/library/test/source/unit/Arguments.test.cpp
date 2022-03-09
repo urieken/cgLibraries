@@ -76,6 +76,7 @@ TEST_F(ArgumentsTest, testInputStreamWithMalformedPair) {
     PrepareInputStreamWithMalformedPair();
     auto result = mArguments->ProcessInputStream(mInputStream);
 
+    // EXPECT_EQ(Code::MalformedKeyPair, static_cast<Code>(result.value()));
     EXPECT_EQ(Code::MalformedKeyPair, static_cast<Code>(result.value()));
     EXPECT_EQ(std::nullopt, mArguments->GetProperty("key_03"));
 }

@@ -9,8 +9,6 @@
  * 
  */
 
-#include "display/Rect.hpp"
-#include <SDL2/SDL_error.h>
 #include <display/L15Scene.hpp>
 
 #include <command/SDLRendererCommand.hpp>
@@ -19,10 +17,13 @@
 #include <display/SDLTexture.hpp>
 #include <display/SDLWindow.hpp>
 #include <error/CGLError.hpp>
+#include <event/SDLTimer.hpp>
 #include <imgui/IMGuiSDLRenderer.hpp>
 
+#include <bitset>
 #include <memory>
 #include <stdexcept>
+#include <system_error>
 
 namespace Command = ::cgl::command;
 namespace Display = ::cgl::display;
@@ -43,20 +44,59 @@ constexpr auto LEFT{1281};
 constexpr auto WIDTH{150};
 constexpr auto HEIGHT{150};
 
+auto callBack(std::uint32_t interval, void* arg) -> std::uint32_t {
+    reinterpret_cast<L15Scene*>(arg)->OnTimer();
+    return 0;
+}
+
+auto L15Scene::OnTimer() -> void {
+    ::SDL_Log("%s", __PRETTY_FUNCTION__);
+}
+
 L15Scene::L15Scene(const std::uint32_t& event) :
     L15Scene{event, TITLE, {TOP, LEFT, WIDTH, HEIGHT}}{
+    ::SDL_Log("STOPPED : %d",
+        static_cast<int>(::cgl::event::TimerState::Stopped));
+    ::SDL_Log("STOPPED : %d",
+        static_cast<int>(::cgl::event::TimerState::Started));
+    ::SDL_Log("STOPPED : %d",
+        static_cast<int>(::cgl::event::TimerState::Paused));
+    ::SDL_Log("UNKNWON : %d",
+        static_cast<int>(::cgl::event::TimerState::Unknown));
 }
 
 L15Scene::L15Scene(const std::uint32_t& event,
     const std::string& title, const Rect& rect) :
     SandboxScene{event, title, rect},
-    mTexture{nullptr} {}
+    mTexture{nullptr},
+    mTimer{std::make_unique<Event::SDLTimer>()},
+    mFrameCount{0}, mFPS{0.0f}, mFrame{0} {}
 
+L15Scene::~L15Scene() {
+    mTimer->Stop();
+}
 
 auto L15Scene::OnEvent(const Event::IEvent &event) -> bool {
+    ::SDL_Log("%s", __PRETTY_FUNCTION__);
     if (Event::EventSource::SDL == event.Source()) {
         auto data = static_cast<const SDL_Event*>(event.Data());
         switch(data->type) {
+            case SDL_KEYDOWN : {
+                switch(data->key.keysym.sym) {
+                    case  SDLK_SPACE : {
+                        ::SDL_Log("SPACE");
+                        // ::SDL_Log("SECONDS : %f",
+                        //     mTimer->GetTicks() / 1000.0f);
+                            // mFPS = mFrameCount / (mTimer->GetTicks() / 1000.0f);
+                            // if (mFPS > 2000000) {
+                            //     mFPS = 0.0f;
+                            // }
+                            // ::SDL_Log("FRAME COUNT : %d, FRAME RATE : %f",
+                            //     mFrameCount, mFPS);
+                    }break;
+                    default:break;
+                }
+            }break;
             default:{
                 if ((EventType() == data->type) &&
                    (Id() == data->window.windowID)) {
@@ -71,12 +111,6 @@ auto L15Scene::OnEvent(const Event::IEvent &event) -> bool {
                                 *GetRenderer(), colorKey);
                             if(static_cast<int>(Code::NoError) == error.value()){
                                 auto commands = CommandQueue();
-                                // Display::Rect src{0, 1,
-                                //     std::get<0>(mTexture->GetDimensions()),
-                                //     std::get<1>(mTexture->GetDimensions())};
-                                // Display::Rect dest{0, 1,
-                                //     std::get<0>(mTexture->GetDimensions()),
-                                //     std::get<1>(mTexture->GetDimensions())};
                                 Display::Rect src{0, 1, 30, 48};
                                 Display::Rect dest{0, 1, 30, 48};
                                 ::SDL_Log("Rect %d:%d:%d:%d",
@@ -96,6 +130,32 @@ auto L15Scene::OnEvent(const Event::IEvent &event) -> bool {
                                     error.message().c_str());
                             }
                         } break;
+                        case ImGuiEvent::StartTimer : {
+                            ::SDL_Log("%s", __PRETTY_FUNCTION__);
+                            ::SDL_Log("Start timer");
+                            // mFrameCount = 0;
+                            mTimer->Start();
+                            mStartTime = std::chrono::steady_clock::now();
+                        }break;
+                        case ImGuiEvent::StopTimer : {
+                            ::SDL_Log("%s", __PRETTY_FUNCTION__);
+                            ::SDL_Log("Stop timer");
+                            mTimer->Stop();
+                        }break;
+                        case ImGuiEvent::PauseTimer : {
+                            ::SDL_Log("%s", __PRETTY_FUNCTION__);
+                            ::SDL_Log("Pause timer");
+                            // if(mTimer->IsStarted()) {
+                            //     mTimer->Pause();
+                            // }
+                        }break;
+                        case ImGuiEvent::ResumeTimer : {
+                            ::SDL_Log("%s", __PRETTY_FUNCTION__);
+                            ::SDL_Log("Resume timer");
+                            // if(mTimer->IsStarted()) {
+                            //     mTimer->Resume();
+                            // }
+                        }break;
                         default:break;       
                     }
                 }
@@ -105,6 +165,51 @@ auto L15Scene::OnEvent(const Event::IEvent &event) -> bool {
         return SandboxScene::OnEvent(event);
     }
     return false;
+}
+
+auto L15Scene::OnUpdate() -> void {
+    // ::SDL_Log("%s", __PRETTY_FUNCTION__);
+    auto time = mTimer->GetTicks() / 1000.0f;
+    mEndTime = std::chrono::steady_clock::now();
+    auto diff = mEndTime - mStartTime;
+    auto seconds = diff / std::chrono::seconds(1);
+    // 0.041 - 24
+    // 0.016 - 60
+    if (mTimer->IsStarted()) {
+        // auto frame = diff / std::chrono::milliseconds(410);
+        // auto frame = diff / std::chrono::milliseconds(1);
+        auto frame = diff / std::chrono::seconds(1);
+        if (frame != mFrame) {
+            mFrame = frame;
+            mFrameCount++;
+            ::SDL_Log("mFrameCount : %d", mFrameCount);
+            // if (410 >= mFrame) {
+            //     ::SDL_Log("frame : %ld, mFrame : %ld",
+            //         frame, mFrame);
+            // }
+            if(24 <= mFrameCount) {
+                mFrameCount = 0;
+            }
+        }
+        // if (10 > seconds) {
+        //     // mStartTime = std::chrono::steady_clock::now();
+        //     ::SDL_Log("%ld", diff / std::chrono::milliseconds(1));
+        //     ::SDL_Log("%ld", diff / std::chrono::milliseconds(410));
+        //     ::SDL_Log("%ld", diff / std::chrono::milliseconds(160));
+        //     ::SDL_Log("%ld", diff / std::chrono::seconds(1));
+        // }
+    }
+    
+    // mFrameCount++;
+    // if (50000 < mFrameCount) {
+    //     mFrameCount = 0;
+    // }
+    // mFPS = mFrameCount / (mTimer->GetTicks() / 1000.0f);
+    // if (mFPS > 2000000) {
+    //     mFPS = 0.0f;
+    // }
+    // ::SDL_Log("FRAME COUNT : %d, FRAME RATE : %f", mFrameCount, mFPS);
+    // ::SDL_Log("SECONDS : %f", mTimer->GetTicks() / 1000.0f);
 }
 
 }  // namespace display

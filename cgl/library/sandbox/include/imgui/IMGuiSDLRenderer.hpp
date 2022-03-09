@@ -15,6 +15,7 @@
 #include <event/SDLEvent.hpp>
 #include <system/Arguments.hpp>
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -41,6 +42,10 @@ public:
         DrawColorChange,
         FillColorChange,
         LoadImages,
+        StartTimer,
+        StopTimer,
+        PauseTimer,
+        ResumeTimer,
         ModulationColorChange,
         Unknown
     };
@@ -72,12 +77,6 @@ public:
      */
     auto OnUpdate() -> void;
     /**
-     * @brief Retrieve the draw color.
-     * 
-     * @return std::vector<int> The draw color.
-     */
-    auto DrawColor() -> std::vector<int>;
-    /**
      * @brief Retrieve the modulation color.
      * 
      * @return std::vector<int> The modulation color.
@@ -93,6 +92,98 @@ public:
         const ::cgl::event::CustomSDLEevent& event) -> void;
 private:
     /**
+     * @brief The Lesson task interface.
+     */
+    class ILessonTask {
+    public:
+        /**
+         * @brief Construct a new ILessonTask object
+         *
+         * @param event The lesson 01 custom event.
+         */
+        explicit ILessonTask(
+            const ::cgl::event::CustomSDLEevent& event);
+        /**
+         * @brief Execute the task.
+         */
+        virtual auto Execute() -> void = 0;
+    protected:
+        /**
+         * @brief The lesson event.
+         */
+        ::cgl::event::CustomSDLEevent mEvent;
+    };
+    /**
+     * @brief Wrapper for lesson 01 task.
+     */
+    class Lesson01Task : public ILessonTask {
+    public:
+        /**
+         * @brief Construct a new Lesson01Task object
+         *
+         * @param event The lesson 01 custom event.
+         */
+        explicit Lesson01Task(
+            const ::cgl::event::CustomSDLEevent& event);
+        /**
+         * @brief Execute the task.
+         */
+         auto Execute() -> void override;
+    private:
+        /**
+         * @brief The draw color.
+         */
+        std::vector<int> mDrawColor;
+    };
+    /**
+     * @brief Wrapper for lesson 08 task.
+     */
+    class Lesson08Task : public ILessonTask {
+    public:
+        /**
+         * @brief Construct a new Lesson08Task object
+         *
+         * @param event The lesson 08 custom event.
+         */
+        explicit Lesson08Task(
+            const ::cgl::event::CustomSDLEevent& event);
+        /**
+         * @brief Execute the task.
+         */
+         auto Execute() -> void override;
+    private:
+        /**
+         * @brief The clear, draw, and fill colors.
+         */
+        std::vector<std::vector<float>> mColors;
+    };
+    /**
+     * @brief Wrapper for lesson 15 task.
+     */
+    class Lesson15Task : public ILessonTask {
+    public:
+        /**
+         * @brief Construct a new Lesson15Task object
+         *
+         * @param event The lesson 08 custom event.
+         */
+        explicit Lesson15Task(
+            const ::cgl::event::CustomSDLEevent& event);
+        /**
+         * @brief Execute the task.
+         */
+         auto Execute() -> void override;
+    private:
+        /**
+         * @brief The timer status flag.
+         */
+        bool mTimerStarted;
+        /**
+         * @brief The timer pause/resume flag.
+         */
+        bool mTimerPaused;
+    };
+    /**
      * @brief Pointer to the window instance
      */
     SDL_Window* mWindow;
@@ -100,10 +191,6 @@ private:
      * @brief Pointer to the renderer instance.
      */
     SDL_Renderer* mRenderer;
-    /**
-     * @brief The draw color
-     */
-    std::vector<int> mDrawColor;
     /**
      * @brief The modulation color
      */
@@ -113,22 +200,18 @@ private:
      */
     const ::cgl::system::Arguments& mArguments;
     /**
-     * @brief Clear color.
-     */
-    std::vector<float> mClearColors;
-    /**
-     * @brief Draw color.
-     */
-    std::vector<float> mDrawColors;
-    /**
-     * @brief Fill color.
-     */
-    std::vector<float> mFillColors;
-    /**
      * @brief Custom SDL events
      */
     std::unordered_map<std::string,
         ::cgl::event::CustomSDLEevent> mUserEvents;
+    /**
+     * @brief Lessons.
+     */
+    std::vector<std::unique_ptr<ILessonTask>> mLessons;
+    /**
+     * @brief Timer started flag.
+     */
+    bool mTimerStarted;
     /**
      * @brief Display system information.
      */
@@ -167,18 +250,6 @@ private:
      * @brief Display event details.
      */
     auto Events() -> void;
-    /**
-     * @brief Display lesson 01 details.
-     *
-     * @note Some trivial lessons are incorporated.
-     */
-    auto Lesson01() -> void;
-    /**
-     * @brief Display lesson 08 details.
-     *
-     * @note Some trivial lessons are incorporated.
-     */
-    auto Lesson08() -> void;
     /**
      * @brief Display lesson 15 details.
      *

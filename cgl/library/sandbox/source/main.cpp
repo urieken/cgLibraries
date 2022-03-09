@@ -42,6 +42,10 @@ using Code = Error::ErrorCode;
 constexpr auto default_config{"res/config/default_config"};
 
 auto main(int argc, char** argv) -> int {
+    std::printf("[%s]\n", __PRETTY_FUNCTION__);
+    for (auto i = 0; i < argc; i++) {
+        std::printf("[%i][%s]\n", i, argv[i]);
+    }
     auto compiler = System::Compilers{};
     std::printf("Compiled with : %s %s\n",compiler.name().c_str(),
         compiler.versionString().c_str());

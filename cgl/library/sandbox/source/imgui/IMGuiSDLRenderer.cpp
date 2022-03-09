@@ -9,6 +9,7 @@
  * 
  */
 
+#include "event/SDLEvent.hpp"
 #include <imgui/IMGuiSDLRenderer.hpp>
 #include <application/SDLSandboxApplication.hpp>
 
@@ -40,12 +41,9 @@ IMGuiSDLRenderer::IMGuiSDLRenderer(const ::cgl::system::Arguments& arguments,
     SDL_Window* window, SDL_Renderer* renderer) :
     mWindow{window},
     mRenderer{renderer},
-    mDrawColor{0, 0, 0, 255},
     mModulationColor{0, 0, 0, 255},
-    mClearColors{64, 64, 64, 255},
-    mDrawColors{0, 128, 0, 255},
-    mFillColors{0, 0, 128, 255},
-    mArguments{arguments} {
+    mArguments{arguments},
+    mTimerStarted(false) {
 
 
     IMGUI_CHECKVERSION();
@@ -81,17 +79,16 @@ auto IMGuiSDLRenderer::OnUpdate() -> void {
     // Arguments();
     // DrawColorInformation();
     // Events();
-    Lesson01();
-    Lesson08();
-    Lesson15();
+    // Lesson01();
+    for (auto& lesson : mLessons) {
+        lesson->Execute();
+    }
+    // Lesson08();
+    // Lesson15();
     ::ImGui::Render();
 
     
     ::ImGui_ImplSDLRenderer_RenderDrawData(::ImGui::GetDrawData());
-}
-
-auto IMGuiSDLRenderer::DrawColor() -> std::vector<int> {
-    return mDrawColor;
 }
 
 auto IMGuiSDLRenderer::ModulationColor() -> std::vector<int> {
@@ -102,6 +99,15 @@ auto IMGuiSDLRenderer::AddCustomEvent(const std::string &key,
     const ::cgl::event::CustomSDLEevent &event) -> void {
     if (mUserEvents.end() == mUserEvents.find(key)) {
         mUserEvents[key] = event;
+        if(0 == key.compare("LESSON_01")) {
+            mLessons.push_back(std::make_unique<Lesson01Task>(event));
+        }
+        if(0 == key.compare("LESSON_08")) {
+            mLessons.push_back(std::make_unique<Lesson08Task>(event));
+        }
+        if(0 == key.compare("LESSON_15")) {
+            mLessons.push_back(std::make_unique<Lesson15Task>(event));
+        }
     }
 }
 
@@ -118,6 +124,8 @@ auto IMGuiSDLRenderer::SystemInformation() -> void {
     ::ImGui::Text("MEMORY   : %.2f GB", ::SDL_GetSystemRAM() / 1024.0f);   
 
     DisplayInformation();
+
+    ::ImGui::ShowDemoWindow();
 
     if (::ImGui::Button("Quit", ::ImVec2{350, 25})) {
         SDL_Event event{SDL_QUIT};
@@ -305,95 +313,6 @@ auto IMGuiSDLRenderer::Events() -> void {
     ::ImGui::End();
 }
 
-auto IMGuiSDLRenderer::Lesson01() -> void {
-    ::ImGui::SetNextWindowSize(::ImVec2{250, 150}, ::ImGuiCond_Always);
-    ::ImGui::Begin("LESSON 01", nullptr, ::ImGuiWindowFlags_NoResize);
-    ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
-        "Clear/Draw color");
-    // ::ImGui::ColorEdit4("COLOR", &mColors[0]);
-    if (::ImGui::TreeNode("Color components")) {
-        bool update{false};
-        update |= ::ImGui::SliderInt("Red", &mDrawColor[0], 0, 255);
-        update |= ::ImGui::SliderInt("Green", &mDrawColor[1], 0, 255);
-        update |= ::ImGui::SliderInt("Blue", &mDrawColor[2], 0, 255);
-        if(update) {
-            if(auto iter = mUserEvents.find("LESSON_01");
-                mUserEvents.end() != iter) {
-                SDL_Event event;
-
-                ::SDL_memset(&event, 0, sizeof(event));
-
-                event.type = iter->second.type;
-                event.user.code = iter->second.code;
-                event.user.data1 = mDrawColor.data();
-                event.window.windowID = iter->second.id;
-
-                ::SDL_PushEvent(&event);
-            }
-        }
-        ::ImGui::TreePop();
-    }
-    ::ImGui::End();
-}
-
-auto IMGuiSDLRenderer::Lesson08() -> void {
-    ::ImGui::SetNextWindowSize(::ImVec2{270, 150}, ::ImGuiCond_Always);
-    ::ImGui::Begin("LESSON 08", nullptr, ::ImGuiWindowFlags_NoResize);
-    ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
-        "Geometry rendering");
-    if(::ImGui::ColorEdit4("Clear", &mClearColors[0])) {
-        if(auto iter = mUserEvents.find("LESSON_08");
-            mUserEvents.end() != iter) {
-                
-            SDL_Event event;
-
-            ::SDL_memset(&event, 0, sizeof(event));
-
-            event.type = iter->second.type;
-            event.user.code =
-                static_cast<Sint32>(ImGuiEvent::ClearColorChange);
-            event.user.data1 = mClearColors.data();
-            event.window.windowID = iter->second.id;
-
-            ::SDL_PushEvent(&event);
-        }
-    }
-    if(::ImGui::ColorEdit4("Draw", &mDrawColors[0])) {
-        if(auto iter = mUserEvents.find("LESSON_08");
-            mUserEvents.end() != iter) {
-                
-            SDL_Event event;
-
-            ::SDL_memset(&event, 0, sizeof(event));
-
-            event.type = iter->second.type;
-            event.user.code =
-                static_cast<Sint32>(ImGuiEvent::DrawColorChange);
-            event.user.data1 = mDrawColors.data();
-            event.window.windowID = iter->second.id;
-
-            ::SDL_PushEvent(&event);
-        }
-    }
-    if(::ImGui::ColorEdit4("Fill", &mFillColors[0])) {
-        if(auto iter = mUserEvents.find("LESSON_08");
-            mUserEvents.end() != iter) {
-                
-            SDL_Event event;
-
-            ::SDL_memset(&event, 0, sizeof(event));
-
-            event.type = iter->second.type;
-            event.user.code =
-                static_cast<Sint32>(ImGuiEvent::FillColorChange);
-            event.user.data1 = mFillColors.data();
-            event.window.windowID = iter->second.id;
-
-            ::SDL_PushEvent(&event);
-        }
-    }
-    ::ImGui::End();
-}
 
 auto IMGuiSDLRenderer::Lesson15() -> void {
     ::ImGui::SetNextWindowSize(::ImVec2{270, 150}, ::ImGuiCond_Always);
@@ -401,8 +320,6 @@ auto IMGuiSDLRenderer::Lesson15() -> void {
     ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
         "Texture and sprite rendering");
     if (::ImGui::Button("Load Images", ::ImVec2{270, 25})) {
-        // SDL_Event event{SDL_QUIT};
-        // ::SDL_PushEvent(&event);
         if(auto iter = mUserEvents.find("LESSON_15");
             mUserEvents.end() != iter) {
             SDL_Event event;
@@ -412,14 +329,164 @@ auto IMGuiSDLRenderer::Lesson15() -> void {
             event.type = iter->second.type;
             event.user.code =
                 static_cast<Sint32>(ImGuiEvent::LoadImages);
-            event.user.data1 = mDrawColor.data();
             event.window.windowID = iter->second.id;
 
             ::SDL_PushEvent(&event);
         }
     }
+    if (::ImGui::Checkbox("Start timer", &mTimerStarted)) {
+        ::SDL_Log("TIMER : %s", (mTimerStarted ? "YES" : "NO"));
+    }
     ::ImGui::End();
 }
+
+IMGuiSDLRenderer::ILessonTask::ILessonTask(
+    const ::cgl::event::CustomSDLEevent& event) :
+    mEvent{event} {}
+
+IMGuiSDLRenderer::Lesson01Task::Lesson01Task(
+    const ::cgl::event::CustomSDLEevent& event) :
+    ILessonTask{event}, mDrawColor{0, 0, 0, 255} {}
+
+auto IMGuiSDLRenderer::Lesson01Task::Execute() -> void {
+    ::ImGui::SetNextWindowSize(::ImVec2{250, 150}, ::ImGuiCond_Always);
+    ::ImGui::Begin("LESSON 01", nullptr, ::ImGuiWindowFlags_NoResize);
+    ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+        "Clear/Draw color");
+    if (::ImGui::TreeNode("Color components")) {
+        bool update{false};
+        update |= ::ImGui::SliderInt("Red", &mDrawColor[0], 0, 255);
+        update |= ::ImGui::SliderInt("Green", &mDrawColor[1], 0, 255);
+        update |= ::ImGui::SliderInt("Blue", &mDrawColor[2], 0, 255);
+        if(update) {
+            SDL_Event event;
+
+            ::SDL_memset(&event, 0, sizeof(event));
+
+            event.type = mEvent.type;
+            event.user.code = mEvent.code;
+            event.user.data1 = mDrawColor.data();
+            event.window.windowID = mEvent.id;
+
+            ::SDL_PushEvent(&event);
+        }
+        ::ImGui::TreePop();
+    }
+    ::ImGui::End();
+}
+
+IMGuiSDLRenderer::Lesson08Task::Lesson08Task(
+    const ::cgl::event::CustomSDLEevent& event) :
+    ILessonTask{event},
+    mColors{{64, 64, 64, 255}, {0, 128, 0, 255}, {0, 0, 128, 255}} {}
+
+auto IMGuiSDLRenderer::Lesson08Task::Execute() -> void {
+    ::ImGui::SetNextWindowSize(::ImVec2{270, 150}, ::ImGuiCond_Always);
+    ::ImGui::Begin("LESSON 08", nullptr, ::ImGuiWindowFlags_NoResize);
+    ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+        "Geometry rendering");
+    if(::ImGui::ColorEdit4("Clear", &mColors[0][0])) {     
+        SDL_Event event;
+
+        ::SDL_memset(&event, 0, sizeof(event));
+
+        event.type = mEvent.type;
+        event.user.code =
+            static_cast<Sint32>(ImGuiEvent::ClearColorChange);
+        event.user.data1 = mColors[0].data();
+        event.window.windowID = mEvent.id;
+
+        ::SDL_PushEvent(&event);
+    }
+    if(::ImGui::ColorEdit4("Draw", &mColors[1][0])) {               
+        SDL_Event event;
+
+        ::SDL_memset(&event, 0, sizeof(event));
+
+        event.type = mEvent.type;
+        event.user.code =
+            static_cast<Sint32>(ImGuiEvent::DrawColorChange);
+        event.user.data1 = mColors[1].data();
+        event.window.windowID = mEvent.id;
+
+        ::SDL_PushEvent(&event);
+    }
+    if(::ImGui::ColorEdit4("Fill", &mColors[2][0])) {                
+        SDL_Event event;
+
+        ::SDL_memset(&event, 0, sizeof(event));
+
+        event.type = mEvent.type;
+        event.user.code =
+            static_cast<Sint32>(ImGuiEvent::FillColorChange);
+        event.user.data1 = mColors[2].data();
+        event.window.windowID = mEvent.id;
+
+        ::SDL_PushEvent(&event);
+    }
+    ::ImGui::End();
+}
+
+IMGuiSDLRenderer::Lesson15Task::Lesson15Task(
+    const ::cgl::event::CustomSDLEevent& event) :
+    ILessonTask{event},
+    mTimerStarted{false},
+    mTimerPaused{false} {
+}
+
+auto IMGuiSDLRenderer::Lesson15Task::Execute() -> void {
+    ::ImGui::SetNextWindowSize(::ImVec2{270, 150}, ::ImGuiCond_Always);
+    ::ImGui::Begin("LESSON 15", nullptr, ::ImGuiWindowFlags_NoResize);
+    ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
+        "Texture and sprite rendering");
+    if (::ImGui::Button("Load Images", ::ImVec2{270, 25})) {
+        SDL_Event event;
+
+        ::SDL_memset(&event, 0, sizeof(event));
+
+        event.type = mEvent.type;
+        event.user.code =
+            static_cast<Sint32>(ImGuiEvent::LoadImages);
+        event.window.windowID = mEvent.id;
+
+        ::SDL_PushEvent(&event);
+    }
+    if (::ImGui::Checkbox("Start timer", &mTimerStarted)) {
+        ::SDL_Log("TIMER : %s", (mTimerStarted ? "YES" : "NO"));
+        SDL_Event event;
+
+        ::SDL_memset(&event, 0, sizeof(event));
+
+        event.type = mEvent.type;
+        event.user.code =
+            static_cast<Sint32>(mTimerStarted ?
+                ImGuiEvent::StartTimer : ImGuiEvent::StopTimer);
+        event.window.windowID = mEvent.id;
+
+        mTimerPaused = false;
+
+        ::SDL_PushEvent(&event);
+    }
+    if(mTimerStarted) {
+        auto label{mTimerPaused ? "Resume timer" : "Pause timer"};
+        if (::ImGui::Button(label, ::ImVec2{270, 25})) {
+            mTimerPaused = !mTimerPaused;
+            SDL_Event event;
+
+            ::SDL_memset(&event, 0, sizeof(event));
+
+            event.type = mEvent.type;
+            event.user.code =
+                static_cast<Sint32>(mTimerPaused ?
+                    ImGuiEvent::PauseTimer : ImGuiEvent::ResumeTimer);
+            event.window.windowID = mEvent.id;
+
+            ::SDL_PushEvent(&event);
+        }
+    }
+    ::ImGui::End();   
+}
+
 
 }  // namespace imgui
 }  // namespace sandbox

@@ -20,7 +20,9 @@
 #include <display/ITexture.hpp>
 #include <display/IWindow.hpp>
 #include <event/IEvent.hpp>
+#include <event/ITimer.hpp>
 
+#include <chrono>
 #include <cstdint>
 #include <memory>
 #include <queue>
@@ -51,6 +53,10 @@ public:
     L15Scene(const std::uint32_t& event, const std::string& title,
         const Rect& rect);
     /**
+     * @brief Destroy the L15Scene object
+     */
+    virtual ~L15Scene();
+    /**
      * @brief Handle events.
      * 
      * @param event The event to be handled.
@@ -58,11 +64,43 @@ public:
      * @return false An error has occurred or quit the application.
      */
     auto OnEvent(const ::cgl::event::IEvent& event) -> bool override;
+    /**
+     * @brief Update the scene.
+     */
+    auto OnUpdate() -> void override;
+    /**
+     * @brief Timer callback
+     */
+    auto OnTimer() -> void;
 private:
     /**
      * @brief The test texture.
      */
     std::unique_ptr<::cgl::display::ITexture> mTexture;
+    /**
+     * @brief The test timer.
+     */
+    std::unique_ptr<::cgl::event::ITimer> mTimer;
+    /**
+     * @brief The frame counter.
+     */
+    int mFrameCount;
+    /**
+     * @brief Frames per second.
+     */
+    float mFPS;
+    /**
+     * @brief The current frame.
+     */
+    std::int64_t mFrame;
+    /**
+     * @brief The start time.
+     */
+    std::chrono::time_point<std::chrono::steady_clock> mStartTime;
+    /**
+     * @brief The end time.
+     */
+    std::chrono::time_point<std::chrono::steady_clock> mEndTime;
 };
 }  // namespace display
 }  // namespace cgl

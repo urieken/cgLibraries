@@ -57,7 +57,7 @@ auto SDLApplication::OnEvent(const Event::IEvent& event) -> bool {
         auto data = static_cast<const SDL_Event*>(event.Data());
         switch(data->type) {
             case SDL_QUIT : {
-                Cleanup();
+                // Cleanup();
                 result = false;
             }break;
             case SDL_KEYUP : {
@@ -94,6 +94,9 @@ auto SDLApplication::ProcessSDLFlags(const std::string& flags) const
     return value;
 }
 
+auto SDLApplication::OnIdle() -> void {
+}
+
 auto SDLApplication::Setup() -> bool {
     ::SDL_Log("Setting up SDLApplication");
     auto initFlags
@@ -119,7 +122,6 @@ auto SDLApplication::OnKeyUpEvent(const SDL_KeyboardEvent& event) -> bool {
     bool result{true};
     switch(event.keysym.sym) {
         case SDLK_ESCAPE : {
-            Cleanup();
             result = false;
         } break;
         default:break;

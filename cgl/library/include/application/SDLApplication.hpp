@@ -53,6 +53,10 @@ public:
      * @return false An error has occurred or quit the application.
      */
     auto OnEvent(const ::cgl::event::IEvent& event) -> bool override;
+    /**
+     * @brief Called when the event queue is empty.
+     */
+    auto OnIdle() -> void override;
 private:
     /**
      * @brief Arguments for the application.
