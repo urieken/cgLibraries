@@ -22,6 +22,7 @@ enum class EventType {
     Core = 0UL,
     Init,
     InitWithData,
+    Update,
     Quit,
     // Maximum value for EventType. Any new
     // items should be added before this.

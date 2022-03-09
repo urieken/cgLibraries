@@ -28,9 +28,11 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/source/display/Viewport.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/error/CGLError.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/IEvent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/event/CommonTimer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/CoreEvent.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/SDLEventListener.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/event/SDLEvent.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/source/event/SDLTimer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/geometry/Line.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/geometry/Point.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/source/geometry/Rectangle.cpp

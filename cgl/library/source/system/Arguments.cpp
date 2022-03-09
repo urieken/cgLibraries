@@ -14,6 +14,10 @@
 #include <error/CGLError.hpp>
 #include <system/KeyPairString.hpp>
 
+#include <stdexcept>
+
+#include <SDL2/SDL.h>
+
 namespace Error = ::cgl::error;
 
 using Code = Error::ErrorCode;
@@ -23,10 +27,12 @@ namespace system {
 
 auto Arguments::GetProperty(const std::string& key) const
     -> std::optional<std::string> {
-    if (mProperties.end() != mProperties.find(key)) {
-        return mProperties.at(key);
+    try {
+        return std::string{mProperties.at(key)};
+    } catch (const std::out_of_range& except) {
+        ::SDL_Log("Exception occurred : %s", except.what());
+        return {};
     }
-    return {};
 }
 
 auto Arguments::ProcessInputStream(std::istream& inputStream,

@@ -95,17 +95,9 @@ public:
      */
     auto OnEvent(const ::cgl::event::IEvent& event) -> bool override;
     /**
-     * @brief Event handler for clear color change.
-     * 
-     * @param clearColor The clear color.
+     * @brief Called when the event queue is empty.
      */
-    // auto OnClearColorChange(std::vector<int>& clearColor) -> void;
-    /**
-     * @brief Event handler for modulation color change.
-     * 
-     * @param modulationColor The modulation color.
-     */
-    // auto OnModulationColorChange(std::vector<int>& modulationColor) -> void;
+    auto OnIdle() -> void override;
 private:
     /**
      * @brief Starting value for custom event type.
@@ -130,37 +122,15 @@ private:
      */
     bool mUpdateRequested;
     /**
-     * @brief Pointer to the texture.
-     */
-    // std::unique_ptr<::cgl::display::ITexture> mTexture;
-    /**
-     * @brief Pointer to the background texture.
-     */
-    // std::unique_ptr<::cgl::display::ITexture> mBackground;
-    /**
-     * @brief Spritesheet for Terra.
-     */
-    // SpriteSheet mTerra;
-    /**
      * @brief Pointer to the IMGUI wrapper.
      */
     std::shared_ptr<::cgl::sandbox::imgui::IMGuiSDLRenderer> mImGui;
-    /**
-     * @brief Window and renderer map.
-     */
-    // WindowGroupMap mWindowGroupMap;
-    /**
-     * @brief Pointer to the scene instance.
-     */
-    // std::unique_ptr<::cgl::display::IScene> mScene;
-    // std::unique_ptr<::cgl::display::IScene> mL08Scene;
     /**
      * @brief Event handlers for scene instances.
      * 
      * @note Attempt to change to std::function instead of pointer
      * to the scene instance.
      */
-    // std::unordered_map<std::uint32_t, ::cgl::display::IScene*> mHandlers;
     std::unordered_map<std::uint32_t,
         std::unique_ptr<::cgl::display::IScene>> mScenes;
 
@@ -172,29 +142,9 @@ private:
      */
     auto Setup() -> bool;
     /**
-     * @brief Create window and renderer.
-     * 
-     * @return true Setup succeeded.
-     * @return false Setup failed.
-     */
-    // auto SetupWindowAndRenderer() -> bool;
-    /**
-     * @brief Load image resources.
-     * 
-     * @return true Setup succeeded.
-     * @return false Setup failed.
-     */
-    // auto LoadImages() -> bool;
-    /**
      * @brief Update renderer
      */
     auto OnUpdate() -> void;
-    /**
-     * @brief Update sprite.
-     * 
-     * @param index The spritesheet index.
-     */
-    // auto UpdateSprite(int index) -> void;
 };
 
 }  // namespace sandbox

@@ -31,6 +31,10 @@ public:
      * @return false An error has occurred or quit the application.
      */
     virtual auto OnEvent(const ::cgl::event::IEvent& event) -> bool = 0;
+    /**
+     * @brief Called when the event queue is empty.
+     */
+    virtual auto OnIdle() -> void = 0;
 };
 
 }  // namespace application

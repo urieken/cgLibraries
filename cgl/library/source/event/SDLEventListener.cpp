@@ -9,6 +9,8 @@
  * 
  */
 
+#include "event/CoreEvent.hpp"
+#include "event/IEvent.hpp"
 #include <event/SDLEventListener.hpp>
 #include <event/SDLEvent.hpp>
 
@@ -34,6 +36,11 @@ auto SDLEventListener::Start() -> int {
         return -1;
     } else {
         ::SDL_Log("SDL event subsystem initialized");
+        auto customEvent = ::SDL_RegisterEvents(1);
+        auto coreEvent = Event::CoreEvent {
+            Event::EventType::Update,
+            Event::EventSource::None
+        };
         mListening = true;
         while(mListening) {
             SDL_Event event;
@@ -42,6 +49,7 @@ auto SDLEventListener::Start() -> int {
                     Event::EventType::Core,Event::EventSource::SDL,
                     &event});
             };
+            mApplication.OnIdle();
         };
     }
     return 0;
