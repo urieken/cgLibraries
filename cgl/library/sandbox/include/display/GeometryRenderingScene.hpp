@@ -1,7 +1,7 @@
 /**
- * @file L08Scene.hpp
+ * @file GeometryRenderingScene.hpp
  * @author Ulysses Don Rieken (ulysses.rieken@gmail.com)
- * @brief Header for lesson 08 scene
+ * @brief Header for geometry rendering scene
  * @version 0.1
  * @date 2022-01-21
  * 
@@ -26,29 +26,31 @@
 
 #include <SDL2/SDL.h>
 
+constexpr auto GEOMETRY_RENDERING_SCENE_TITLE{"Geometry rendering scene"};
+
 namespace cgl {
 namespace display {
 /**
- * @brief Scene class for lesson 08
+ * @brief Scene class for geometry rendering
  */
-class L08Scene final : public SandboxScene {
+class GeometryRenderingScene final : public SandboxScene {
 public:
-    L08Scene() = delete;
+    GeometryRenderingScene() = delete;
     /**
-     * @brief Construct a new L08Scene object
+     * @brief Construct a new GeometryRenderingScene object
      * 
      * @param event Event type for this scene.
      */
-    explicit L08Scene(const std::uint32_t& event);
+    explicit GeometryRenderingScene(const std::uint32_t& event);
     /**
-     * @brief Construct a new L08Scene object
+     * @brief Construct a new GeometryRenderingScene object
      * 
      * @param event Event type for this scene.
      * @param title The scene title.
      * @param rect The scene dimensions.
      */
-    L08Scene(const std::uint32_t& event, const std::string& title,
-        const Rect& rect);
+    GeometryRenderingScene(const std::uint32_t& event,
+        const std::string& title, const Rect& rect);
     /**
      * @brief Handle events.
      * 

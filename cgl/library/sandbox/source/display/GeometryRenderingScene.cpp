@@ -1,5 +1,5 @@
 /**
- * @file L08Scene.cpp
+ * @file GeometryRenderingScene.cpp
  * @author Ulysses Don Rieken (ulysses.rieken@gmail.com)
  * @brief Source for lesson 08 scene.
  * @version 0.1
@@ -13,9 +13,9 @@
 
 #include <command/SDLRendererCommand.hpp>
 #include <command/SDLRendererGeometryCommand.hpp>
+#include <display/GeometryRenderingScene.hpp>
 #include <display/SDLRenderer.hpp>
 #include <display/SDLWindow.hpp>
-#include <display/L08Scene.hpp>
 #include <geometry/IGeometryElement.hpp>
 #include <imgui/IMGuiSDLRenderer.hpp>
 
@@ -34,23 +34,23 @@ using DrawOperation = Command::SDLRendererCommand::Operation;
 namespace cgl {
 namespace display {
 
-constexpr auto TITLE{"LESSON_08"};
 constexpr auto TOP{200};
 constexpr auto LEFT{1281};
 constexpr auto WIDTH{200};
 constexpr auto HEIGHT{200};
 
-L08Scene::L08Scene(const std::uint32_t& event) :
-    L08Scene{event, TITLE, {TOP, LEFT, WIDTH, HEIGHT}} {}
+GeometryRenderingScene::GeometryRenderingScene(const std::uint32_t& event) :
+    GeometryRenderingScene{event, GEOMETRY_RENDERING_SCENE_TITLE,
+        {TOP, LEFT, WIDTH, HEIGHT}} {}
 
-L08Scene::L08Scene(const std::uint32_t& event,
+GeometryRenderingScene::GeometryRenderingScene(const std::uint32_t& event,
     const std::string& title, const Rect& rect) :
     SandboxScene{event, title, rect},
     mClearColor{0, 0, 0, 255},
     mDrawColor{0, 255, 0, 255},
     mFillColor{0, 0, 255, 255} {}
 
-auto L08Scene::OnEvent(const Event::IEvent &event) -> bool {
+auto GeometryRenderingScene::OnEvent(const Event::IEvent &event) -> bool {
     if (Event::EventSource::SDL == event.Source()) {
         auto data = static_cast<const SDL_Event*>(event.Data());
         switch(data->type) {
@@ -106,7 +106,7 @@ auto L08Scene::OnEvent(const Event::IEvent &event) -> bool {
     return false;
 }
 
-auto L08Scene::OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool {
+auto GeometryRenderingScene::OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool {
     switch(event.keysym.sym) {
         case SDLK_r : {
             AppendDrawCommand(DrawOperation::DrawRect);
@@ -129,7 +129,7 @@ auto L08Scene::OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool {
     return false;
 }
 
-auto L08Scene::OnWindowEvent(const SDL_WindowEvent& event) -> bool {
+auto GeometryRenderingScene::OnWindowEvent(const SDL_WindowEvent& event) -> bool {
     switch(event.event) {
         case SDL_WINDOWEVENT_MOVED : {
             ::SDL_Log("%s - WINDOW MOVE EVENT : %d,%d",
@@ -141,7 +141,7 @@ auto L08Scene::OnWindowEvent(const SDL_WindowEvent& event) -> bool {
     return false;
 }
 
-auto L08Scene::AppendSetDrawColorCommand() -> void {
+auto GeometryRenderingScene::AppendSetDrawColorCommand() -> void {
     auto commands = CommandQueue();
     commands->push(
         std::make_unique<Command::SDLRendererCommand>(*GetRenderer(),
@@ -154,7 +154,7 @@ auto L08Scene::AppendSetDrawColorCommand() -> void {
         Command::SDLRendererCommand::Operation::Present));
 }
 
-auto L08Scene::AppendDrawCommand(
+auto GeometryRenderingScene::AppendDrawCommand(
     const Command::SDLRendererCommand::Operation& operation) -> void {
     auto commands = CommandQueue();
     auto element = GeometryElement{{50, 50, 150, 150}};
