@@ -1,7 +1,7 @@
 /**
- * @file L15Scene.hpp
+ * @file SpriteRenderingScene.hpp
  * @author Ulysses Don Rieken (ulysses.rieken@gmail.com)
- * @brief Header for lesson 15 scene
+ * @brief Header for sprite rendering scene
  * @version 0.1
  * @date 2022-01-29
  * 
@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L15SCENE_HPP_
-#define CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L15SCENE_HPP_
+#ifndef CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_SPRITE_RENDERING_SCENE_HPP_
+#define CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_SPRITE_RENDERING_SCENE_HPP_
 
 #include <display/SandboxScene.hpp>
 
@@ -29,33 +29,35 @@
 
 #include <SDL2/SDL.h>
 
+constexpr auto SPRITE_RENDERING_SCENE_TITLE{"Sprite rendering scene"};
+
 namespace cgl {
 namespace display {
 /**
- * @brief Scene class for lesson 15
+ * @brief Scene class for sprite rendering
  */
-class L15Scene final : public SandboxScene {
+class SpriteRenderingScene final : public SandboxScene {
 public:
-    L15Scene() = delete;
+    SpriteRenderingScene() = delete;
     /**
-     * @brief Construct a new L15Scene object
+     * @brief Construct a new SpriteRenderingScene object
      * 
      * @param event Event type for this scene.
      */
-    explicit L15Scene(const std::uint32_t& event);
+    explicit SpriteRenderingScene(const std::uint32_t& event);
     /**
-     * @brief Construct a new L15Scene object
+     * @brief Construct a new SpriteRenderingScene object
      * 
      * @param event Event type for this scene.
      * @param title The scene title.
      * @param rect The scene dimensions.
      */
-    L15Scene(const std::uint32_t& event, const std::string& title,
+    SpriteRenderingScene(const std::uint32_t& event, const std::string& title,
         const Rect& rect);
     /**
-     * @brief Destroy the L15Scene object
+     * @brief Destroy the SpriteRenderingScene object
      */
-    virtual ~L15Scene();
+    virtual ~SpriteRenderingScene();
     /**
      * @brief Handle events.
      * 
@@ -105,4 +107,4 @@ private:
 }  // namespace display
 }  // namespace cgl
 
-#endif//CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L15SCENE_HPP_
+#endif//CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_SPRITE_RENDERING_SCENE_HPP_

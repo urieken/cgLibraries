@@ -136,14 +136,14 @@ private:
         std::vector<int> mDrawColor;
     };
     /**
-     * @brief Wrapper for lesson 08 task.
+     * @brief Wrapper for geometry rendering task.
      */
     class GeometryRenderingTask : public ILessonTask {
     public:
         /**
          * @brief Construct a new GeometryRenderingTask object
          *
-         * @param event The lesson 08 custom event.
+         * @param event The geometry rendering custom event.
          */
         explicit GeometryRenderingTask(
             const ::cgl::event::CustomSDLEevent& event);
@@ -158,16 +158,16 @@ private:
         std::vector<std::vector<float>> mColors;
     };
     /**
-     * @brief Wrapper for lesson 15 task.
+     * @brief Wrapper for sprite rendering task.
      */
-    class Lesson15Task : public ILessonTask {
+    class SpriteRenderingTask : public ILessonTask {
     public:
         /**
-         * @brief Construct a new Lesson15Task object
+         * @brief Construct a new SpriteRenderingTask object
          *
-         * @param event The lesson 08 custom event.
+         * @param event The sprite rendering custom event.
          */
-        explicit Lesson15Task(
+        explicit SpriteRenderingTask(
             const ::cgl::event::CustomSDLEevent& event);
         /**
          * @brief Execute the task.

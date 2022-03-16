@@ -29,6 +29,7 @@ namespace imgui {
 
 constexpr auto CLEAR_COLOR_SCENE_TITLE{"Clear color scene"};
 constexpr auto GEOMETRY_RENDERING_SCENE_TITLE{"Geometry rendering scene"};
+constexpr auto SPRITE_RENDERING_SCENE_TITLE{"Sprite rendering scene"};
 
 constexpr auto NORMAL_FONT_FILE{"res/font/DroidSansMono.ttf"};
 constexpr auto NORMAL_FONT_SIZE{16.0f};
@@ -107,8 +108,8 @@ auto IMGuiSDLRenderer::AddCustomEvent(const std::string &key,
         if(0 == key.compare(GEOMETRY_RENDERING_SCENE_TITLE)) {
             mLessons.push_back(std::make_unique<GeometryRenderingTask>(event));
         }
-        if(0 == key.compare("LESSON_15")) {
-            mLessons.push_back(std::make_unique<Lesson15Task>(event));
+        if(0 == key.compare(SPRITE_RENDERING_SCENE_TITLE)) {
+            mLessons.push_back(std::make_unique<SpriteRenderingTask>(event));
         }
     }
 }
@@ -318,11 +319,12 @@ auto IMGuiSDLRenderer::Events() -> void {
 
 auto IMGuiSDLRenderer::Lesson15() -> void {
     ::ImGui::SetNextWindowSize(::ImVec2{270, 150}, ::ImGuiCond_Always);
-    ::ImGui::Begin("LESSON 15", nullptr, ::ImGuiWindowFlags_NoResize);
+    ::ImGui::Begin(SPRITE_RENDERING_SCENE_TITLE,
+        nullptr, ::ImGuiWindowFlags_NoResize);
     ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
         "Texture and sprite rendering");
     if (::ImGui::Button("Load Images", ::ImVec2{270, 25})) {
-        if(auto iter = mUserEvents.find("LESSON_15");
+        if(auto iter = mUserEvents.find(SPRITE_RENDERING_SCENE_TITLE);
             mUserEvents.end() != iter) {
             SDL_Event event;
 
@@ -431,16 +433,17 @@ auto IMGuiSDLRenderer::GeometryRenderingTask::Execute() -> void {
     ::ImGui::End();
 }
 
-IMGuiSDLRenderer::Lesson15Task::Lesson15Task(
+IMGuiSDLRenderer::SpriteRenderingTask::SpriteRenderingTask(
     const ::cgl::event::CustomSDLEevent& event) :
     ILessonTask{event},
     mTimerStarted{false},
     mTimerPaused{false} {
 }
 
-auto IMGuiSDLRenderer::Lesson15Task::Execute() -> void {
+auto IMGuiSDLRenderer::SpriteRenderingTask::Execute() -> void {
     ::ImGui::SetNextWindowSize(::ImVec2{270, 150}, ::ImGuiCond_Always);
-    ::ImGui::Begin("LESSON 15", nullptr, ::ImGuiWindowFlags_NoResize);
+    ::ImGui::Begin(SPRITE_RENDERING_SCENE_TITLE,
+        nullptr, ::ImGuiWindowFlags_NoResize);
     ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
         "Texture and sprite rendering");
     if (::ImGui::Button("Load Images", ::ImVec2{270, 25})) {

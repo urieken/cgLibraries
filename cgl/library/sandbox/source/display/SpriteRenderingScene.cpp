@@ -1,7 +1,7 @@
 /**
- * @file L15Scene.cpp
+ * @file SpriteRenderingScene.cpp
  * @author Ulysses Don Rieken (ulysses.rieken@gmail.com)
- * @brief Source for lesson 15
+ * @brief Source for sprite rendering scene
  * @version 0.1
  * @date 2022-01-29
  * 
@@ -9,7 +9,7 @@
  * 
  */
 
-#include <display/L15Scene.hpp>
+#include <display/SpriteRenderingScene.hpp>
 
 #include <command/SDLRendererCommand.hpp>
 #include <command/SDLRendererCopyCommand.hpp>
@@ -38,23 +38,23 @@ using RenderOperation = Command::SDLRendererCommand::Operation;
 namespace cgl {
 namespace display {
 
-constexpr auto TITLE{"LESSON_15"};
 constexpr auto TOP{421};
 constexpr auto LEFT{1281};
 constexpr auto WIDTH{150};
 constexpr auto HEIGHT{150};
 
 auto callBack(std::uint32_t interval, void* arg) -> std::uint32_t {
-    reinterpret_cast<L15Scene*>(arg)->OnTimer();
+    reinterpret_cast<SpriteRenderingScene*>(arg)->OnTimer();
     return 0;
 }
 
-auto L15Scene::OnTimer() -> void {
+auto SpriteRenderingScene::OnTimer() -> void {
     ::SDL_Log("%s", __PRETTY_FUNCTION__);
 }
 
-L15Scene::L15Scene(const std::uint32_t& event) :
-    L15Scene{event, TITLE, {TOP, LEFT, WIDTH, HEIGHT}}{
+SpriteRenderingScene::SpriteRenderingScene(const std::uint32_t& event) :
+    SpriteRenderingScene{event, SPRITE_RENDERING_SCENE_TITLE,
+        {TOP, LEFT, WIDTH, HEIGHT}}{
     ::SDL_Log("STOPPED : %d",
         static_cast<int>(::cgl::event::TimerState::Stopped));
     ::SDL_Log("STOPPED : %d",
@@ -65,18 +65,18 @@ L15Scene::L15Scene(const std::uint32_t& event) :
         static_cast<int>(::cgl::event::TimerState::Unknown));
 }
 
-L15Scene::L15Scene(const std::uint32_t& event,
+SpriteRenderingScene::SpriteRenderingScene(const std::uint32_t& event,
     const std::string& title, const Rect& rect) :
     SandboxScene{event, title, rect},
     mTexture{nullptr},
     mTimer{std::make_unique<Event::SDLTimer>()},
     mFrameCount{0}, mFPS{0.0f}, mFrame{0} {}
 
-L15Scene::~L15Scene() {
+SpriteRenderingScene::~SpriteRenderingScene() {
     mTimer->Stop();
 }
 
-auto L15Scene::OnEvent(const Event::IEvent &event) -> bool {
+auto SpriteRenderingScene::OnEvent(const Event::IEvent &event) -> bool {
     ::SDL_Log("%s", __PRETTY_FUNCTION__);
     if (Event::EventSource::SDL == event.Source()) {
         auto data = static_cast<const SDL_Event*>(event.Data());
@@ -167,7 +167,7 @@ auto L15Scene::OnEvent(const Event::IEvent &event) -> bool {
     return false;
 }
 
-auto L15Scene::OnUpdate() -> void {
+auto SpriteRenderingScene::OnUpdate() -> void {
     // ::SDL_Log("%s", __PRETTY_FUNCTION__);
     auto time = mTimer->GetTicks() / 1000.0f;
     mEndTime = std::chrono::steady_clock::now();
