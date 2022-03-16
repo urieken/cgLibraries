@@ -38,25 +38,6 @@ public:
      * @brief Destroy the SDLFontTexture object
      */
     virtual ~SDLFontTexture();
-    /**
-     * @brief Load a font from file.
-     * 
-     * @param path The path to the font file.
-     * @param renderer The renderer where the texture will be created from.
-     * @return std::error_condition Error result from the operation.
-     */
-    // auto Load(const std::string& path, IRenderer& renderer)
-    //     -> std::error_condition override;
-    /**
-     * @brief Load a font from file.
-     * 
-     * @param path The path to the font file.
-     * @param renderer The renderer where the texture will be created from.
-     * @param key The color key.
-     * @return std::error_condition Error result from the operation.
-     */
-    // auto Load(const std::string& path, IRenderer& renderer,
-    //     const Color& key) -> std::error_condition override;
 private:
     /**
      * @brief The SDL font structure.

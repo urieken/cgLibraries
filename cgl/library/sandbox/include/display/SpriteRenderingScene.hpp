@@ -69,7 +69,7 @@ public:
     /**
      * @brief Update the scene.
      */
-    auto OnUpdate() -> void override;
+    // auto OnUpdate() -> void override;
     /**
      * @brief Timer callback
      */

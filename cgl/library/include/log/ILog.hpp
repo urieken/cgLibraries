@@ -62,8 +62,7 @@ public:
      * @param category The log category. 
      * @param entry The entry to be pushed.
      */
-    virtual auto Push(const Severity& severity,
-        const Category& category,
+    virtual auto Push(const Severity& severity, const Category& category,
         const std::string& entry) -> void = 0;
 };
 }  // namespace log

@@ -27,8 +27,8 @@ SDLRendererViewportCommand::SDLRendererViewportCommand(
     ::cgl::display::IRenderer& renderer, const Operation& operation,
     const Viewport& viewport) :
     SDLRendererCommand{renderer, operation} {
-    mViewport =
-        std::make_unique<Viewport>(viewport.getId(), viewport.getRect());
+    mViewport = std::make_unique<Viewport>(viewport.getId(),
+        viewport.getRect());
 }
 
 auto SDLRendererViewportCommand::Execute() -> std::error_condition {

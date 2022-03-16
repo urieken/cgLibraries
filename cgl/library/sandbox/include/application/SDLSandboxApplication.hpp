@@ -49,27 +49,6 @@ struct SpriteSheet {
     int height;
     std::vector<int> indices;
 };
-/**
- * @brief Group for window, window id, renderer
- *
- * @note Might just need the window ID here.
- */
-struct WindowGroup {
-    /**
-     * @brief The SDL window.
-     */
-    std::unique_ptr<::cgl::display::IWindow> mWindow;
-    /**
-     * @brief The SDL renderer.
-     */
-    std::unique_ptr<::cgl::display::IRenderer> mRenderer;
-};
-/**
- * @brief Alias for the window group map.
- *
- * @note Might just need to store the renderer instead of the entire group.
- */
-using WindowGroupMap = std::unordered_map<std::uint32_t, WindowGroup>;
 
 /**
  * @brief SDL application for sandbox.

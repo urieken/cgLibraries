@@ -40,8 +40,7 @@ public:
      * @param category The log category. 
      * @param entry The entry to be pushed.
      */
-    auto Push(const Severity& severity,
-        const Category& category,
+    auto Push(const Severity& severity, const Category& category,
         const std::string& entry) -> void override;
 private:
     SDL_mutex* mLogMutex;

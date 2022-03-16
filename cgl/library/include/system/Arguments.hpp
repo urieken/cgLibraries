@@ -26,12 +26,6 @@ namespace system {
  */
 class Arguments final {
 public:
-    Arguments() = default;
-    Arguments(const Arguments&) = default;
-    Arguments(Arguments&&) = default;
-    ~Arguments() = default;
-    Arguments& operator=(const Arguments&) = default;
-    Arguments& operator=(Arguments&&) = default;
     /**
      * @brief Process input stream.
      * 

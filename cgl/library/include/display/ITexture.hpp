@@ -30,31 +30,12 @@ class ITexture {
 public:
     virtual ~ITexture() = default;
     /**
-     * @brief Load a texture from file.
-     * 
-     * @param path The path to the texture file.
-     * @param renderer The renderer where the texture will be created from.
-     * @return std::error_condition Error result from the operation.
-     */
-    // virtual auto Load(const std::string& path,
-    //     IRenderer& renderer) -> std::error_condition = 0;
-    /**
      * @brief Create the texture.
      * 
      * @param renderer The renderer where the texture will be created from.
      * @return std::error_condition Error result from the operation.
      */
     virtual auto Create(IRenderer& renderer) -> std::error_condition = 0;
-    /**
-     * @brief Load a texture from file.
-     * 
-     * @param path The path to the texture file.
-     * @param renderer The renderer where the texture will be created from.
-     * @param key The color key.
-     * @return std::error_condition Error result from the operation.
-     */
-    // virtual auto Load(const std::string& path,
-    //     IRenderer& renderer, const Color& key) -> std::error_condition = 0;
     /**
      * @brief 
      * 

@@ -16,8 +16,7 @@ namespace cgl {
 namespace system {
 
 template <typename...Args> 
-auto unused(const Args&...) -> void {
-} 
+auto unused(const Args&...) -> void {} 
 
 }  // namespace system
 }  // namespace cgl
