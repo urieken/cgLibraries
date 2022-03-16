@@ -19,7 +19,7 @@
 #include <display/Color.hpp>
 #include <display/ClearColorScene.hpp>
 #include <display/GeometryRenderingScene.hpp>
-#include <display/L15Scene.hpp>
+#include <display/SpriteRenderingScene.hpp>
 #include <display/MainScene.hpp>
 #include <display/SandboxScene.hpp>
 #include <display/SDLRenderer.hpp>
@@ -135,7 +135,8 @@ auto SDLSandboxApplication::Setup() -> bool {
         std::make_unique<Display::ClearColorScene>(mCustomEventStart + 1);
     auto geometryRenderingScene =
         std::make_unique<Display::GeometryRenderingScene>(mCustomEventStart + 2);
-    // auto scene15 = std::make_unique<Display::L15Scene>(mCustomEventStart + 3);
+    auto spriteRenderingScene =
+        std::make_unique<Display::SpriteRenderingScene>(mCustomEventStart + 3);
 
     auto event = Event::CoreEvent{
         Event::EventType::Init,
@@ -144,7 +145,7 @@ auto SDLSandboxApplication::Setup() -> bool {
 
     clearColorScene->OnEvent(event);
     geometryRenderingScene->OnEvent(event);
-    // scene15->OnEvent(event);
+    spriteRenderingScene->OnEvent(event);
 
     std::vector<std::pair<std::string,
         ::cgl::event::CustomSDLEevent>> events {
@@ -155,10 +156,11 @@ auto SDLSandboxApplication::Setup() -> bool {
             {
                 GEOMETRY_RENDERING_SCENE_TITLE,
                 {mCustomEventStart + 2, geometryRenderingScene->Id(), 0}
-            } //,
-            // {
-            //     "LESSON_15", {mCustomEventStart + 3, scene15->Id(), 0}
-            // }
+            },
+            {
+                SPRITE_RENDERING_SCENE_TITLE,
+                {mCustomEventStart + 3, spriteRenderingScene->Id(), 0}
+            }
         };
     auto mainScene = std::make_unique<Display::MainScene>(mCustomEventStart,
         mArguments, events);
@@ -167,7 +169,7 @@ auto SDLSandboxApplication::Setup() -> bool {
     mScenes[mainScene->Id()] = std::move(mainScene);
     mScenes[clearColorScene->Id()] = std::move(clearColorScene);
     mScenes[geometryRenderingScene->Id()] = std::move(geometryRenderingScene);
-    // mScenes[scene15->Id()] = std::move(scene15);
+    mScenes[spriteRenderingScene->Id()] = std::move(spriteRenderingScene);
 
     for(auto& scene : mScenes) {
         scene.second->Visible(true);

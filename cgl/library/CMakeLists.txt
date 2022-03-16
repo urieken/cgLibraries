@@ -57,7 +57,7 @@ add_executable(${PROJECT_NAME}_sandbox
     ${SOURCE_FILES}
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/ClearColorScene.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/GeometryRenderingScene.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/L15Scene.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/SpriteRenderingScene.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/MainScene.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/SandboxScene.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/imgui/IMGuiCommand.cpp
