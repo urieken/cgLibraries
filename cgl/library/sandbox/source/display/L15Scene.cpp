@@ -106,9 +106,9 @@ auto L15Scene::OnEvent(const Event::IEvent &event) -> bool {
                             constexpr auto spriteImageFile{"res/img/Terra.png"};
                             Display::Color colorKey{0x00, 0x80, 0x80, 0x00};
 
-                            mTexture = std::make_unique<Display::SDLTexture>();
-                            auto error = mTexture->Load(spriteImageFile,
-                                *GetRenderer(), colorKey);
+                            mTexture =
+                                std::make_unique<Display::SDLTexture>(spriteImageFile);
+                            auto error = mTexture->Create(*GetRenderer(), colorKey);
                             if(static_cast<int>(Code::NoError) == error.value()){
                                 auto commands = CommandQueue();
                                 Display::Rect src{0, 1, 30, 48};

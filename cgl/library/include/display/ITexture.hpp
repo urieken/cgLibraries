@@ -36,8 +36,15 @@ public:
      * @param renderer The renderer where the texture will be created from.
      * @return std::error_condition Error result from the operation.
      */
-    virtual auto Load(const std::string& path,
-        IRenderer& renderer) -> std::error_condition = 0;
+    // virtual auto Load(const std::string& path,
+    //     IRenderer& renderer) -> std::error_condition = 0;
+    /**
+     * @brief Create the texture.
+     * 
+     * @param renderer The renderer where the texture will be created from.
+     * @return std::error_condition Error result from the operation.
+     */
+    virtual auto Create(IRenderer& renderer) -> std::error_condition = 0;
     /**
      * @brief Load a texture from file.
      * 
@@ -46,8 +53,17 @@ public:
      * @param key The color key.
      * @return std::error_condition Error result from the operation.
      */
-    virtual auto Load(const std::string& path,
-        IRenderer& renderer, const Color& key) -> std::error_condition = 0;
+    // virtual auto Load(const std::string& path,
+    //     IRenderer& renderer, const Color& key) -> std::error_condition = 0;
+    /**
+     * @brief 
+     * 
+     * @param renderer The renderer where the texture will be created from.
+     * @param key The color key.
+     * @return std::error_condition Error result from the operation.
+     */
+    virtual auto Create(IRenderer& renderer, const Color& key)
+        -> std::error_condition = 0;
     /**
      * @brief Get the raw pointer to the texture structure.
      * 

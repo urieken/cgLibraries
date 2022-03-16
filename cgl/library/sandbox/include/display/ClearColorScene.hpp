@@ -1,5 +1,5 @@
 /**
- * @file L01Scene.hpp
+ * @file ClearColorScene.hpp
  * @author Ulysses Don Rieken (ulysses.rieken@gmail.com)
  * @brief Header for lesson 01 scene
  * @version 0.1
@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L01SCENE_HPP_
-#define CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L01SCENE_HPP_
+#ifndef CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_CLEAR_COLOR_SCENE_HPP_
+#define CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_CLEAR_COLOR_SCENE_HPP_
 
 #include <display/SandboxScene.hpp>
 
@@ -25,28 +25,30 @@
 
 #include <SDL2/SDL.h>
 
+constexpr auto CLEAR_COLOR_SCENE_TITLE{"Clear color scene"};
+
 namespace cgl {
 namespace display {
 /**
  * @brief Scene class for lesson 01
  */
-class L01Scene final : public SandboxScene {
+class ClearColorScene final : public SandboxScene {
 public:
-    L01Scene() = delete;
+    ClearColorScene() = delete;
     /**
-     * @brief Construct a new L01Scene object
+     * @brief Construct a new ClearColorScene object
      * 
      * @param event Event type for this scene.
      */
-    explicit L01Scene(const std::uint32_t& event);
+    explicit ClearColorScene(const std::uint32_t& event);
     /**
-     * @brief Construct a new L01Scene object
+     * @brief Construct a new ClearColorScene object
      * 
      * @param event Event type for this scene.
      * @param title The scene title.
      * @param rect The scene dimensions.
      */
-    L01Scene(const std::uint32_t& event, const std::string& title,
+    ClearColorScene(const std::uint32_t& event, const std::string& title,
         const Rect& rect);
     /**
      * @brief Handle events.
@@ -83,4 +85,4 @@ private:
 }  // namespace display
 }  // namespace cgl
 
-#endif//CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_L01SCENE_HPP_
+#endif//CGL_LIBRARY_SANDBOX_INCLUDE_DISPLAY_CLEAR_COLOR_SCENE_HPP_

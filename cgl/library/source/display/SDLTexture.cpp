@@ -24,6 +24,11 @@ using Code = Error::ErrorCode;
 namespace cgl {
 namespace display {
 
+SDLTexture::SDLTexture(const std::string& path) :
+    mTexture{nullptr},
+    mPath{path} {
+}
+
 SDLTexture::~SDLTexture() {
     if (nullptr != mTexture) {
         ::SDL_DestroyTexture(mTexture);
@@ -31,12 +36,12 @@ SDLTexture::~SDLTexture() {
     }
 }
 
-auto SDLTexture::Load(const std::string& path,
-    IRenderer& renderer) -> std::error_condition {
-    SDL_Surface* loadedSurface = ::IMG_Load(path.c_str());
+auto SDLTexture::Create(IRenderer &renderer) -> std::error_condition {
+    return Error::makeErrorCondition(Code::NoError);
+    SDL_Surface* loadedSurface = ::IMG_Load(mPath.c_str());
     if (nullptr == loadedSurface) {
         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
-            "Failed to load image %s[%s]", path.c_str(), ::IMG_GetError());
+            "Failed to load image %s[%s]", mPath.c_str(), ::IMG_GetError());
         return Error::makeErrorCondition(Code::ImageLoadFailure);
     }
     mTexture = ::SDL_CreateTextureFromSurface(
@@ -47,15 +52,56 @@ auto SDLTexture::Load(const std::string& path,
         return Error::makeErrorCondition(Code::TextureCreationFailure);
     }
     ::SDL_FreeSurface(loadedSurface);
-    return Error::makeErrorCondition(Code::NoError);
 }
 
-auto SDLTexture::Load(const std::string& path,
-    IRenderer& renderer, const Color& key) -> std::error_condition {
-    SDL_Surface* loadedSurface = ::IMG_Load(path.c_str());
+// auto SDLTexture::Load(const std::string& path,
+//     IRenderer& renderer) -> std::error_condition {
+//     SDL_Surface* loadedSurface = ::IMG_Load(path.c_str());
+//     if (nullptr == loadedSurface) {
+//         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
+//             "Failed to load image %s[%s]", path.c_str(), ::IMG_GetError());
+//         return Error::makeErrorCondition(Code::ImageLoadFailure);
+//     }
+//     mTexture = ::SDL_CreateTextureFromSurface(
+//         static_cast<SDL_Renderer*>(renderer.Get()), loadedSurface);
+//     if (nullptr ==  mTexture) {
+//         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
+//             "Failed to create texture %s", ::SDL_GetError());
+//         return Error::makeErrorCondition(Code::TextureCreationFailure);
+//     }
+//     ::SDL_FreeSurface(loadedSurface);
+//     return Error::makeErrorCondition(Code::NoError);
+// }
+
+// auto SDLTexture::Load(const std::string& path,
+//     IRenderer& renderer, const Color& key) -> std::error_condition {
+//     SDL_Surface* loadedSurface = ::IMG_Load(path.c_str());
+//     if (nullptr == loadedSurface) {
+//         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
+//             "Failed to load image %s[%s]", path.c_str(), ::IMG_GetError());
+//         return Error::makeErrorCondition(Code::ImageLoadFailure);
+//     }
+//     if (0 != ::SDL_SetColorKey(loadedSurface, SDL_TRUE,
+//         ::SDL_MapRGB(loadedSurface->format, key.red, key.green, key.blue))) {
+//         return Error::makeErrorCondition(Code::ImageLoadFailure);
+//     }
+//     mTexture = ::SDL_CreateTextureFromSurface(
+//         static_cast<SDL_Renderer*>(renderer.Get()), loadedSurface);
+//     if (nullptr ==  mTexture) {
+//         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
+//             "Failed to create texture %s", ::SDL_GetError());
+//         return Error::makeErrorCondition(Code::TextureCreationFailure);
+//     }
+//     ::SDL_FreeSurface(loadedSurface);
+//     return Error::makeErrorCondition(Code::NoError);
+// }
+
+auto SDLTexture::Create(IRenderer& renderer, const Color& key)
+    -> std::error_condition {
+    SDL_Surface* loadedSurface = ::IMG_Load(mPath.c_str());
     if (nullptr == loadedSurface) {
         ::SDL_LogCritical(SDL_LOG_CATEGORY_ERROR,
-            "Failed to load image %s[%s]", path.c_str(), ::IMG_GetError());
+            "Failed to load image %s[%s]", mPath.c_str(), ::IMG_GetError());
         return Error::makeErrorCondition(Code::ImageLoadFailure);
     }
     if (0 != ::SDL_SetColorKey(loadedSurface, SDL_TRUE,

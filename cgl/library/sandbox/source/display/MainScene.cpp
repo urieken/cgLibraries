@@ -9,7 +9,6 @@
  * 
  */
 
-#include <SDL2/SDL_log.h>
 #include <display/MainScene.hpp>
 
 #include <command/SDLRendererCommand.hpp>

@@ -28,7 +28,14 @@ namespace display {
  */
 class SDLSpriteSheet : SDLTexture {
 public:
+    SDLSpriteSheet() = delete;
     virtual ~SDLSpriteSheet() = default;
+    /**
+     * @brief Construct a new SDLTexture object
+     * 
+     * @param path Path to the image file.
+     */
+    explicit SDLSpriteSheet(const std::string& path);
     /**
      * @brief Load a texture from file.
      * 
@@ -36,8 +43,15 @@ public:
      * @param renderer The renderer where the texture will be created from.
      * @return std::error_condition Error result from the operation.
      */
-    auto Load(const std::string& path, IRenderer& renderer)
-        -> std::error_condition override;
+    // auto Load(const std::string& path, IRenderer& renderer)
+    //     -> std::error_condition override;
+    /**
+     * @brief Create the texture.
+     * 
+     * @param renderer The renderer where the texture will be created from.
+     * @return std::error_condition Error result from the operation.
+     */
+    //auto Create(IRenderer& renderer) -> std::error_condition override;
     /**
      * @brief Load a texture from file.
      * 
@@ -46,8 +60,8 @@ public:
      * @param key The color key.
      * @return std::error_condition Error result from the operation.
      */
-    auto Load(const std::string& path, IRenderer& renderer,
-        const Color& key) -> std::error_condition override;
+    // auto Load(const std::string& path, IRenderer& renderer,
+    //     const Color& key) -> std::error_condition override;
 };
 
 }  // namespace display

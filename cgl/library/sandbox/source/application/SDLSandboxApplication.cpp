@@ -17,7 +17,7 @@
 #include <command/SDLRendererGeometryCommand.hpp>
 #include <command/SDLRendererViewportCommand.hpp>
 #include <display/Color.hpp>
-#include <display/L01Scene.hpp>
+#include <display/ClearColorScene.hpp>
 #include <display/L08Scene.hpp>
 #include <display/L15Scene.hpp>
 #include <display/MainScene.hpp>
@@ -122,16 +122,17 @@ auto SDLSandboxApplication::OnEvent(
 }
 
 auto SDLSandboxApplication::OnIdle() -> void {
-    if(mUpdateRequested) {
+    // if(mUpdateRequested) {
         OnUpdate();
-        mUpdateRequested = false;
-    }
+        // mUpdateRequested = false;
+    // }
 }
 
 auto SDLSandboxApplication::Setup() -> bool {
     // mCustomEventStart = ::SDL_RegisterEvents(1);
     mCustomEventStart = ::SDL_RegisterEvents(3);
-    // auto scene01 = std::make_unique<Display::L01Scene>(mCustomEventStart + 1);
+    auto clearColorScene =
+        std::make_unique<Display::ClearColorScene>(mCustomEventStart + 1);
     // auto scene08 = std::make_unique<Display::L08Scene>(mCustomEventStart + 2);
     // auto scene15 = std::make_unique<Display::L15Scene>(mCustomEventStart + 3);
 
@@ -140,29 +141,29 @@ auto SDLSandboxApplication::Setup() -> bool {
         Event::EventSource::None
     };
 
-    // scene01->OnEvent(event);
+    clearColorScene->OnEvent(event);
     // scene08->OnEvent(event);
     // scene15->OnEvent(event);
 
     std::vector<std::pair<std::string,
         ::cgl::event::CustomSDLEevent>> events {
-                // {
-                //     "LESSON_01", {mCustomEventStart + 1, scene01->Id(), 0}
-                // },
-                // {
-                //     "LESSON_08", {mCustomEventStart + 2, scene08->Id(), 0}
-                // },
-                // {
-                //     "LESSON_15", {mCustomEventStart + 3, scene15->Id(), 0}
-                // }
-            };
-
+            {
+               CLEAR_COLOR_SCENE_TITLE,
+                {mCustomEventStart + 1, clearColorScene->Id(), 0}
+            }//,
+            // {
+            //     "LESSON_08", {mCustomEventStart + 2, scene08->Id(), 0}
+            // },
+            // {
+            //     "LESSON_15", {mCustomEventStart + 3, scene15->Id(), 0}
+            // }
+        };
     auto mainScene = std::make_unique<Display::MainScene>(mCustomEventStart,
         mArguments, events);
     mainScene->OnEvent(event);
 
     mScenes[mainScene->Id()] = std::move(mainScene);
-    // mScenes[scene01->Id()] = std::move(scene01);
+    mScenes[clearColorScene->Id()] = std::move(clearColorScene);
     // mScenes[scene08->Id()] = std::move(scene08);
     // mScenes[scene15->Id()] = std::move(scene15);
 

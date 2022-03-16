@@ -9,7 +9,6 @@
  * 
  */
 
-#include "event/SDLEvent.hpp"
 #include <imgui/IMGuiSDLRenderer.hpp>
 #include <application/SDLSandboxApplication.hpp>
 
@@ -28,6 +27,7 @@ namespace cgl {
 namespace sandbox {
 namespace imgui {
 
+constexpr auto CLEAR_COLOR_SCENE_TITLE{"Clear color scene"};
 constexpr auto NORMAL_FONT_FILE{"res/font/DroidSansMono.ttf"};
 constexpr auto NORMAL_FONT_SIZE{16.0f};
 constexpr auto BUTTON_FONT_FILE{"res/font/Alien_lines_1.9.ttf"};
@@ -99,8 +99,8 @@ auto IMGuiSDLRenderer::AddCustomEvent(const std::string &key,
     const ::cgl::event::CustomSDLEevent &event) -> void {
     if (mUserEvents.end() == mUserEvents.find(key)) {
         mUserEvents[key] = event;
-        if(0 == key.compare("LESSON_01")) {
-            mLessons.push_back(std::make_unique<Lesson01Task>(event));
+        if(0 == key.compare(CLEAR_COLOR_SCENE_TITLE)) {
+            mLessons.push_back(std::make_unique<ClearColorTask>(event));
         }
         if(0 == key.compare("LESSON_08")) {
             mLessons.push_back(std::make_unique<Lesson08Task>(event));
@@ -344,11 +344,11 @@ IMGuiSDLRenderer::ILessonTask::ILessonTask(
     const ::cgl::event::CustomSDLEevent& event) :
     mEvent{event} {}
 
-IMGuiSDLRenderer::Lesson01Task::Lesson01Task(
+IMGuiSDLRenderer::ClearColorTask::ClearColorTask(
     const ::cgl::event::CustomSDLEevent& event) :
     ILessonTask{event}, mDrawColor{0, 0, 0, 255} {}
 
-auto IMGuiSDLRenderer::Lesson01Task::Execute() -> void {
+auto IMGuiSDLRenderer::ClearColorTask::Execute() -> void {
     ::ImGui::SetNextWindowSize(::ImVec2{250, 150}, ::ImGuiCond_Always);
     ::ImGui::Begin("LESSON 01", nullptr, ::ImGuiWindowFlags_NoResize);
     ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),

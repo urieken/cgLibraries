@@ -30,29 +30,33 @@ namespace display {
  */
 class SDLTexture : public ITexture {
 public:
+    SDLTexture() = delete;
     /**
      * @brief Destroy the SDLTexture object
      */
     virtual ~SDLTexture();
     /**
-     * @brief Load a texture from file.
+     * @brief Construct a new SDLTexture object
      * 
-     * @param path The path to the texture file.0
+     * @param path Path to the image file.
+     */
+    explicit SDLTexture(const std::string& path);
+    /**
+     * @brief Create the texture.
+     * 
      * @param renderer The renderer where the texture will be created from.
      * @return std::error_condition Error result from the operation.
      */
-    auto Load(const std::string& path, IRenderer& renderer)
-        -> std::error_condition override;
+    auto Create(IRenderer& renderer) -> std::error_condition override;
     /**
-     * @brief Load a texture from file.
+     * @brief Create the texture.
      * 
-     * @param path The path to the texture file.
      * @param renderer The renderer where the texture will be created from.
      * @param key The color key.
      * @return std::error_condition Error result from the operation.
      */
-    auto Load(const std::string& path, IRenderer& renderer,
-        const Color& key) -> std::error_condition override;
+    auto Create(IRenderer& renderer, const Color& key)
+        -> std::error_condition override;
     /**
      * @brief Get the raw pointer to the texture structure.
      * 
@@ -79,6 +83,10 @@ protected:
      * @brief Pointer to the SDL texture structure.
      */
     SDL_Texture* mTexture;
+    /**
+     * @brief The path to image filename.
+     */
+    std::string mPath;
 };
 
 }  // namespace display

@@ -9,7 +9,6 @@
  * 
  */
 
-#include "display/SandboxScene.hpp"
 #include <SDL2/SDL_pixels.h>
 
 #include <command/SDLRendererCommand.hpp>

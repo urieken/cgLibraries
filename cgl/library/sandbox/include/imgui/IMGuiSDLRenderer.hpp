@@ -99,7 +99,7 @@ private:
         /**
          * @brief Construct a new ILessonTask object
          *
-         * @param event The lesson 01 custom event.
+         * @param event The task custom event.
          */
         explicit ILessonTask(
             const ::cgl::event::CustomSDLEevent& event);
@@ -114,16 +114,16 @@ private:
         ::cgl::event::CustomSDLEevent mEvent;
     };
     /**
-     * @brief Wrapper for lesson 01 task.
+     * @brief Wrapper for clear color task.
      */
-    class Lesson01Task : public ILessonTask {
+    class ClearColorTask : public ILessonTask {
     public:
         /**
-         * @brief Construct a new Lesson01Task object
+         * @brief Construct a new ClearColorTask object
          *
-         * @param event The lesson 01 custom event.
+         * @param event The clear color custom event.
          */
-        explicit Lesson01Task(
+        explicit ClearColorTask(
             const ::cgl::event::CustomSDLEevent& event);
         /**
          * @brief Execute the task.

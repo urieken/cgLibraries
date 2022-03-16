@@ -55,7 +55,7 @@ set_target_properties(${PROJECT_NAME}
 
 add_executable(${PROJECT_NAME}_sandbox
     ${SOURCE_FILES}
-    ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/L01Scene.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/ClearColorScene.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/L08Scene.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/L15Scene.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sandbox/source/display/MainScene.cpp

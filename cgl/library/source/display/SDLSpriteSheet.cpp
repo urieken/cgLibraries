@@ -27,15 +27,19 @@ using Code = Error::ErrorCode;
 namespace cgl {
 namespace display {
 
-auto SDLSpriteSheet::Load(const std::string& path,
-    IRenderer& renderer) -> std::error_condition {
-    return Error::makeErrorCondition(Code::NoError);
+SDLSpriteSheet::SDLSpriteSheet(const std::string& path) :
+    SDLTexture{path} {
 }
 
-auto SDLSpriteSheet::Load(const std::string& path,
-    IRenderer& renderer, const Color& key) -> std::error_condition {
-    return Error::makeErrorCondition(Code::NoError);
-}
+// auto SDLSpriteSheet::Load(const std::string& path,
+//     IRenderer& renderer) -> std::error_condition {
+//     return Error::makeErrorCondition(Code::NoError);
+// }
+
+// auto SDLSpriteSheet::Load(const std::string& path,
+//     IRenderer& renderer, const Color& key) -> std::error_condition {
+//     return Error::makeErrorCondition(Code::NoError);
+// }
 
 }  // namespace display
 }  // namespace cgl
