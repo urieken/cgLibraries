@@ -28,6 +28,8 @@ namespace sandbox {
 namespace imgui {
 
 constexpr auto CLEAR_COLOR_SCENE_TITLE{"Clear color scene"};
+constexpr auto GEOMETRY_RENDERING_SCENE_TITLE{"Geometry rendering scene"};
+
 constexpr auto NORMAL_FONT_FILE{"res/font/DroidSansMono.ttf"};
 constexpr auto NORMAL_FONT_SIZE{16.0f};
 constexpr auto BUTTON_FONT_FILE{"res/font/Alien_lines_1.9.ttf"};
@@ -102,8 +104,8 @@ auto IMGuiSDLRenderer::AddCustomEvent(const std::string &key,
         if(0 == key.compare(CLEAR_COLOR_SCENE_TITLE)) {
             mLessons.push_back(std::make_unique<ClearColorTask>(event));
         }
-        if(0 == key.compare("LESSON_08")) {
-            mLessons.push_back(std::make_unique<Lesson08Task>(event));
+        if(0 == key.compare(GEOMETRY_RENDERING_SCENE_TITLE)) {
+            mLessons.push_back(std::make_unique<GeometryRenderingTask>(event));
         }
         if(0 == key.compare("LESSON_15")) {
             mLessons.push_back(std::make_unique<Lesson15Task>(event));
@@ -350,7 +352,8 @@ IMGuiSDLRenderer::ClearColorTask::ClearColorTask(
 
 auto IMGuiSDLRenderer::ClearColorTask::Execute() -> void {
     ::ImGui::SetNextWindowSize(::ImVec2{250, 150}, ::ImGuiCond_Always);
-    ::ImGui::Begin("LESSON 01", nullptr, ::ImGuiWindowFlags_NoResize);
+    ::ImGui::Begin(CLEAR_COLOR_SCENE_TITLE,
+        nullptr, ::ImGuiWindowFlags_NoResize);
     ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
         "Clear/Draw color");
     if (::ImGui::TreeNode("Color components")) {
@@ -375,14 +378,15 @@ auto IMGuiSDLRenderer::ClearColorTask::Execute() -> void {
     ::ImGui::End();
 }
 
-IMGuiSDLRenderer::Lesson08Task::Lesson08Task(
+IMGuiSDLRenderer::GeometryRenderingTask::GeometryRenderingTask(
     const ::cgl::event::CustomSDLEevent& event) :
     ILessonTask{event},
     mColors{{64, 64, 64, 255}, {0, 128, 0, 255}, {0, 0, 128, 255}} {}
 
-auto IMGuiSDLRenderer::Lesson08Task::Execute() -> void {
+auto IMGuiSDLRenderer::GeometryRenderingTask::Execute() -> void {
     ::ImGui::SetNextWindowSize(::ImVec2{270, 150}, ::ImGuiCond_Always);
-    ::ImGui::Begin("LESSON 08", nullptr, ::ImGuiWindowFlags_NoResize);
+    ::ImGui::Begin(GEOMETRY_RENDERING_SCENE_TITLE,
+        nullptr, ::ImGuiWindowFlags_NoResize);
     ::ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f),
         "Geometry rendering");
     if(::ImGui::ColorEdit4("Clear", &mColors[0][0])) {     

@@ -18,7 +18,7 @@
 #include <command/SDLRendererViewportCommand.hpp>
 #include <display/Color.hpp>
 #include <display/ClearColorScene.hpp>
-#include <display/L08Scene.hpp>
+#include <display/GeometryRenderingScene.hpp>
 #include <display/L15Scene.hpp>
 #include <display/MainScene.hpp>
 #include <display/SandboxScene.hpp>
@@ -133,7 +133,8 @@ auto SDLSandboxApplication::Setup() -> bool {
     mCustomEventStart = ::SDL_RegisterEvents(3);
     auto clearColorScene =
         std::make_unique<Display::ClearColorScene>(mCustomEventStart + 1);
-    // auto scene08 = std::make_unique<Display::L08Scene>(mCustomEventStart + 2);
+    auto geometryRenderingScene =
+        std::make_unique<Display::GeometryRenderingScene>(mCustomEventStart + 2);
     // auto scene15 = std::make_unique<Display::L15Scene>(mCustomEventStart + 3);
 
     auto event = Event::CoreEvent{
@@ -142,7 +143,7 @@ auto SDLSandboxApplication::Setup() -> bool {
     };
 
     clearColorScene->OnEvent(event);
-    // scene08->OnEvent(event);
+    geometryRenderingScene->OnEvent(event);
     // scene15->OnEvent(event);
 
     std::vector<std::pair<std::string,
@@ -150,10 +151,11 @@ auto SDLSandboxApplication::Setup() -> bool {
             {
                CLEAR_COLOR_SCENE_TITLE,
                 {mCustomEventStart + 1, clearColorScene->Id(), 0}
-            }//,
-            // {
-            //     "LESSON_08", {mCustomEventStart + 2, scene08->Id(), 0}
-            // },
+            },
+            {
+                GEOMETRY_RENDERING_SCENE_TITLE,
+                {mCustomEventStart + 2, geometryRenderingScene->Id(), 0}
+            } //,
             // {
             //     "LESSON_15", {mCustomEventStart + 3, scene15->Id(), 0}
             // }
@@ -164,7 +166,7 @@ auto SDLSandboxApplication::Setup() -> bool {
 
     mScenes[mainScene->Id()] = std::move(mainScene);
     mScenes[clearColorScene->Id()] = std::move(clearColorScene);
-    // mScenes[scene08->Id()] = std::move(scene08);
+    mScenes[geometryRenderingScene->Id()] = std::move(geometryRenderingScene);
     // mScenes[scene15->Id()] = std::move(scene15);
 
     for(auto& scene : mScenes) {

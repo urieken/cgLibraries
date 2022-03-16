@@ -138,14 +138,14 @@ private:
     /**
      * @brief Wrapper for lesson 08 task.
      */
-    class Lesson08Task : public ILessonTask {
+    class GeometryRenderingTask : public ILessonTask {
     public:
         /**
-         * @brief Construct a new Lesson08Task object
+         * @brief Construct a new GeometryRenderingTask object
          *
          * @param event The lesson 08 custom event.
          */
-        explicit Lesson08Task(
+        explicit GeometryRenderingTask(
             const ::cgl::event::CustomSDLEevent& event);
         /**
          * @brief Execute the task.
