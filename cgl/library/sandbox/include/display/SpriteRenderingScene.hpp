@@ -19,6 +19,8 @@
 #include <display/IRenderer.hpp>
 #include <display/ITexture.hpp>
 #include <display/IWindow.hpp>
+#include <display/SDLTexture.hpp>
+#include <display/Rect.hpp>
 #include <event/IEvent.hpp>
 #include <event/ITimer.hpp>
 
@@ -26,6 +28,7 @@
 #include <cstdint>
 #include <memory>
 #include <queue>
+#include <vector>
 
 #include <SDL2/SDL.h>
 
@@ -33,6 +36,19 @@ constexpr auto SPRITE_RENDERING_SCENE_TITLE{"Sprite rendering scene"};
 
 namespace cgl {
 namespace display {
+/**
+ * @brief The spritesheet wrapper.
+ */
+struct SpriteSheet {
+    /**
+     * @brief The spritesheet texture.
+     */
+    SDLTexture texture;
+    /**
+     * @brief The sprite rectangles.
+     */
+    std::vector<Rect> rectangles;
+};
 /**
  * @brief Scene class for sprite rendering
  */
@@ -67,13 +83,13 @@ public:
      */
     auto OnEvent(const ::cgl::event::IEvent& event) -> bool override;
     /**
-     * @brief Update the scene.
-     */
-    // auto OnUpdate() -> void override;
-    /**
      * @brief Timer callback
      */
     auto OnTimer() -> void;
+    /**
+     * @brief Update the scene.
+     */
+    auto OnUpdate() -> void override;
 private:
     /**
      * @brief The test texture.
@@ -94,7 +110,15 @@ private:
     /**
      * @brief The current frame.
      */
-    std::int64_t mFrame;
+    int mFrame;
+    /**
+     * @brief The step to the next frame.
+     */
+    int mStep;
+    /**
+     * @brief The initial spritesheet.
+     */
+    SpriteSheet mSpriteSheet;
     /**
      * @brief The start time.
      */
@@ -103,6 +127,14 @@ private:
      * @brief The end time.
      */
     std::chrono::time_point<std::chrono::steady_clock> mEndTime;
+    /**
+     * @brief Handle keyboard press events
+     * 
+     * @param event The SDL keyboard event.
+     * @return true The event was processed.
+     * @return false An error has occurred or quit the application.
+     */
+    auto OnKeyDownEvent(const SDL_KeyboardEvent& event) -> bool;
 };
 }  // namespace display
 }  // namespace cgl

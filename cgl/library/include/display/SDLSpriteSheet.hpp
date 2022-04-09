@@ -15,6 +15,7 @@
 #include <display/SDLTexture.hpp>
 
 #include <display/Color.hpp>
+#include <display/Rect.hpp>
 #include <display/SDLRenderer.hpp>
 
 #include <string>
@@ -36,6 +37,8 @@ public:
      * @param path Path to the image file.
      */
     explicit SDLSpriteSheet(const std::string& path);
+private:
+
 };
 
 }  // namespace display
